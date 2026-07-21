@@ -1,0 +1,301 @@
+[gd_scene load_steps=32 format=3]
+
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/prototype_main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://Scenes/prototype_0_1/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/stations/ingredient_cabinet.gd" id="3_cabinet"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/stations/cutting_board.gd" id="4_cutting"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/stations/marinating_station.gd" id="5_marinating"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/stations/wok_station.gd" id="6_wok"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/stations/sink_station.gd" id="7_sink"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/prototype_debug_ui.gd" id="8_ui"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/quick_inventory_ui.gd" id="9_hotbar"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/ingredient_cabinet_ui.gd" id="10_cabinet_ui"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/combat/combat_manager.gd" id="11_combat"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/stations/clean_plate_pile.gd" id="12_plate_pile"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/combat/debug_combat_target.gd" id="13_target"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/plating/plating_qte_ui.gd" id="14_qte_ui"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/plating/plating_controller.gd" id="15_plating"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/navigation/kitchen_obstacle.gd" id="16_obstacle"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/navigation/kitchen_navigation_grid.gd" id="17_navigation"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/wave/wave_spawn_point.gd" id="18_spawn"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/wave/wave_manager.gd" id="19_wave"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/wave_warning_ui.gd" id="20_warning"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/navigation/prototype_map_controller.gd" id="21_map_controller"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/player_hud.gd" id="22_player_hud"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/start_game_ui.gd" id="23_start_ui"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/stations/cookware_rack.gd" id="24_cookware_rack"]
+[ext_resource type="Texture2D" path="res://Assets/Prototype/Static/room_floor_warm.png" id="25_floor_art"]
+
+[sub_resource type="RectangleShape2D" id="WallTopBottom"]
+size = Vector2(1840, 28)
+
+[sub_resource type="RectangleShape2D" id="WallSide"]
+size = Vector2(28, 1344)
+
+[node name="Prototype01Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="FloorArt" type="NinePatchRect" parent="."]
+z_index = -10
+texture_filter = 1
+offset_left = 28.0
+offset_top = 28.0
+offset_right = 1848.0
+offset_bottom = 1356.0
+mouse_filter = 2
+texture = ExtResource("25_floor_art")
+patch_margin_left = 60
+patch_margin_top = 60
+patch_margin_right = 60
+patch_margin_bottom = 60
+axis_stretch_horizontal = 0
+axis_stretch_vertical = 0
+
+[node name="Floor" type="Polygon2D" parent="."]
+z_index = -11
+polygon = PackedVector2Array(28, 28, 1848, 28, 1848, 1356, 28, 1356)
+color = Color(0.15, 0.17, 0.2, 0)
+
+[node name="PrototypeTitle" type="Label" parent="."]
+offset_left = 34.0
+offset_top = 1314.0
+offset_right = 1844.0
+offset_bottom = 1349.0
+text = "《谁是大厨生》Prototype 0.3.2 启动、HUD 与可读性调整（全部数值与表现均非最终设计）"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.82, 0.84, 0.88, 1)
+theme_override_font_sizes/font_size = 16
+
+[node name="Bounds" type="Node2D" parent="."]
+
+[node name="Top" type="StaticBody2D" parent="Bounds"]
+position = Vector2(938, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/Top"]
+shape = SubResource("WallTopBottom")
+
+[node name="Bottom" type="StaticBody2D" parent="Bounds"]
+position = Vector2(938, 1364)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/Bottom"]
+shape = SubResource("WallTopBottom")
+
+[node name="Left" type="StaticBody2D" parent="Bounds"]
+position = Vector2(20, 692)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/Left"]
+shape = SubResource("WallSide")
+
+[node name="Right" type="StaticBody2D" parent="Bounds"]
+position = Vector2(1856, 692)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/Right"]
+shape = SubResource("WallSide")
+
+[node name="CombatRuntime" type="Node2D" parent="."]
+script = ExtResource("11_combat")
+
+[node name="MapController" type="Node" parent="."]
+script = ExtResource("21_map_controller")
+
+[node name="KitchenNavigation" type="Node2D" parent="."]
+script = ExtResource("17_navigation")
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="LeftTop" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(58, 360)
+script = ExtResource("18_spawn")
+edge_label = "左侧"
+
+[node name="LeftBottom" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(58, 1024)
+script = ExtResource("18_spawn")
+edge_label = "左侧"
+
+[node name="RightTop" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1818, 360)
+script = ExtResource("18_spawn")
+edge_label = "右侧"
+
+[node name="RightBottom" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1818, 1024)
+script = ExtResource("18_spawn")
+edge_label = "右侧"
+
+[node name="TopLeft" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(483, 58)
+script = ExtResource("18_spawn")
+edge_label = "上侧"
+
+[node name="TopRight" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1393, 58)
+script = ExtResource("18_spawn")
+edge_label = "上侧"
+
+[node name="BottomLeft" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(483, 1326)
+script = ExtResource("18_spawn")
+edge_label = "下侧"
+
+[node name="BottomRight" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1393, 1326)
+script = ExtResource("18_spawn")
+edge_label = "下侧"
+
+[node name="Kitchen" type="Node2D" parent="."]
+position = Vector2(240, 220)
+
+[node name="IngredientCabinet" type="Node2D" parent="Kitchen"]
+position = Vector2(470, 105)
+script = ExtResource("3_cabinet")
+prototype_art_key = &"ingredient_cabinet"
+raw_beef_stock = 12
+marinade_stock = 12
+chili_stock = 12
+cooking_oil_stock = 12
+salt_stock = 12
+mustard_stock = 12
+
+[node name="Obstacle" type="StaticBody2D" parent="Kitchen/IngredientCabinet"]
+script = ExtResource("16_obstacle")
+obstacle_size = Vector2(210, 78)
+
+[node name="CuttingBoard" type="Node2D" parent="Kitchen"]
+position = Vector2(155, 320)
+script = ExtResource("4_cutting")
+prototype_art_key = &"prep_counter"
+prototype_first_cut_time = 1.4
+prototype_second_cut_time = 1.4
+
+[node name="Obstacle" type="StaticBody2D" parent="Kitchen/CuttingBoard"]
+script = ExtResource("16_obstacle")
+obstacle_size = Vector2(136, 72)
+
+[node name="MarinatingStation" type="Node2D" parent="Kitchen"]
+position = Vector2(385, 320)
+script = ExtResource("5_marinating")
+prototype_art_key = &"marinating_bowl"
+prototype_marinating_time = 1.8
+
+[node name="Obstacle" type="StaticBody2D" parent="Kitchen/MarinatingStation"]
+script = ExtResource("16_obstacle")
+obstacle_size = Vector2(136, 72)
+
+[node name="WokStation" type="Node2D" parent="Kitchen"]
+position = Vector2(625, 320)
+script = ExtResource("6_wok")
+prototype_art_key = &"stove_station_double"
+station_id = &"prototype_stove_01"
+initial_cookware_type = 9
+
+[node name="Obstacle" type="StaticBody2D" parent="Kitchen/WokStation"]
+script = ExtResource("16_obstacle")
+obstacle_size = Vector2(136, 72)
+
+[node name="StoveStation2" type="Node2D" parent="Kitchen"]
+position = Vector2(625, 112)
+script = ExtResource("6_wok")
+prototype_art_key = &"stove_station_double"
+station_id = &"prototype_stove_02"
+initial_cookware_type = 15
+
+[node name="Obstacle" type="StaticBody2D" parent="Kitchen/StoveStation2"]
+script = ExtResource("16_obstacle")
+obstacle_size = Vector2(136, 72)
+
+[node name="CookwareRack" type="Node2D" parent="Kitchen"]
+position = Vector2(840, 220)
+script = ExtResource("24_cookware_rack")
+prototype_art_key = &"soup_pot"
+
+[node name="Obstacle" type="StaticBody2D" parent="Kitchen/CookwareRack"]
+script = ExtResource("16_obstacle")
+obstacle_size = Vector2(136, 72)
+
+[node name="CleanPlatePile" type="Node2D" parent="Kitchen"]
+position = Vector2(840, 112)
+script = ExtResource("12_plate_pile")
+prototype_art_key = &"clean_plate_stack"
+
+[node name="Obstacle" type="StaticBody2D" parent="Kitchen/CleanPlatePile"]
+script = ExtResource("16_obstacle")
+obstacle_size = Vector2(146, 72)
+
+[node name="Sink" type="Node2D" parent="Kitchen"]
+position = Vector2(840, 320)
+script = ExtResource("7_sink")
+prototype_art_key = &"washing_station"
+prototype_stuck_wok_wash_time = 2.2
+
+[node name="Obstacle" type="StaticBody2D" parent="Kitchen/Sink"]
+script = ExtResource("16_obstacle")
+obstacle_size = Vector2(136, 72)
+
+[node name="Player" parent="Kitchen" instance=ExtResource("2_player")]
+position = Vector2(470, 525)
+
+[node name="EnemyDummyA" type="CharacterBody2D" parent="Kitchen"]
+position = Vector2(185, 520)
+script = ExtResource("13_target")
+combat_faction = 1
+debug_title = "敌方假人 A"
+
+[node name="EnemyDummyB" type="CharacterBody2D" parent="Kitchen"]
+position = Vector2(315, 520)
+script = ExtResource("13_target")
+combat_faction = 1
+debug_title = "敌方假人 B"
+
+[node name="EnemyDummyC" type="CharacterBody2D" parent="Kitchen"]
+position = Vector2(710, 520)
+script = ExtResource("13_target")
+combat_faction = 1
+debug_title = "敌方假人 C"
+
+[node name="FriendlyDummy" type="CharacterBody2D" parent="Kitchen"]
+position = Vector2(850, 520)
+script = ExtResource("13_target")
+combat_faction = 2
+debug_title = "友方测试目标"
+
+[node name="DebugUI" type="CanvasLayer" parent="."]
+script = ExtResource("8_ui")
+player_path = NodePath("../Kitchen/Player")
+
+[node name="QuickInventoryUI" type="CanvasLayer" parent="."]
+layer = 5
+script = ExtResource("9_hotbar")
+player_path = NodePath("../Kitchen/Player")
+
+[node name="IngredientCabinetUI" type="CanvasLayer" parent="."]
+layer = 10
+script = ExtResource("10_cabinet_ui")
+player_path = NodePath("../Kitchen/Player")
+
+[node name="PlatingQTEUI" type="CanvasLayer" parent="."]
+layer = 20
+script = ExtResource("14_qte_ui")
+
+[node name="PlatingController" type="Node" parent="."]
+script = ExtResource("15_plating")
+player_path = NodePath("../Kitchen/Player")
+qte_ui_path = NodePath("../PlatingQTEUI")
+
+[node name="WaveManager" type="Node2D" parent="."]
+script = ExtResource("19_wave")
+player_path = NodePath("../Kitchen/Player")
+navigation_path = NodePath("../KitchenNavigation")
+
+[node name="WaveWarningUI" type="CanvasLayer" parent="."]
+layer = 15
+script = ExtResource("20_warning")
+
+[node name="PlayerHUD" type="CanvasLayer" parent="."]
+layer = 30
+script = ExtResource("22_player_hud")
+player_path = NodePath("../Kitchen/Player")
+
+[node name="StartGameUI" type="CanvasLayer" parent="."]
+layer = 40
+script = ExtResource("23_start_ui")

@@ -4,7 +4,10 @@
 # Imported/generated resources
 *.translation
 export.cfg
-export_presets.cfg
+
+# Local release outputs and downloaded engine templates
+.release-temp/
+Builds/
 
 # Editor and operating-system files
 .vscode/
@@ -12,4 +15,3 @@ export_presets.cfg
 .DS_Store
 Thumbs.db
 desktop.ini
-

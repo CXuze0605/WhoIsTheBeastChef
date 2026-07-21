@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/player/prototype_player.gd" id="1_player"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/combat/dish_attack_controller.gd" id="2_attack"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/combat/trap_controller.gd" id="3_trap"]
+[ext_resource type="Texture2D" path="res://Assets/Prototype/Static/player_chef.png" id="4_player_art"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(34, 34)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_player")
+prototype_move_speed = 240.0
+prototype_interaction_distance = 108.0
+
+[node name="Body" type="Polygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(-18, -18, 18, -18, 18, 18, -18, 18)
+color = Color(0.2, 0.65, 0.95, 1)
+
+[node name="PlayerArt" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -5)
+scale = Vector2(0.092, 0.092)
+texture = ExtResource("4_player_art")
+
+[node name="DirectionMarker" type="Polygon2D" parent="."]
+z_index = 2
+polygon = PackedVector2Array(0, -28, 8, -14, -8, -14)
+color = Color(1, 0.92, 0.35, 1)
+
+[node name="PlayerLabel" type="Label" parent="."]
+offset_left = -29.0
+offset_top = 20.0
+offset_right = 29.0
+offset_bottom = 43.0
+text = "玩家"
+horizontal_alignment = 1
+theme_override_colors/font_outline_color = Color(0.08, 0.09, 0.12, 1)
+theme_override_constants/outline_size = 4
+
+[node name="HeldAnchor" type="Node2D" parent="."]
+position = Vector2(0, 34)
+
+[node name="InventoryStorage" type="Node2D" parent="."]
+
+[node name="DishAttackController" type="Node" parent="."]
+script = ExtResource("2_attack")
+
+[node name="TrapController" type="Node" parent="."]
+script = ExtResource("3_trap")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 7.0
