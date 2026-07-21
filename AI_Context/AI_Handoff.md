@@ -1,7 +1,7 @@
 # AI Handoff
 
 > 最后更新：2026-07-22  
-> 最近交接来源：GPT Codex（v0.0.1 发布准备）  
+> 最近交接来源：GPT Codex（v0.0.1 已公开发布）
 > 接手原则：假设下一位 AI 看不到任何聊天记录，只能读取仓库。
 
 ## 当前开发阶段
@@ -20,7 +20,7 @@
 - 已有普通与重型两种近战味真族和三波连续测试。
 - 0.1 至 0.4 七套自动化测试全部通过；最近一次主场景无界面运行通过。
 - v0.0.1 Windows 包已由 Godot 4.6.2 正式模板导出，并通过隐藏启动检查；构建产物位于被 Git 忽略的 `Builds/`。
-- 项目负责人已授权将完整源码公开上传到 `WhoIsTheBeastChef`、不添加许可证，并发布 v0.0.1 Windows Release；在远程上传完成前不得宣称链接已经可用。
+- 完整源码已发布到 `https://github.com/CXuze0605/WhoIsTheBeastChef`，提交 `921d549` 对应标签 `v0.0.1`；Windows 包位于 `https://github.com/CXuze0605/WhoIsTheBeastChef/releases/tag/v0.0.1`。仓库当前不添加许可证。
 
 ## 已完成内容
 
@@ -38,7 +38,7 @@
 
 最近一次游戏表现修改是首批静态 PNG 接入：素材从 `D:/静止素材/` 复制到 `GodotProject/Assets/Prototype/Static/` 并改为明确英文名，通过 `PrototypeArtCatalog`、`PlaceholderVisual`、物品映射和场景属性替换玩家、基础味真族、主要厨房设施及部分物品的程序占位表现。原始素材目录未修改；玩法规则和数值未改变，现有厨房障碍碰撞尺寸已按图片显示范围校准。详细记录见 `Prototype_0_4_Static_Art_Pass_1.md`。
 
-同日完成 `v0.0.1` 公开测试候选整理：重写根目录 `README.md`，新增 `CHANGELOG.md`、`.gitattributes` 和可版本管理的 Windows 导出预设，并在 `project.godot` 中写入版本号。使用 Godot 4.6.2 正式模板导出的 `.exe + .pck` 已启动成功，七套回归测试全部通过，Windows ZIP SHA-256 为 `B0B362BB1BEB9250DDE4A73D1D7381955E01F2E9F9D48C9529C1A6F83146305D`。项目负责人已授权公开仓库、无许可证、完整源码和 Windows Release；当前仍需完成提交、标签、远程创建、推送与 Release 上传。
+同日完成 `v0.0.1` 公开发布：重写根目录 `README.md`，新增 `CHANGELOG.md`、`.gitattributes` 和可版本管理的 Windows 导出预设，并在 `project.godot` 中写入版本号。使用 Godot 4.6.2 正式模板导出的 `.exe + .pck` 已启动成功，七套回归测试全部通过，Windows ZIP SHA-256 为 `B0B362BB1BEB9250DDE4A73D1D7381955E01F2E9F9D48C9529C1A6F83146305D`。源码提交 `921d549`、`main`、标签 `v0.0.1` 和 GitHub Release 均已公开；GitHub API 验证 ZIP 状态为 `uploaded` 且摘要一致。
 
 2026-07-22，DeepSeek Codex 完成一次全量只读接手审计：阅读全部 20 份 `AI_Context` 文档和 55+ 个脚本，输出中文标注的游戏数值清单，但没有修改任何项目文件。GPT Codex 已复核 Git 状态与交接描述一致。当前唯一待办没有变化，仍是 Prototype 0.4 人工试玩。
 
@@ -61,11 +61,11 @@
 2. 两灶三锅、翻面、陷阱和三波可能增加认知负担，需要判断是否“忙乱但可读”。
 3. 重型韧性应可感知，但不能被误解为隐藏料理抗性。
 4. 第一批静态 PNG 与暖色地图地板已接入；旧灰盒色块在有图片时隐藏，设施碰撞按实际图片显示范围校准。重型味真族、部分物品 / 料理、攻击实体、陷阱、地图细节和正式 UI 仍是程序占位表现。
-5. 工作区尚无包含全部 Prototype 与 AI Context 的干净 Git 基线。
+5. 已有包含全部 Prototype 与 AI Context 的公开 Git 基线；后续修改必须先检查 `git status`，不得覆盖其他 AI / 用户的工作。
 
 ## 下一步推荐工作
 
-推荐下一步：由项目负责人完整试玩 Prototype 0.4，同时确认首批 PNG 的尺寸、辨识度和风格是否可作为第一代美术基线。若准备上传 GitHub，再明确仓库名称、公开或私有、许可证与是否需要 Windows 构建，之后才执行提交和推送。
+推荐下一步：由项目负责人从公开 Release 下载 Windows ZIP，完成外部启动与 Prototype 0.4 人工试玩，同时确认首批 PNG 的尺寸、辨识度和风格是否可作为第一代美术基线。试玩结论出来前不扩展新玩法。
 
 如果委托 AI 修复：先复现，说明修改目标，保持范围最小，运行相关测试与七套全量回归，然后更新 `Current_Status.md`、`AI_Work_Log.md`、`Pending_Tasks.md` 和本文件；涉及设计变化时再更新 `Decision_Log.md`。
 

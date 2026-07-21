@@ -1,5 +1,29 @@
 # AI Work Log
 
+## 2026-07-22 — v0.0.1 GitHub 公开发布完成
+
+执行 AI：GPT Codex
+
+任务：完成首次公开源码推送、版本标签和 Windows GitHub Release。
+
+目标：让开发者可查看完整 Godot 源工程，让普通 Windows 测试者无需 Godot 即可下载并启动试玩包。
+
+完成内容：
+- 创建公开仓库 `CXuze0605/WhoIsTheBeastChef`，推送 `main` 和提交 `921d549 feat: publish v0.0.1 playable prototype`。
+- 推送已有标签 `v0.0.1`。
+- 发布 `v0.0.1 — First Playable Prototype`，附带 `WhoIsTheBeastChef-v0.0.1-Windows.zip`。
+- 通过 GitHub 公开 API 核验 Release 不是草稿或预发行版；资源状态为 `uploaded`，大小 `36,387,979` 字节，远程 SHA-256 与本地一致。
+
+修改文件：本次发布后的文档提交更新 `Current_Status.md`、`Decision_Log.md`、`Pending_Tasks.md`、`AI_Handoff.md`、`Development_Roadmap.md` 和本日志；玩法代码未修改。
+
+代码影响：无玩法影响；只记录真实发布状态和远程链接。
+
+测试结果：源码与标签远程可见；Release API 验证通过；Windows ZIP 摘要一致。
+
+遗留问题：仍需从 GitHub Release 外部下载 ZIP，完成一次真实解压、启动和 Prototype 0.4 人工试玩；GitHub 首页仍缺代表性截图或 GIF。
+
+下一步建议：优先完成外部分发包人工试玩并记录阻断、手感和可读性问题，不继续扩展新玩法。
+
 ## 2026-07-22 — v0.0.1 Windows 导出与发布验证
 
 执行 AI：GPT Codex

@@ -2,11 +2,11 @@
 
 ## 发布检查点：v0.0.1（2026-07-22）
 
-当前 Prototype 0.4 已整理为首次公开测试版本：完整 Godot 源工程与 `AI_Context/` 将进入公开仓库 `WhoIsTheBeastChef`，不附带开源许可证；Windows 玩家包通过 `v0.0.1` GitHub Release 单独分发。Godot 4.6.2 导出包已启动成功，七套自动化回归全部通过。
+当前 Prototype 0.4 已作为首次公开测试版本发布：完整 Godot 源工程与 `AI_Context/` 已进入公开仓库 [CXuze0605/WhoIsTheBeastChef](https://github.com/CXuze0605/WhoIsTheBeastChef)，不附带开源许可证；Windows 玩家包通过 [v0.0.1 GitHub Release](https://github.com/CXuze0605/WhoIsTheBeastChef/releases/tag/v0.0.1) 单独分发。Godot 4.6.2 导出包已启动成功，七套自动化回归全部通过。
 
 发布完成后的下一检查点仍是项目负责人人工试玩，而不是扩展新系统。应优先记录操作手感、三种料理路线的可读性、两灶三锅取舍、重型味真族威胁、三波资源压力和首批静态 PNG 的尺寸 / 识别问题。
 
-> 最后更新：2026-07-21  
+> 最后更新：2026-07-22
 > 目标：2026 年 9 月左右完成作品集 Demo。时间段为初始规划，实际以每个里程碑的退出条件为准。
 
 ## 当前里程碑更新：Prototype 0.4 已完成代码与自动验收
@@ -57,7 +57,7 @@ Prototype 0.4 已继续把 M4—M6 的技术骨架组合为自由准备、三种
 ## M0：上下文与工程基线
 
 **计划时间**：2026-07-19 至 2026-07-20  
-**状态**：进行中（阶段一中期与多 AI 协作上下文已完成，Git 基线尚待项目负责人整理）
+**状态**：已完成（阶段一中期、多 AI 协作上下文、公开 Git 基线与 v0.0.1 Release 均已建立）
 
 交付内容：
 

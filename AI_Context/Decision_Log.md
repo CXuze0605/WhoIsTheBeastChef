@@ -8,6 +8,8 @@
 
 **发布工程决定**：仓库跟踪 `GodotProject/export_presets.cfg` 以保留可复现的 Windows 导出配置；Godot 官方导出模板、`.release-temp/` 与 `Builds/` 属于本机生成 / 下载内容，不进入版本库。
 
+**执行结果**：提交 `921d549`、`main`、标签 `v0.0.1` 与公开 GitHub Release 已发布；Windows ZIP 的远程大小与 SHA-256 已通过 GitHub API 核验，和本地构建一致。
+
 **权限说明**：无许可证不等同于开源授权；公开可见只用于展示与审阅，后续若要允许复用、修改或分发，需要项目负责人另行选择许可证。
 
 > 最后更新：2026-07-21  

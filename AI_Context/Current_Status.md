@@ -2,20 +2,21 @@
 
 ## v0.0.1 发布状态（2026-07-22）
 
-- 项目负责人已授权将完整源码（包含 `AI_Context/`）上传到公开 GitHub 仓库 `WhoIsTheBeastChef`，当前不添加开源许可证。
+- 完整源码（包含 `AI_Context/`）已发布到公开仓库 [CXuze0605/WhoIsTheBeastChef](https://github.com/CXuze0605/WhoIsTheBeastChef)，当前不添加开源许可证。
 - 已加入可版本管理的 Windows Desktop 导出预设，并用 Godot 4.6.2 stable 成功生成 `WhoIsTheBeastChef.exe + WhoIsTheBeastChef.pck`。
 - 已生成 Release 压缩包 `Builds/WhoIsTheBeastChef-v0.0.1-Windows.zip`，SHA-256 为 `B0B362BB1BEB9250DDE4A73D1D7381955E01F2E9F9D48C9529C1A6F83146305D`；`Builds/` 和官方导出模板均不进入源码提交。
 - 导出包隐藏启动检查退出码为 0、标准错误为空；Prototype 0.1 至 0.4 七套自动化回归在发布候选上全部通过。
-- 当前正在完成首次完整 Git 提交、`v0.0.1` 标签、公开远程仓库推送和 GitHub Release；在实际成功前不得把远程链接视为已存在。
+- 首次完整源码提交为 `921d549 feat: publish v0.0.1 playable prototype`；`main` 与标签 `v0.0.1` 已推送。
+- [v0.0.1 — First Playable Prototype](https://github.com/CXuze0605/WhoIsTheBeastChef/releases/tag/v0.0.1) 已公开发布；Windows ZIP 状态为 `uploaded`、大小 `36,387,979` 字节，GitHub 记录的 SHA-256 与本地一致。
 
 ## 新 AI 接手摘要
 
 - **项目简介**：《谁是大厨生》是 2D 俯视角“烹饪 × 战斗 × 实时构筑 × 轻度资源管理”独立游戏；当前以单人灰盒验证“战斗中持续做饭，料理决定战斗方式”。
 - **当前版本**：Prototype 0.4；主场景为 `res://Scenes/prototype_0_1/main.tscn`。
 - **当前运行状态**：0.1—0.4 七套自动化验收、Godot 4.6.2 资源扫描和主场景无界面启动均已通过；仍等待项目负责人完成 0.4 编辑器人工试玩。
-- **当前开发状态**：玩法开发已按项目负责人要求暂停；本轮只完成多 AI 协作记忆体系，不修改 Godot 代码、场景或玩法数据。
+- **当前开发状态**：玩法开发已按项目负责人要求暂停；最近完成首批静态美术接入、显示修正和 v0.0.1 公开发布，没有扩展新玩法系统。
 - **当前重点**：确认 0.4 的操作手感、两灶三锅取舍、三种料理战斗形式、重型敌人和三波节奏；人工结论出来前不扩展新系统。
-- **工作区提醒**：当前存在大批未提交 / 未跟踪的 Prototype 与文档文件。不得擅自提交、清理、回滚或覆盖；具体任务与交接分别以 `Pending_Tasks.md` 和 `AI_Handoff.md` 为准。
+- **工作区提醒**：当前已有公开 Git 基线，`main` 与 `origin/main` 同步。后续仍不得擅自提交、清理、回滚或覆盖其他 AI / 用户的修改；具体任务与交接分别以 `Pending_Tasks.md` 和 `AI_Handoff.md` 为准。
 
 ## Prototype 0.4 状态更新（2026-07-21）
 
@@ -208,13 +209,13 @@ Who Is The Beast Chef/
 - 有 PNG 时旧灰盒色块会完全隐藏；厨房实体碰撞按图片实际显示尺寸自动校准，并向内缩少量透明边缘，导航网格随后按新尺寸重建。
 - 详细映射、未覆盖对象和验证记录见 `Prototype_0_4_Static_Art_Pass_1.md`。
 
-## 2026-07-22 v0.0.1 公开测试候选整理
+## 2026-07-22 v0.0.1 公开测试候选整理与发布结果
 
 - 对外版本候选命名为 `v0.0.1 — First Playable Prototype`；内部实现里程碑仍为 Prototype 0.4。
 - `README.md` 已更新为当前真实玩法、操作方式、Godot 运行入口、已知限制、项目结构和许可证状态。
 - 新增 `CHANGELOG.md` 与 `.gitattributes`；`project.godot` 增加 `config/version="0.0.1"`。
-- 当前只完成本地发布材料整理，尚未创建远程仓库、提交、打标签、推送或创建 GitHub Release。
-- 当前仓库没有开源许可证；公开上传前仍需项目负责人确认仓库公开性、许可证选择，以及是否同时提供 Windows 可执行测试包。
+- 已建立提交 `921d549`，并将 `main` 与标签 `v0.0.1` 推送到公开仓库 `CXuze0605/WhoIsTheBeastChef`。
+- 已创建公开 GitHub Release 并上传 Windows ZIP；仓库当前没有开源许可证，`Builds/` 与官方导出模板未进入源码历史。
 
 ## 当前下一项设计讨论
 
