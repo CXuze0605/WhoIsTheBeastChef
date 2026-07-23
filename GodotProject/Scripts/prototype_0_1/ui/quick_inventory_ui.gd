@@ -6,6 +6,8 @@ extends CanvasLayer
 var player: PrototypePlayer
 var slot_panels: Array[PanelContainer] = []
 var slot_labels: Array[Label] = []
+var slot_icons: Array[TextureRect] = []
+var slot_icon_styles: Array[StyleBoxFlat] = []
 var selected_style: StyleBoxFlat
 var normal_style: StyleBoxFlat
 
@@ -22,18 +24,15 @@ func _process(_delta: float) -> void:
 		return
 	for slot_index in QuickInventory.SLOT_COUNT:
 		var item := player.inventory.get_item(slot_index)
-		var item_name := "空"
-		if item != null:
-			item_name = item.data.display_name + (" ×%d" % item.data.stack_count if item.data.is_stackable else "")
-		slot_labels[slot_index].text = "格子 %d\n%s" % [slot_index + 1, item_name]
+		_refresh_slot_content(slot_index, item)
 		var selected := slot_index == player.inventory.selected_index
 		slot_panels[slot_index].add_theme_stylebox_override("panel", selected_style if selected else normal_style)
 
 
 func _build_ui() -> void:
 	var column := VBoxContainer.new()
-	column.position = Vector2(100.0, 566.0)
-	column.size = Vector2(752.0, 92.0)
+	column.position = Vector2(100.0, 540.0)
+	column.size = Vector2(752.0, 116.0)
 	column.add_theme_constant_override("separation", 4)
 	add_child(column)
 
@@ -51,16 +50,58 @@ func _build_ui() -> void:
 	for slot_index in QuickInventory.SLOT_COUNT:
 		var panel := PanelContainer.new()
 		panel.name = "Slot%d" % (slot_index + 1)
-		panel.custom_minimum_size = Vector2(144.0, 58.0)
+		panel.custom_minimum_size = Vector2(144.0, 80.0)
 		row.add_child(panel)
 		slot_panels.append(panel)
+		var stack := VBoxContainer.new()
+		stack.alignment = BoxContainer.ALIGNMENT_CENTER
+		stack.add_theme_constant_override("separation", 1)
+		panel.add_child(stack)
+		var icon_panel := PanelContainer.new()
+		icon_panel.custom_minimum_size = Vector2(112.0, 52.0)
+		var icon_style := StyleBoxFlat.new()
+		icon_style.bg_color = Color("151820")
+		icon_style.set_corner_radius_all(4)
+		icon_style.content_margin_left = 4.0
+		icon_style.content_margin_right = 4.0
+		icon_style.content_margin_top = 2.0
+		icon_style.content_margin_bottom = 2.0
+		icon_panel.add_theme_stylebox_override("panel", icon_style)
+		stack.add_child(icon_panel)
+		slot_icon_styles.append(icon_style)
+		var icon := TextureRect.new()
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon_panel.add_child(icon)
+		slot_icons.append(icon)
 		var label := Label.new()
+		label.custom_minimum_size = Vector2(0.0, 20.0)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		label.add_theme_font_size_override("font_size", 15)
-		panel.add_child(label)
+		label.add_theme_font_size_override("font_size", 13)
+		stack.add_child(label)
 		slot_labels.append(label)
+
+
+func _refresh_slot_content(slot_index: int, item: CarryableItem) -> void:
+	var label := slot_labels[slot_index]
+	var icon := slot_icons[slot_index]
+	var icon_style := slot_icon_styles[slot_index]
+	if item == null or not is_instance_valid(item) or item.data == null:
+		icon.texture = null
+		icon_style.bg_color = Color("151820")
+		label.text = "%d · 空" % (slot_index + 1)
+		label.tooltip_text = "空格"
+		return
+	var art_key := ItemCatalog.get_art_key_for_data(item.data)
+	var texture := PrototypeArtCatalog.TEXTURES.get(art_key) as Texture2D
+	icon.texture = texture
+	icon_style.bg_color = Color("151820") if texture != null else ItemCatalog.get_item_color(item.data.item_type).darkened(0.42)
+	var count_text := " ×%d" % item.data.stack_count if item.data.is_stackable else ""
+	label.text = "%d%s" % [slot_index + 1, count_text] if texture != null else "%d · %s%s" % [slot_index + 1, item.data.display_name, count_text]
+	label.tooltip_text = item.data.display_name
 
 
 func _make_slot_style(selected: bool) -> StyleBoxFlat:

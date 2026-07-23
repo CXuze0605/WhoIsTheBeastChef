@@ -18,6 +18,7 @@ func _ready() -> void:
 	qte_ui = get_node(qte_ui_path) as PlatingQTEUI
 	combat_manager = get_tree().get_first_node_in_group("combat_runtime") as CombatManager
 	add_to_group("plating_controller")
+	add_to_group("prototype_local_modal")
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -86,6 +87,8 @@ func request_apply_mustard() -> bool:
 	dish.data.add_active_modifier(ItemData.ActiveModifier.MUSTARD)
 	if dish.data.item_type == ItemData.ItemType.TOMAHAWK_STEAK:
 		combat_manager.config.apply_tomahawk_stats(dish.data)
+	else:
+		combat_manager.config.apply_combat_dish_stats(dish.data)
 	dish.refresh_visual()
 	player.inventory.notify_item_changed()
 	player.notify_feedback("已加入芥末：料理成为怪异料理，无法获得完美品质（Prototype）")
@@ -102,6 +105,29 @@ func complete_for_test(hit_perfect: bool) -> bool:
 	if not active:
 		return false
 	return _finish_plating(hit_perfect)
+
+
+func is_local_modal_open() -> bool:
+	return active
+
+
+func close_local_modal() -> void:
+	cancel_active_plating()
+
+
+func cancel_active_plating() -> bool:
+	if not active:
+		return false
+	active = false
+	locked_dish = null
+	locked_dish_slot = -1
+	qte_ui.close_qte()
+	player.set_modal_ui_open(false)
+	var plate_returned := player.receive_item_data(ItemCatalog.create(ItemData.ItemType.CLEAN_PLATE))
+	player.notify_feedback("已取消摆盘，干净盘子已退回" if plate_returned else "已取消摆盘，但干净盘子退回失败")
+	if not plate_returned:
+		push_error("Plating cancellation could not return the reserved clean plate")
+	return true
 
 
 func _finish_plating(hit_perfect: bool) -> bool:

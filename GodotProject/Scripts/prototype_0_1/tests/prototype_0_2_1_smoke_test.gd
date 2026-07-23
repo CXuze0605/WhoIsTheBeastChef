@@ -235,6 +235,10 @@ func _test_regression_contracts() -> void:
 	var station := scene.get_node("Kitchen/WokStation") as WokStation
 	var sink := scene.get_node("Kitchen/Sink") as SinkStation
 	var player := scene.get_node("Kitchen/Player") as PrototypePlayer
+	var manager := scene.get_node("WaveManager") as PrototypeWaveManager
+	manager.start_service_early()
+	await process_frame
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and not cabinet.lobby_unlimited, "Formal preparation must use the finite cabinet")
 	_expect(cabinet.get_supported_item_types().size() == 6, "Unified cabinet must contain exactly the four old ingredients plus salt and mustard")
 	_expect(cabinet.get_stock(ItemData.ItemType.SALT) > 0 and cabinet.get_stock(ItemData.ItemType.MUSTARD) > 0, "Salt and mustard stocks must be finite editable Debug values")
 	player.receive_item_data(ItemCatalog.create(ItemData.ItemType.RAW_BEEF_SLICES))
@@ -261,7 +265,11 @@ func _make_completed_unplated_in_wok(station: WokStation) -> void:
 
 
 func _give_unplated_dish(player: PrototypePlayer) -> CarryableItem:
-	player.receive_item_data(ItemCatalog.create(ItemData.ItemType.UNPLATED_STIR_FRY_BEEF))
+	var data := ItemCatalog.create(ItemData.ItemType.UNPLATED_STIR_FRY_BEEF)
+	var combat := player.get_tree().get_first_node_in_group("combat_runtime") as CombatManager
+	if combat != null:
+		combat.config.apply_combat_dish_stats(data)
+	player.receive_item_data(data)
 	return player.inventory.get_item(player.inventory.find_item_slot(ItemData.ItemType.UNPLATED_STIR_FRY_BEEF))
 
 

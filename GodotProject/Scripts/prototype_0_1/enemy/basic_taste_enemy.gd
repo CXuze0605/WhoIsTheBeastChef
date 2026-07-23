@@ -19,6 +19,7 @@ var current_path := PackedVector2Array()
 var path_index: int = 0
 var hit_flash_left: float = 0.0
 var counted_reflavor: bool = false
+var defeat_recorded: bool = false
 var placeholder: PlaceholderVisual
 var status_effects: DamageOverTimeController
 var lure_target: ShabuTrap
@@ -41,6 +42,13 @@ var attack_cooldown_value: float = 0.7
 var hit_stun_time_value: float = 0.14
 var stagger_threshold: float = 0.0
 var knockback_multiplier: float = 1.0
+var chase_slot_index: int = 0
+var chase_slot_offset := Vector2.ZERO
+var stalled_time: float = 0.0
+var unstuck_steer_left: float = 0.0
+var unstuck_direction := Vector2.ZERO
+var stuck_recovery_count: int = 0
+var walk_animator: DirectionalWalkAnimator
 
 
 func setup(enemy_config: PrototypeWaveConfig, player_target: PrototypePlayer, nav: KitchenNavigationGrid) -> void:
@@ -70,7 +78,9 @@ func _ready() -> void:
 	add_to_group("damageable")
 	add_to_group("basic_taste_enemy")
 	collision_layer = 4
-	collision_mask = 7
+	# Enemies still collide with the world and player. Enemy-enemy hard collision
+	# caused queues at kitchen corners; local separation below keeps the crowd shape.
+	collision_mask = 3
 	var collision := CollisionShape2D.new()
 	var circle := CircleShape2D.new()
 	circle.radius = enemy_collision_radius
@@ -81,9 +91,27 @@ func _ready() -> void:
 	placeholder.configure(enemy_visual_size, enemy_color, enemy_title, _status_text())
 	if not (self is HeavyTasteEnemy):
 		PrototypeArtCatalog.apply_to(placeholder, &"basic_taste_enemy")
+		_setup_walk_animation(&"basic_taste_enemy_walk_sheet", 7.5, true)
 	status_effects = DamageOverTimeController.new()
 	status_effects.name = "DamageOverTimeController"
 	add_child(status_effects)
+
+
+func _setup_walk_animation(art_key: StringName, fps: float, source_faces_right: bool) -> void:
+	var sprite_sheet := PrototypeArtCatalog.TEXTURES.get(art_key) as Texture2D
+	if placeholder == null or placeholder.art_sprite == null or sprite_sheet == null:
+		return
+	walk_animator = DirectionalWalkAnimator.new()
+	walk_animator.name = "DirectionalWalkAnimator"
+	add_child(walk_animator)
+	walk_animator.configure(
+		placeholder.art_sprite,
+		sprite_sheet,
+		enemy_visual_size,
+		fps,
+		source_faces_right,
+		source_faces_right
+	)
 
 
 func _physics_process(delta: float) -> void:
@@ -130,19 +158,17 @@ func _update_chase(delta: float) -> void:
 		_enter_state(State.WINDUP)
 		return
 	chase_refresh_left -= delta
+	var chase_goal := get_chase_goal_position()
 	if chase_refresh_left <= 0.0:
 		chase_refresh_left = config.chase_refresh_interval
-		current_path = navigation.find_path(global_position, target.global_position) if navigation != null else PackedVector2Array([target.global_position])
+		current_path = navigation.find_path(global_position, chase_goal) if navigation != null else PackedVector2Array([chase_goal])
 		path_index = 0
 	while path_index < current_path.size() and global_position.distance_to(current_path[path_index]) < 18.0:
 		path_index += 1
-	var desired := global_position.direction_to(target.global_position)
+	var desired := global_position.direction_to(chase_goal)
 	if path_index < current_path.size():
 		desired = global_position.direction_to(current_path[path_index])
-	var separation := _get_separation_velocity()
-	velocity = desired * move_speed_value + separation + knockback_velocity
-	move_and_slide()
-	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, config.knockback_decay * delta)
+	_move_chasing(desired, delta, global_position.distance_to(target.global_position) > attack_distance_value + 4.0)
 
 
 func _update_timed_state(delta: float, next_state: int) -> void:
@@ -156,8 +182,11 @@ func _update_timed_state(delta: float, next_state: int) -> void:
 
 func _enter_state(next_state: int) -> void:
 	state = next_state
+	if state not in [State.CHASE, State.LURED]:
+		_reset_stuck_tracking()
 	match state:
 		State.CHASE:
+			_reset_stuck_tracking()
 			state_time_left = 0.0
 			chase_refresh_left = 0.0
 		State.WINDUP:
@@ -175,6 +204,7 @@ func _enter_state(next_state: int) -> void:
 			state_time_left = config.reflavor_exit_time
 			velocity = Vector2.ZERO
 		State.LURED:
+			_reset_stuck_tracking()
 			state_time_left = 0.0
 			chase_refresh_left = 0.0
 			lure_path_fail_left = lure_target.config.shabu_lock_timeout if lure_target != null and is_instance_valid(lure_target) else 7.0
@@ -199,10 +229,80 @@ func _get_separation_velocity() -> Vector2:
 		var other := node as BasicTasteEnemy
 		if other == null or other == self or other.state == State.REFLAVORING:
 			continue
-		var distance := global_position.distance_to(other.global_position)
-		if distance > 0.01 and distance < config.separation_radius:
-			separation += other.global_position.direction_to(global_position) * (1.0 - distance / config.separation_radius)
-	return separation.limit_length(1.0) * config.separation_force
+		var offset := global_position - other.global_position
+		var distance := offset.length()
+		var preferred_distance := maxf(config.separation_radius, enemy_collision_radius + other.enemy_collision_radius + 4.0)
+		if distance <= 0.01:
+			var lower_id := mini(get_instance_id(), other.get_instance_id())
+			var fallback_angle := float(lower_id % 8) * TAU / 8.0
+			var fallback := Vector2.RIGHT.rotated(fallback_angle)
+			separation += fallback if get_instance_id() == lower_id else -fallback
+		elif distance < preferred_distance:
+			separation += offset / distance * (1.0 - distance / preferred_distance)
+	var separation_speed := minf(config.separation_force, move_speed_value * 0.55)
+	return separation.limit_length(1.0) * separation_speed
+
+
+func set_chase_slot(slot_index: int) -> void:
+	chase_slot_index = maxi(0, slot_index)
+	var angle := float(chase_slot_index % 8) * TAU / 8.0
+	chase_slot_offset = Vector2.RIGHT.rotated(angle) * config.chase_slot_radius
+	chase_refresh_left = 0.0
+
+
+func get_chase_goal_position() -> Vector2:
+	if target == null or not is_instance_valid(target):
+		return global_position
+	return target.global_position + chase_slot_offset
+
+
+func _move_chasing(desired: Vector2, delta: float, detect_stuck: bool) -> void:
+	var steering := desired
+	if unstuck_steer_left > 0.0:
+		unstuck_steer_left = maxf(0.0, unstuck_steer_left - delta)
+		steering = (desired + unstuck_direction * config.stuck_lateral_weight).normalized()
+	var position_before := global_position
+	velocity = steering * move_speed_value + _get_navigation_safe_separation() + knockback_velocity
+	move_and_slide()
+	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, config.knockback_decay * delta)
+	_update_stuck_tracking(position_before, desired, delta, detect_stuck)
+
+
+func _get_navigation_safe_separation() -> Vector2:
+	var separation := _get_separation_velocity()
+	if separation.is_zero_approx() or navigation == null:
+		return separation
+	var probe_distance := maxf(enemy_collision_radius + 4.0, navigation.cell_size * 0.5)
+	var probe_position := global_position + separation.normalized() * probe_distance
+	return separation if navigation.is_position_walkable(probe_position) else Vector2.ZERO
+
+
+func _update_stuck_tracking(position_before: Vector2, desired: Vector2, delta: float, detect_stuck: bool) -> void:
+	if not detect_stuck or desired.is_zero_approx():
+		stalled_time = 0.0
+		return
+	var minimum_displacement := config.stuck_minimum_speed * delta
+	var forward_progress := (global_position - position_before).dot(desired.normalized())
+	if forward_progress >= minimum_displacement:
+		stalled_time = 0.0
+		return
+	stalled_time += delta
+	if stalled_time < config.stuck_repath_time:
+		return
+	stalled_time = 0.0
+	stuck_recovery_count += 1
+	chase_refresh_left = 0.0
+	current_path = PackedVector2Array()
+	path_index = 0
+	var side := -1.0 if (chase_slot_index + stuck_recovery_count) % 2 == 0 else 1.0
+	unstuck_direction = desired.orthogonal() * side
+	unstuck_steer_left = config.stuck_steer_time
+
+
+func _reset_stuck_tracking() -> void:
+	stalled_time = 0.0
+	unstuck_steer_left = 0.0
+	unstuck_direction = Vector2.ZERO
 
 
 func _try_acquire_lure() -> bool:
@@ -247,9 +347,7 @@ func _update_lured(delta: float) -> void:
 	var desired := global_position.direction_to(lure_target.global_position)
 	if path_index < current_path.size():
 		desired = global_position.direction_to(current_path[path_index])
-	velocity = desired * move_speed_value + _get_separation_velocity() + knockback_velocity
-	move_and_slide()
-	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, config.knockback_decay * delta)
+	_move_chasing(desired, delta, global_position.distance_to(lure_target.global_position) > 34.0)
 
 
 func _update_tasting(delta: float) -> void:
@@ -287,7 +385,9 @@ func get_recipe_damage_multiplier(_attack_form: int, _cooking_method: int) -> fl
 func receive_combat_hit(damage: float, attacker_faction: int, knockback_direction: Vector2, knockback_force: float, friendly_fire: bool, stagger_power_value: float = 0.0) -> bool:
 	if state in [State.REFLAVORING, State.DISABLED] or not CombatRules.can_damage(attacker_faction, get_combat_faction(), friendly_fire):
 		return false
+	var health_before := current_health
 	current_health = maxf(0.0, current_health - damage)
+	_record_damage(health_before - current_health, attacker_faction)
 	knockback_velocity += knockback_direction.normalized() * knockback_force * knockback_multiplier
 	hit_flash_left = 0.12
 	if current_health <= 0.0:
@@ -304,7 +404,9 @@ func apply_status_effect(effect: StatusEffectData) -> bool:
 func receive_status_damage(damage: float, attacker_faction: int, _effect_type: int) -> bool:
 	if state in [State.REFLAVORING, State.DISABLED] or not CombatRules.can_damage(attacker_faction, get_combat_faction(), false):
 		return false
+	var health_before := current_health
 	current_health = maxf(0.0, current_health - damage)
+	_record_damage(health_before - current_health, attacker_faction)
 	hit_flash_left = 0.16
 	if current_health <= 0.0:
 		_begin_reflavor()
@@ -314,7 +416,9 @@ func receive_status_damage(damage: float, attacker_faction: int, _effect_type: i
 func receive_trap_reflavor_damage(damage: float) -> bool:
 	if state in [State.REFLAVORING, State.DISABLED]:
 		return false
+	var health_before := current_health
 	current_health = maxf(0.0, current_health - damage)
+	_record_damage(health_before - current_health, CombatRules.Faction.PLAYER)
 	hit_flash_left = 0.16
 	if current_health <= 0.0:
 		_begin_reflavor()
@@ -330,10 +434,21 @@ func disable_for_failed_wave() -> void:
 func _begin_reflavor() -> void:
 	if state == State.REFLAVORING:
 		return
+	if not defeat_recorded:
+		defeat_recorded = true
+		var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+		if stats != null:
+			stats.record_enemy_defeated(self is HeavyTasteEnemy)
 	_release_lure()
 	_enter_state(State.REFLAVORING)
 	collision_layer = 0
 	collision_mask = 0
+
+
+func _record_damage(actual_damage: float, attacker_faction: int) -> void:
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null:
+		stats.record_damage(actual_damage, attacker_faction, get_combat_faction())
 
 
 func _update_reflavor(delta: float) -> void:

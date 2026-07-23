@@ -20,6 +20,21 @@ var progress_bar: ProgressBar
 func _ready() -> void:
 	player = get_node(player_path) as PrototypePlayer
 	_build_ui()
+	set_developer_ui_visible(true)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_debug_ui"):
+		set_developer_ui_visible(not visible)
+		get_viewport().set_input_as_handled()
+
+
+func set_developer_ui_visible(active: bool) -> void:
+	visible = active
+
+
+func is_developer_ui_visible() -> bool:
+	return visible
 
 
 func _process(_delta: float) -> void:
@@ -73,9 +88,9 @@ func _build_ui() -> void:
 	column.add_theme_constant_override("separation", 7)
 	margin.add_child(column)
 
-	var title := _make_label("Prototype 0.3.2 / Debug UI\n启动、HUD 与可读性调整 · 非最终数值", 17, Color("ffd166"))
+	var title := _make_label("Prototype 0.5 / 开发辅助 UI\nF3 可切换玩家模式 · 非最终数值", 17, Color("ffd166"))
 	column.add_child(title)
-	var controls := _make_label("WASD 移动  E 交互/切洗  F 投料/拿取\nR 锅具  滚轮/1—5 切格  B 提前营业\nM 芥末  Space 摆盘  左键攻击  T 重置", 12, Color("d7e3fc"))
+	var controls := _make_label("WASD 移动  E 交互/切洗  F 投料/拿取\nR 锅具  滚轮/1—5 切格  B 开始营业\nM 芥末  G 陷阱  Space 摆盘  左键攻击\nESC 暂停  F3 隐藏开发 UI  F9 试玩记录  T 重置", 12, Color("d7e3fc"))
 	column.add_child(controls)
 	wave_label = _make_label("波次：等待初始化", 12, Color("ffd166"))
 	column.add_child(wave_label)
@@ -127,7 +142,7 @@ func _get_combat_text() -> String:
 		lines.append(attack.get_aim_debug_text())
 	for node in get_tree().get_nodes_in_group("debug_combat_target"):
 		var target := node as DebugCombatTarget
-		if target != null:
+		if target != null and target.lobby_active:
 			var effect_text := target.status_effects.get_effects_text() if target.status_effects != null else "无"
 			lines.append("%s：%.0f / %.0f · 状态 %s" % [target.debug_title, target.current_health, target.max_health, effect_text])
 	return "\n".join(lines)

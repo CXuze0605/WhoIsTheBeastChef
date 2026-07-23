@@ -24,8 +24,7 @@ static func create(item_type: int) -> ItemData:
 		ItemData.ItemType.UNPLATED_STIR_FRY_BEEF:
 			_configure(data, "待摆盘小炒黄牛肉", ItemData.ProcessingState.READY_TO_PLATE, true, false, false, [])
 			data.can_be_plated = true
-			data.max_durability = 1
-			data.current_durability = 1
+			data.is_combat_dish = true
 			data.attack_form = ItemData.AttackForm.PROJECTILE
 			data.cooking_method = ItemData.CookingMethod.STIR_FRY
 		ItemData.ItemType.CHARCOAL:
@@ -80,6 +79,7 @@ static func create(item_type: int) -> ItemData:
 		ItemData.ItemType.MUSHY_BOILED_BEEF:
 			_configure(data, "【煮烂牛肉】", ItemData.ProcessingState.OVERCOOKED, true, false, false, [])
 			data.cooking_method = ItemData.CookingMethod.BOIL
+	ItemStorageCatalog.apply_storage_defaults(data)
 	data.recalculate_quality()
 	return data
 
@@ -96,6 +96,46 @@ static func transform(existing: ItemData, target_type: int) -> ItemData:
 	result.next_sneeze_attack = existing.next_sneeze_attack
 	result.bone_thrown = existing.bone_thrown
 	result.recalculate_quality()
+	return result
+
+
+static func duplicate_data(existing: ItemData) -> ItemData:
+	if existing == null:
+		return null
+	var result := create(existing.item_type)
+	result.display_name = existing.display_name
+	result.processing_state = existing.processing_state
+	result.is_ingredient = existing.is_ingredient
+	result.is_auxiliary = existing.is_auxiliary
+	result.is_cookware = existing.is_cookware
+	result.allowed_stations = existing.allowed_stations.duplicate()
+	result.failure_tags = existing.failure_tags.duplicate()
+	result.components = existing.components.duplicate()
+	result.active_modifiers = existing.active_modifiers.duplicate()
+	result.quality = existing.quality
+	result.is_stackable = existing.is_stackable
+	result.stack_count = existing.stack_count
+	result.max_stack_count = existing.max_stack_count
+	result.can_be_plated = existing.can_be_plated
+	result.is_combat_dish = existing.is_combat_dish
+	result.current_durability = existing.current_durability
+	result.max_durability = existing.max_durability
+	result.base_damage = existing.base_damage
+	result.actual_damage = existing.actual_damage
+	result.has_perfect_finisher = existing.has_perfect_finisher
+	result.carried_plate_state = existing.carried_plate_state
+	result.poison_damage = existing.poison_damage
+	result.poison_interval = existing.poison_interval
+	result.poison_duration = existing.poison_duration
+	result.poison_refresh_duration = existing.poison_refresh_duration
+	result.has_been_used = existing.has_been_used
+	result.remaining_portions = existing.remaining_portions
+	result.attack_count = existing.attack_count
+	result.next_sneeze_attack = existing.next_sneeze_attack
+	result.bone_thrown = existing.bone_thrown
+	result.attack_form = existing.attack_form
+	result.cooking_method = existing.cooking_method
+	result.stagger_power = existing.stagger_power
 	return result
 
 
@@ -148,8 +188,14 @@ static func get_item_color(item_type: int) -> Color:
 
 static func get_art_key(item_type: int) -> StringName:
 	match item_type:
+		ItemData.ItemType.RAW_BEEF_CHUNK:
+			return &"raw_beef_chunk"
 		ItemData.ItemType.RAW_STEAK:
 			return &"raw_steak"
+		ItemData.ItemType.RAW_BEEF_SLICES:
+			return &"raw_beef_slices"
+		ItemData.ItemType.SHABU_BEEF:
+			return &"shabu_beef_single"
 		ItemData.ItemType.CHILI_SEGMENTS:
 			return &"chili_segment"
 		ItemData.ItemType.COOKING_OIL:
@@ -160,13 +206,32 @@ static func get_art_key(item_type: int) -> StringName:
 			return &"wok"
 		ItemData.ItemType.CLEAN_PLATE:
 			return &"clean_plate_stack"
+		ItemData.ItemType.DIRTY_PLATE:
+			return &"dirty_plate"
 		ItemData.ItemType.SALT:
 			return &"salt_bottle"
+		ItemData.ItemType.MARINADE:
+			return &"marinade"
+		ItemData.ItemType.MUSTARD:
+			return &"mustard"
 		ItemData.ItemType.PAN:
 			return &"frying_pan"
 		ItemData.ItemType.SOUP_POT:
 			return &"soup_pot"
+		ItemData.ItemType.TOMAHAWK_STEAK:
+			return &"tomahawk_steak"
 	return &""
+
+
+static func get_art_key_for_data(data: ItemData) -> StringName:
+	if data == null:
+		return &""
+	match data.item_type:
+		ItemData.ItemType.RAW_BEEF_SLICES:
+			return &"raw_beef_slice_single" if data.remaining_portions <= 1 else &"raw_beef_slices"
+		ItemData.ItemType.SHABU_BEEF:
+			return &"shabu_beef_single" if data.stack_count <= 1 else &"shabu_beef_slices"
+	return get_art_key(data.item_type)
 
 
 static func _configure(

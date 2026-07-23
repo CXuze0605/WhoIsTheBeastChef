@@ -8,6 +8,7 @@ var config: PrototypeCombatConfig
 var traveled_distance: float = 0.0
 var hit_target_ids: Dictionary = {}
 var on_hit_effect: StatusEffectData
+var visual: PlaceholderVisual
 
 
 func setup(
@@ -28,8 +29,9 @@ func setup(
 
 func _ready() -> void:
 	add_to_group("normal_bull")
-	var visual := PlaceholderVisual.new()
+	visual = PlaceholderVisual.new()
 	add_child(visual)
+	PrototypeArtCatalog.apply_to(visual, &"normal_bull")
 	visual.configure(Vector2(92.0, 54.0), Color("d97927"), "愤怒公牛", "穿透冲锋")
 	rotation = direction.angle()
 

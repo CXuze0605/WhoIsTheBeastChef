@@ -13,10 +13,15 @@ var status_effects: DamageOverTimeController
 var external_aim_sway_angle: float = 0.0
 var external_sneeze_offset: float = 0.0
 var receives_aim_influence: bool = true
+var lobby_active: bool = true
+var original_collision_layer: int
+var original_collision_mask: int
 
 
 func _ready() -> void:
 	current_health = max_health
+	original_collision_layer = collision_layer
+	original_collision_mask = collision_mask
 	add_to_group("damageable")
 	add_to_group("debug_combat_target")
 	if combat_faction == CombatRules.Faction.FRIENDLY and receives_aim_influence:
@@ -26,6 +31,8 @@ func _ready() -> void:
 	add_child(status_effects)
 	placeholder = PlaceholderVisual.new()
 	add_child(placeholder)
+	var art_key: StringName = &"friendly_dummy" if combat_faction == CombatRules.Faction.FRIENDLY else &"enemy_dummy"
+	PrototypeArtCatalog.apply_to(placeholder, art_key)
 	placeholder.configure(Vector2(74.0, 64.0), _get_color(), debug_title, _health_text())
 
 
@@ -51,9 +58,16 @@ func receive_combat_hit(
 	friendly_fire: bool,
 	_stagger_power: float = 0.0
 ) -> bool:
-	if not CombatRules.can_damage(attacker_faction, combat_faction, friendly_fire):
+	if not lobby_active or not CombatRules.can_damage(attacker_faction, combat_faction, friendly_fire):
 		return false
+	var health_before := current_health
 	current_health = maxf(0.0, current_health - damage)
+	var actual_damage := health_before - current_health
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null:
+		stats.record_damage(actual_damage, attacker_faction, combat_faction)
+		if health_before > 0.0 and current_health <= 0.0 and combat_faction == CombatRules.Faction.FRIENDLY:
+			stats.record_teammate_knocked_down()
 	knockback_velocity += knockback_direction.normalized() * knockback_force
 	hit_flash_time = 0.12
 	return true
@@ -64,9 +78,13 @@ func apply_status_effect(effect: StatusEffectData) -> bool:
 
 
 func receive_status_damage(damage: float, attacker_faction: int, _effect_type: int) -> bool:
-	if not CombatRules.can_damage(attacker_faction, combat_faction, false):
+	if not lobby_active or not CombatRules.can_damage(attacker_faction, combat_faction, false):
 		return false
+	var health_before := current_health
 	current_health = maxf(0.0, current_health - damage)
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null:
+		stats.record_damage(health_before - current_health, attacker_faction, combat_faction)
 	hit_flash_time = 0.18
 	return true
 
@@ -79,6 +97,32 @@ func set_external_aim_influence(_source_id: int, sway_angle: float, sneeze_offse
 func reset_target() -> void:
 	current_health = max_health
 	knockback_velocity = Vector2.ZERO
+	external_aim_sway_angle = 0.0
+	external_sneeze_offset = 0.0
+	if status_effects != null:
+		status_effects.active_effects.clear()
+
+
+func set_lobby_active(active: bool) -> void:
+	lobby_active = active
+	visible = active
+	set_physics_process(active)
+	collision_layer = original_collision_layer if active else 0
+	collision_mask = original_collision_mask if active else 0
+	if status_effects != null:
+		status_effects.set_process(active)
+	if active:
+		if not is_in_group("damageable"):
+			add_to_group("damageable")
+		if combat_faction == CombatRules.Faction.FRIENDLY and receives_aim_influence and not is_in_group("aim_influence_receiver"):
+			add_to_group("aim_influence_receiver")
+		reset_target()
+	else:
+		if is_in_group("damageable"):
+			remove_from_group("damageable")
+		if is_in_group("aim_influence_receiver"):
+			remove_from_group("aim_influence_receiver")
+		knockback_velocity = Vector2.ZERO
 
 
 func _health_text() -> String:

@@ -181,9 +181,13 @@ func _advance_wok(delta: float, player: Node = null) -> bool:
 		WokItem.CookStage.RAW_LOADED:
 			wok.complete_stage_one(); last_event_text = "第一阶段短炒完成；等待辣椒段"
 		WokItem.CookStage.STAGE_ONE_DONE:
-			wok.complete_stage_two(); last_event_text = "得到待摆盘小炒黄牛肉；灶火仍开启"
+			wok.complete_stage_two()
+			config.apply_combat_dish_stats(wok.content_data)
+			last_event_text = "得到可直接使用或继续摆盘的小炒黄牛肉；灶火仍开启"
 		WokItem.CookStage.STAGE_TWO_DONE:
-			wok.mark_burnt(); last_event_text = "料理已获得【焦糊】标签"
+			wok.mark_burnt()
+			config.apply_combat_dish_stats(wok.content_data)
+			last_event_text = "料理已获得【焦糊】标签"
 		WokItem.CookStage.BURNT_TAGGED:
 			wok.turn_content_to_charcoal(); last_event_text = "料理继续受热并变为焦炭"
 	active_stage = wok.cook_stage

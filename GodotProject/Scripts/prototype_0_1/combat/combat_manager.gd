@@ -45,10 +45,14 @@ func spawn_big_bone(origin: Vector2, direction: Vector2, callback: Callable) -> 
 
 
 func reset_for_new_game() -> void:
-	for child in get_children():
-		if child is NormalBull or child is RagingBull or child is MeleeSwing or child is BigBoneProjectile:
-			child.queue_free()
+	clear_active_attacks()
 	normal_bulls_spawned = 0
 	raging_bulls_spawned = 0
 	melee_swings_spawned = 0
 	big_bones_spawned = 0
+
+
+func clear_active_attacks() -> void:
+	for child in get_children():
+		if child is NormalBull or child is RagingBull or child is MeleeSwing or child is BigBoneProjectile:
+			child.queue_free()

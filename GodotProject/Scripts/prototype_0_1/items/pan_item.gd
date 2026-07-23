@@ -7,6 +7,7 @@ enum CookStage { EMPTY, FIRST_SIDE, FLIP_WINDOW, SECOND_SIDE, READY, BURNT_TAGGE
 var pan_state: int = PanState.CLEAN
 var cook_stage: int = CookStage.EMPTY
 var content_data: ItemData
+var dish_recorded_for_content: bool = false
 var flipped: bool = false
 
 
@@ -37,6 +38,7 @@ func insert_steak(item_data: ItemData) -> bool:
 	if content_data != null or is_stuck() or item_data.item_type != ItemData.ItemType.RAW_STEAK:
 		return false
 	content_data = item_data
+	dish_recorded_for_content = false
 	cook_stage = CookStage.FIRST_SIDE
 	content_data.processing_state = ItemData.ProcessingState.PAN_FIRST_SIDE
 	refresh_visual()
@@ -77,7 +79,17 @@ func complete_steak() -> void:
 	cook_stage = CookStage.READY
 	pan_state = PanState.CLEAN
 	data.processing_state = ItemData.ProcessingState.PAN_CLEAN
+	_record_completed_dish()
 	refresh_visual()
+
+
+func _record_completed_dish() -> void:
+	if dish_recorded_for_content or not is_inside_tree():
+		return
+	dish_recorded_for_content = true
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null:
+		stats.record_dish_created(content_data)
 
 
 func mark_burnt() -> void:

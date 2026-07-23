@@ -3,9 +3,11 @@ extends Node2D
 
 signal wave_stats_changed
 signal early_service_recorded(seconds_early: float)
+signal run_finished(success: bool)
 
 enum Phase {
 	FREE_PREPARATION,
+	PREPARATION,
 	GLOBAL_WARNING,
 	LOCAL_WARNING,
 	SPAWNING,
@@ -14,9 +16,8 @@ enum Phase {
 	RUN_COMPLETE,
 	FAILED,
 	# Legacy names are kept only so older debug helpers fail safely while the
-	# Prototype 0.4 flow is migrated. Runtime never enters these states.
+	# Prototype flow is migrated. Runtime never enters these states.
 	WAITING_TO_START,
-	PREPARATION,
 	WAVE_COMPLETE,
 }
 
@@ -43,12 +44,15 @@ var random := RandomNumberGenerator.new()
 var live_enemies: Array[BasicTasteEnemy] = []
 var current_wave: int = 1
 var completed_waves: int = 0
+var run_stats: RunStats
+var loot_settled_enemy_ids: Dictionary = {}
 
 
 func _ready() -> void:
 	add_to_group("prototype_wave_manager")
 	player = get_node(player_path) as PrototypePlayer
 	navigation = get_node(navigation_path) as KitchenNavigationGrid
+	run_stats = get_tree().get_first_node_in_group("run_stats") as RunStats
 	random.randomize()
 	if player != null:
 		player.configure_wave_health(config.player_max_health, config.player_hit_protection_time)
@@ -61,6 +65,10 @@ func _process(delta: float) -> void:
 	match phase:
 		Phase.FREE_PREPARATION:
 			pass
+		Phase.PREPARATION:
+			preparation_left = maxf(0.0, preparation_left - delta)
+			if preparation_left <= 0.0:
+				_begin_global_warning()
 		Phase.GLOBAL_WARNING:
 			phase_time_left -= delta
 			if phase_time_left <= 0.0:
@@ -102,43 +110,35 @@ func start_service_early() -> bool:
 		early_started = preparation_left > 0.0
 		early_seconds = preparation_left
 		early_service_recorded.emit(early_seconds)
+		_begin_global_warning()
 	else:
-		# The first wave has free preparation with no countdown.
-		early_started = false
-		early_seconds = 0.0
-	_begin_global_warning()
+		_begin_initial_preparation()
 	return true
 
 
 func start_game() -> bool:
 	if phase not in [Phase.FAILED, Phase.RUN_COMPLETE, Phase.WAVE_COMPLETE, Phase.WAITING_TO_START]:
 		return false
+	return_to_lobby()
+	return true
+
+
+func return_to_lobby() -> void:
 	_initialize_new_run()
 	wave_stats_changed.emit()
-	return true
 
 
 func start_same_wave_preparation() -> void:
 	if phase not in [Phase.WAVE_COMPLETE, Phase.RUN_COMPLETE]:
 		return
-	phase = Phase.FREE_PREPARATION
-	preparation_left = 0.0
-	phase_time_left = 0.0
-	next_batch_left = 0.0
-	current_batch = 0
-	spawned_in_current_batch = 0
-	spawned_total = 0
-	reflavored_total = 0
-	active_enemy_count = 0
-	early_started = false
-	early_seconds = 0.0
-	current_edge_label = ""
-	wave_stats_changed.emit()
+	return_to_lobby()
 
 
 func force_begin_wave_for_test() -> void:
 	if phase == Phase.FREE_PREPARATION:
 		start_service_early()
+	if phase == Phase.PREPARATION:
+		force_advance_phase_for_test(preparation_left + 0.01)
 
 
 func force_advance_phase_for_test(delta: float) -> void:
@@ -192,7 +192,7 @@ func get_phase_text() -> String:
 func get_debug_summary() -> String:
 	return "阶段：%s\n波次：%d / %d\n准备倒计时：%s\n提前营业：%s / 提前 %.1fs\n批次：%d / %d\n场上味真族：%d\n已生成：%d / 已复味：%d\n下一批：%.1fs\n局部方向：%s" % [
 		get_phase_text(), current_wave, config.run_total_waves,
-		"自由" if phase == Phase.FREE_PREPARATION else "%.1fs" % preparation_left,
+		"大厅" if phase == Phase.FREE_PREPARATION else "%.1fs" % preparation_left,
 		"是" if early_started else "否", early_seconds,
 		current_batch, config.get_total_batches(current_wave), active_enemy_count, spawned_total, reflavored_total,
 		next_batch_left if phase == Phase.WAVE_ACTIVE else phase_time_left,
@@ -208,10 +208,40 @@ func _begin_global_warning() -> void:
 	wave_stats_changed.emit()
 
 
+func _begin_initial_preparation() -> void:
+	# The free lobby is an isolated practice space. Reuse the one complete
+	# new-run reset before formal preparation so no lobby items, cookware state,
+	# attacks, traps or statistics leak into the run.
+	_reset_scene_for_new_game()
+	phase = Phase.PREPARATION
+	preparation_left = maxf(config.preparation_time, 30.0)
+	phase_time_left = 0.0
+	early_started = false
+	early_seconds = 0.0
+	current_edge_label = ""
+	if run_stats == null:
+		run_stats = get_tree().get_first_node_in_group("run_stats") as RunStats
+	if run_stats != null:
+		run_stats.begin_run()
+	_set_test_dummies_active(false)
+	var combat := get_tree().get_first_node_in_group("combat_runtime") as CombatManager
+	if combat != null:
+		combat.clear_active_attacks()
+	wave_stats_changed.emit()
+
+
 func _initialize_new_run() -> void:
 	_reset_scene_for_new_game()
 	phase = Phase.FREE_PREPARATION
 	preparation_left = 0.0
+	var cabinet := get_tree().get_first_node_in_group("ingredient_cabinet") as IngredientCabinet
+	if cabinet != null:
+		cabinet.configure_lobby_unlimited_catalog()
+	if run_stats == null:
+		run_stats = get_tree().get_first_node_in_group("run_stats") as RunStats
+	if run_stats != null:
+		run_stats.reset_for_lobby()
+	_set_test_dummies_active(true)
 	if player != null:
 		player.set_modal_ui_open(false)
 	wave_stats_changed.emit()
@@ -220,8 +250,8 @@ func _initialize_new_run() -> void:
 func _begin_local_warning() -> void:
 	pending_spawn_point = choose_legal_spawn_point()
 	if pending_spawn_point == null:
-		phase = Phase.FAILED
 		current_edge_label = "无合法生成点"
+		_finish_run(false)
 		return
 	phase = Phase.LOCAL_WARNING
 	phase_time_left = config.local_warning_time
@@ -260,6 +290,7 @@ func _spawn_enemy_at(position: Vector2) -> BasicTasteEnemy:
 	var enemy := BasicTasteEnemy.new()
 	enemy.name = "BasicTasteEnemy_%d" % (spawned_total + 1)
 	enemy.setup(config, player, navigation)
+	enemy.set_chase_slot(spawned_total)
 	get_tree().current_scene.add_child(enemy)
 	enemy.global_position = position
 	enemy.reflavor_completed.connect(_on_enemy_reflavored)
@@ -274,6 +305,7 @@ func _spawn_heavy_enemy_at(position: Vector2) -> HeavyTasteEnemy:
 	var enemy := HeavyTasteEnemy.new()
 	enemy.name = "HeavyTasteEnemy_%d" % (spawned_total + 1)
 	enemy.setup(config, player, navigation)
+	enemy.set_chase_slot(spawned_total)
 	get_tree().current_scene.add_child(enemy)
 	enemy.global_position = position
 	enemy.reflavor_completed.connect(_on_enemy_reflavored)
@@ -285,12 +317,64 @@ func _spawn_heavy_enemy_at(position: Vector2) -> HeavyTasteEnemy:
 
 
 func _on_enemy_reflavored(enemy: BasicTasteEnemy) -> void:
+	_settle_enemy_loot(enemy)
 	if enemy in live_enemies:
 		live_enemies.erase(enemy)
 		active_enemy_count = maxi(0, active_enemy_count - 1)
 		reflavored_total += 1
 	_check_wave_complete()
 	wave_stats_changed.emit()
+
+
+func settle_enemy_loot_for_test(enemy: BasicTasteEnemy) -> CarryableItem:
+	return _settle_enemy_loot(enemy, true)
+
+
+func _settle_enemy_loot(enemy: BasicTasteEnemy, force_normal_drop: bool = false) -> CarryableItem:
+	if enemy == null or not is_instance_valid(enemy):
+		return null
+	var enemy_id := enemy.get_instance_id()
+	if loot_settled_enemy_ids.has(enemy_id):
+		return null
+	loot_settled_enemy_ids[enemy_id] = true
+	var item_type := -1
+	if enemy is HeavyTasteEnemy:
+		item_type = ItemData.ItemType.RAW_BEEF_CHUNK
+	elif force_normal_drop or random.randf() <= config.normal_loot_chance:
+		item_type = _pick_normal_loot_type()
+	if item_type < 0:
+		return null
+	var loot := ItemFactory.create_carryable(ItemCatalog.create(item_type))
+	get_tree().current_scene.add_child(loot)
+	var offset := Vector2.RIGHT.rotated(random.randf_range(0.0, TAU)) * random.randf_range(8.0, config.loot_spawn_radius)
+	loot.release_to_world(get_tree().current_scene, enemy.global_position + offset)
+	loot.mark_as_loot_drop()
+	if run_stats == null:
+		run_stats = get_tree().get_first_node_in_group("run_stats") as RunStats
+	if run_stats != null:
+		run_stats.record_loot_spawned()
+	return loot
+
+
+func _pick_normal_loot_type() -> int:
+	var entries := [
+		[ItemData.ItemType.COOKING_OIL, config.normal_loot_oil_weight],
+		[ItemData.ItemType.SALT, config.normal_loot_salt_weight],
+		[ItemData.ItemType.CHILI_SEGMENTS, config.normal_loot_chili_weight],
+		[ItemData.ItemType.MARINADE, config.normal_loot_marinade_weight],
+		[ItemData.ItemType.MUSTARD, config.normal_loot_mustard_weight],
+	]
+	var total_weight := 0.0
+	for entry in entries:
+		total_weight += maxf(0.0, float(entry[1]))
+	if total_weight <= 0.0:
+		return ItemData.ItemType.SALT
+	var roll := random.randf_range(0.0, total_weight)
+	for entry in entries:
+		roll -= maxf(0.0, float(entry[1]))
+		if roll <= 0.0:
+			return int(entry[0])
+	return ItemData.ItemType.SALT
 
 
 func _check_wave_complete() -> void:
@@ -300,7 +384,7 @@ func _check_wave_complete() -> void:
 		current_edge_label = ""
 		completed_waves = current_wave
 		if current_wave >= config.run_total_waves:
-			phase = Phase.RUN_COMPLETE
+			_finish_run(true)
 		else:
 			current_wave += 1
 			phase = Phase.INTERMISSION
@@ -312,11 +396,33 @@ func _check_wave_complete() -> void:
 func _on_player_defeated() -> void:
 	if phase in [Phase.RUN_COMPLETE, Phase.FAILED]:
 		return
-	phase = Phase.FAILED
-	for enemy in live_enemies:
-		if is_instance_valid(enemy):
-			enemy.disable_for_failed_wave()
+	if phase == Phase.FREE_PREPARATION:
+		player.reset_wave_health()
+		player.notify_feedback("自由大厅测试倒地：已恢复生命")
+		return
+	_finish_run(false)
+
+
+func _finish_run(success: bool) -> void:
+	phase = Phase.RUN_COMPLETE if success else Phase.FAILED
+	if run_stats == null:
+		run_stats = get_tree().get_first_node_in_group("run_stats") as RunStats
+	if run_stats != null:
+		run_stats.finish_run()
+	if player != null:
+		player.set_modal_ui_open(true)
+	if not success:
+		for enemy in live_enemies:
+			if is_instance_valid(enemy):
+				enemy.disable_for_failed_wave()
+	run_finished.emit(success)
 	wave_stats_changed.emit()
+
+
+func _set_test_dummies_active(active: bool) -> void:
+	for node in get_tree().get_nodes_in_group("debug_combat_target"):
+		if node is DebugCombatTarget:
+			(node as DebugCombatTarget).set_lobby_active(active)
 
 
 func _is_spawn_point_legal(point: WaveSpawnPoint) -> bool:
@@ -358,6 +464,7 @@ func _apply_shared_prototype_config() -> void:
 
 
 func _reset_scene_for_new_game() -> void:
+	loot_settled_enemy_ids.clear()
 	for enemy in get_tree().get_nodes_in_group("basic_taste_enemy"):
 		if is_instance_valid(enemy):
 			enemy.queue_free()

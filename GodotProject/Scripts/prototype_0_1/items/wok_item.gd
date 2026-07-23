@@ -19,6 +19,7 @@ enum CookStage {
 var wok_state: int = WokState.CLEAN
 var cook_stage: int = CookStage.EMPTY
 var content_data: ItemData
+var dish_recorded_for_content: bool = false
 func setup_wok(station_id: StringName) -> void:
 	cookware_kind = CookwareKind.WOK
 	origin_station_id = station_id
@@ -55,6 +56,7 @@ func insert_meat(item_data: ItemData) -> bool:
 	if not can_insert_meat(item_data):
 		return false
 	content_data = item_data
+	dish_recorded_for_content = false
 	if content_data.item_type == ItemData.ItemType.RAW_BEEF_SLICES:
 		content_data.add_failure_tag(ItemData.FailureTag.UNMARINATED)
 	if content_data.processing_state == ItemData.ProcessingState.STIR_FRY_STAGE_ONE:
@@ -117,7 +119,17 @@ func complete_stage_two() -> void:
 	cook_stage = CookStage.STAGE_TWO_DONE
 	wok_state = WokState.CLEAN
 	data.processing_state = ItemData.ProcessingState.WOK_CLEAN
+	_record_completed_dish()
 	refresh_visual()
+
+
+func _record_completed_dish() -> void:
+	if dish_recorded_for_content or not is_inside_tree():
+		return
+	dish_recorded_for_content = true
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null:
+		stats.record_dish_created(content_data)
 
 
 func mark_burnt() -> void:

@@ -38,6 +38,11 @@ extends Resource
 @export var knockback_decay: float = 520.0
 @export var separation_radius: float = 40.0
 @export var separation_force: float = 48.0
+@export var chase_slot_radius: float = 30.0
+@export var stuck_repath_time: float = 0.75
+@export var stuck_minimum_speed: float = 6.0
+@export var stuck_steer_time: float = 0.5
+@export var stuck_lateral_weight: float = 0.7
 @export var reflavor_exit_time: float = 0.48
 
 @export_category("Heavy Taste-True enemy - Prototype values")
@@ -61,14 +66,23 @@ extends Resource
 @export var player_max_health: float = 100.0
 @export var player_hit_protection_time: float = 0.22
 
-@export_category("Finite shared stock")
-@export var raw_beef_stock: int = 6
-@export var marinade_stock: int = 6
-@export var chili_stock: int = 6
-@export var cooking_oil_stock: int = 6
-@export var salt_stock: int = 4
-@export var mustard_stock: int = 4
+@export_category("Prototype 0.6A actual cabinet stock")
+@export var raw_beef_stock: int = 1
+@export var marinade_stock: int = 1
+@export var chili_stock: int = 2
+@export var cooking_oil_stock: int = 2
+@export var salt_stock: int = 1
+@export var mustard_stock: int = 1
 @export var clean_plate_stock: int = 6
+
+@export_category("Prototype 0.6A physical loot")
+@export_range(0.0, 1.0, 0.01) var normal_loot_chance: float = 0.35
+@export var normal_loot_oil_weight: float = 24.0
+@export var normal_loot_salt_weight: float = 24.0
+@export var normal_loot_chili_weight: float = 24.0
+@export var normal_loot_marinade_weight: float = 20.0
+@export var normal_loot_mustard_weight: float = 8.0
+@export var loot_spawn_radius: float = 26.0
 
 @export_category("Manual kitchen processing - Prototype values")
 @export var first_cut_time: float = 1.4

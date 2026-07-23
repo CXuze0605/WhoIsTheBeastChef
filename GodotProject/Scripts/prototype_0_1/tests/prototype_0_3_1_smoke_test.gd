@@ -38,6 +38,7 @@ func _test_01_preparation_timing() -> void:
 	_expect(manager.config.preparation_time >= 18.0 * 1.5, "01: preparation must be clearly longer than Prototype 0.3")
 	var stock_before := cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK)
 	manager.start_service_early()
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and manager.preparation_left >= 30.0, "01: Start Service must use the centralized formal preparation time")
 	_expect(not manager.early_started and is_zero_approx(manager.early_seconds), "01: initial free preparation must not create an early-service reward")
 	_expect(cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == stock_before, "01: timing changes must not refill or consume finite stock")
 	await _dispose_scene(scene)
@@ -51,6 +52,7 @@ func _test_02_spawn_pacing() -> void:
 	_expect(is_equal_approx(manager.config.same_batch_spawn_interval, 0.55), "02: same-batch interval must increase from 0.3 to 0.55 seconds")
 	_expect(manager.config.total_batches == 3 and manager.config.enemies_per_batch == 2, "02: pacing pass must not change the six-enemy total")
 	manager.start_service_early()
+	manager.force_advance_phase_for_test(manager.preparation_left + 0.01)
 	manager.force_advance_phase_for_test(manager.config.global_warning_time + 0.01)
 	manager.force_advance_phase_for_test(manager.config.local_warning_time + 0.01)
 	manager.force_advance_phase_for_test(0.01)
@@ -224,10 +226,11 @@ func _test_11_parallel_cooking_feedback() -> void:
 	var station := scene.get_node("Kitchen/WokStation") as WokStation
 	station.set_process(false)
 	manager.set_process(false)
+	manager.start_service_early()
 	station.wok_item.add_oil()
 	station.wok_item.insert_meat(ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES))
 	station.set_burner_on(true)
-	manager.start_service_early()
+	manager.force_advance_phase_for_test(manager.preparation_left + 0.01)
 	manager.force_advance_phase_for_test(manager.config.global_warning_time + 0.01)
 	station.advance_automatic_cooking(station.config.automatic_stage_one_time + 0.01)
 	_expect(station.wok_item.cook_stage == WokItem.CookStage.STAGE_ONE_DONE, "11: warning and combat phases must not pause automatic cooking")
@@ -242,12 +245,15 @@ func _test_12_full_regression_contract() -> void:
 	var player := scene.get_node("Kitchen/Player") as PrototypePlayer
 	var manager := scene.get_node("WaveManager") as PrototypeWaveManager
 	var cabinet := scene.get_node("Kitchen/IngredientCabinet") as IngredientCabinet
+	manager.start_service_early()
+	await process_frame
 	_expect(player.inventory.slots.size() == 5, "12: five-slot inventory must remain intact")
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and not cabinet.lobby_unlimited, "12: formal preparation must use the finite cabinet")
 	_expect(cabinet.get_supported_item_types().size() == 6, "12: unified finite cabinet must remain intact")
 	_expect(scene.get_node_or_null("PlatingController") != null and scene.get_node_or_null("CombatRuntime") != null, "12: plating and combat-dish runtime must remain connected")
 	_expect(scene.get_node_or_null("Kitchen/Sink") != null and scene.get_node_or_null("Kitchen/CleanPlatePile") != null, "12: plate and stuck-wok cleaning loop must remain connected")
 	_expect(InputMap.has_action("start_service") and manager.config.global_warning_time == 2.0 and manager.config.local_warning_time == 0.8, "12: service input and existing warning rules must remain unchanged")
-	_expect(manager.config.raw_beef_stock == 6 and manager.config.clean_plate_stock == 6, "12: pacing pass must not add inventory or resource stock")
+	_expect(manager.config.raw_beef_stock == 1 and manager.config.clean_plate_stock == 6 and cabinet.storage.get_items().size() > 0, "12: 0.6A must use constrained actual cabinet stock while preserving plate startup")
 	await _dispose_scene(scene)
 
 

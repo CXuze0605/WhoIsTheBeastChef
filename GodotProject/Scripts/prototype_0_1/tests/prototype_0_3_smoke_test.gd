@@ -42,7 +42,7 @@ func _test_01_finite_preparation_stock() -> void:
 	var before := cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK)
 	_expect(cabinet.request_take(ItemData.ItemType.RAW_BEEF_CHUNK, player), "01: preparation must allow normal finite withdrawal")
 	manager.start_service_early()
-	_expect(cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == before - 1, "01: starting combat must not refill or refund stock")
+	_expect(cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == before and player.held_item == null, "01: formal service must reset isolated lobby practice stock and inventory")
 	await _dispose_scene(scene)
 
 
@@ -51,7 +51,9 @@ func _test_02_countdown_starts_warning() -> void:
 	var manager := _manager(scene)
 	manager.set_process(false)
 	_expect(manager.start_service_early(), "02: free preparation must wait for Start Service")
-	_expect(manager.phase == PrototypeWaveManager.Phase.GLOBAL_WARNING, "02: Start Service must enter global warning")
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and manager.preparation_left >= 30.0, "02: Start Service must enter the formal preparation countdown")
+	manager.force_advance_phase_for_test(manager.preparation_left + 0.01)
+	_expect(manager.phase == PrototypeWaveManager.Phase.GLOBAL_WARNING, "02: completed preparation must enter global warning")
 	manager.force_advance_phase_for_test(manager.config.global_warning_time + 0.01)
 	_expect(manager.phase == PrototypeWaveManager.Phase.LOCAL_WARNING, "02: global warning must lead to local warning before spawning")
 	await _dispose_scene(scene)
@@ -63,7 +65,7 @@ func _test_03_early_service() -> void:
 	manager.set_process(false)
 	_expect(manager.start_service_early(), "03: B action handler must begin service during free preparation")
 	_expect(not manager.early_started and is_zero_approx(manager.early_seconds), "03: initial free preparation must not record an early-service reward")
-	_expect(manager.phase == PrototypeWaveManager.Phase.GLOBAL_WARNING, "03: early service must enter the same warning, not spawn instantly")
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION, "03: initial service must enter preparation rather than spawning instantly")
 	await _dispose_scene(scene)
 
 
@@ -86,6 +88,7 @@ func _test_05_staggered_batches() -> void:
 	var manager := _manager(scene)
 	manager.set_process(false)
 	manager.start_service_early()
+	manager.force_advance_phase_for_test(manager.preparation_left + 0.01)
 	manager.force_advance_phase_for_test(manager.config.global_warning_time + 0.01)
 	manager.force_advance_phase_for_test(manager.config.local_warning_time + 0.01)
 	_expect(manager.phase == PrototypeWaveManager.Phase.SPAWNING and manager.spawned_total == 0, "05: local warning must precede first spawn")
@@ -130,6 +133,7 @@ func _test_07_player_damage_and_failure() -> void:
 	var manager := _manager(scene)
 	manager.set_process(false)
 	var player := manager.player
+	manager.phase = PrototypeWaveManager.Phase.WAVE_ACTIVE
 	var before := player.current_health
 	_expect(player.receive_combat_hit(12.0, CombatRules.Faction.ENEMY, Vector2.RIGHT, 30.0, false), "07: enemy swing must damage player")
 	_expect(not player.receive_combat_hit(12.0, CombatRules.Faction.ENEMY, Vector2.RIGHT, 30.0, false), "07: short Prototype protection must block duplicate same-swing damage")
@@ -212,10 +216,11 @@ func _test_12_cooking_continues_during_combat() -> void:
 	var manager := _manager(scene)
 	manager.set_process(false)
 	var station := scene.get_node("Kitchen/WokStation") as WokStation
+	manager.start_service_early()
 	station.wok_item.add_oil()
 	station.wok_item.insert_meat(ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES))
 	station.set_burner_on(true)
-	manager.start_service_early()
+	manager.force_advance_phase_for_test(manager.preparation_left + 0.01)
 	manager.force_advance_phase_for_test(manager.config.global_warning_time + 0.01)
 	station.advance_automatic_cooking(station.config.automatic_stage_one_time + 0.01)
 	_expect(station.wok_item.cook_stage == WokItem.CookStage.STAGE_ONE_DONE, "12: warnings and combat phase must not pause automatic cooking")
@@ -234,9 +239,10 @@ func _test_13_wave_completion_preserves_state() -> void:
 	manager.config.enemies_per_batch = 1
 	var cabinet := scene.get_node("Kitchen/IngredientCabinet") as IngredientCabinet
 	var station := scene.get_node("Kitchen/WokStation") as WokStation
+	manager.start_service_early()
 	var beef_before := cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK)
 	station.set_burner_on(true)
-	manager.start_service_early()
+	manager.force_advance_phase_for_test(manager.preparation_left + 0.01)
 	manager.force_advance_phase_for_test(manager.config.global_warning_time + 0.01)
 	manager.force_advance_phase_for_test(manager.config.local_warning_time + 0.01)
 	manager.force_advance_phase_for_test(0.01)
@@ -252,10 +258,14 @@ func _test_14_regression_contracts() -> void:
 	_expect(InputMap.has_action("start_service") and not InputMap.action_get_events("start_service").is_empty(), "14: Prototype 0.3 must register an early-service input")
 	var scene := await _spawn_main_scene()
 	var player := scene.get_node("Kitchen/Player") as PrototypePlayer
+	var manager := scene.get_node("WaveManager") as PrototypeWaveManager
 	var cabinet := scene.get_node("Kitchen/IngredientCabinet") as IngredientCabinet
 	var wok := scene.get_node("Kitchen/WokStation") as WokStation
+	manager.start_service_early()
+	await process_frame
 	_expect(player.inventory.slots.size() == 5, "14: five-slot quick inventory must remain intact")
-	_expect(cabinet.get_supported_item_types().size() == 6, "14: unified cabinet with salt and mustard must remain intact")
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and not cabinet.lobby_unlimited, "14: formal preparation must switch to the finite cabinet")
+	_expect(cabinet.get_supported_item_types().size() == 6, "14: formal unified cabinet with salt and mustard must remain intact")
 	wok.wok_item.add_oil()
 	wok.wok_item.insert_meat(ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES))
 	wok.set_burner_on(true)

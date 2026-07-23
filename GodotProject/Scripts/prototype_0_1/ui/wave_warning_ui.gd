@@ -16,16 +16,10 @@ func _process(_delta: float) -> void:
 	if manager == null:
 		manager = get_tree().get_first_node_in_group("prototype_wave_manager") as PrototypeWaveManager
 		return
-	center_label.visible = manager.phase in [PrototypeWaveManager.Phase.GLOBAL_WARNING, PrototypeWaveManager.Phase.RUN_COMPLETE, PrototypeWaveManager.Phase.FAILED]
+	center_label.visible = manager.phase == PrototypeWaveManager.Phase.GLOBAL_WARNING
 	if manager.phase == PrototypeWaveManager.Phase.GLOBAL_WARNING:
 		center_label.text = "味真族正在逼近！"
 		center_label.modulate.a = 0.65 + sin(Time.get_ticks_msec() * 0.015) * 0.35
-	elif manager.phase == PrototypeWaveManager.Phase.RUN_COMPLETE:
-		center_label.text = "三波复味测试完成！\n可重新开始新一局"
-		center_label.modulate.a = 1.0
-	elif manager.phase == PrototypeWaveManager.Phase.FAILED:
-		center_label.text = "测试波次失败\n按 T 快速重新开始"
-		center_label.modulate.a = 1.0
 	edge_label.visible = manager.phase == PrototypeWaveManager.Phase.LOCAL_WARNING
 	edge_label.text = "⚠ 下一批将从%s进入" % manager.current_edge_label
 	edge_label.modulate.a = 0.55 + sin(Time.get_ticks_msec() * 0.022) * 0.45

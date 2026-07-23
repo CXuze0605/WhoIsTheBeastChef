@@ -3,6 +3,12 @@ extends Interactable
 
 var data: ItemData
 var pickup_enabled: bool = true
+var storage_rotated: bool = false
+var is_loot_drop: bool = false
+var loot_pickup_counted: bool = false
+
+const DEFAULT_HELD_SCALE := Vector2(0.68, 0.68)
+const TOMAHAWK_HELD_ART_SCALE: float = 3.2
 
 
 func setup(item_data: ItemData) -> void:
@@ -40,8 +46,11 @@ func set_held(anchor: Node2D) -> void:
 	if get_parent() != anchor:
 		reparent(anchor)
 	position = Vector2.ZERO
-	scale = Vector2(0.68, 0.68)
+	scale = DEFAULT_HELD_SCALE
 	z_index = 20
+	_apply_default_visual_pose()
+	if _is_unplated_tomahawk():
+		placeholder.set_text_visible(false)
 
 
 func set_inventory_stored(container: Node2D) -> void:
@@ -53,6 +62,7 @@ func set_inventory_stored(container: Node2D) -> void:
 	scale = Vector2.ONE
 	z_index = 0
 	visible = false
+	_apply_default_visual_pose()
 
 
 func set_stored(container: Node, local_position: Vector2) -> void:
@@ -64,6 +74,7 @@ func set_stored(container: Node, local_position: Vector2) -> void:
 	position = local_position
 	scale = Vector2(0.58, 0.58)
 	z_index = 5
+	_apply_default_visual_pose()
 
 
 func release_to_world(world: Node, world_position: Vector2) -> void:
@@ -75,6 +86,45 @@ func release_to_world(world: Node, world_position: Vector2) -> void:
 	z_index = 5
 	pickup_enabled = true
 	interaction_enabled = true
+	_apply_default_visual_pose()
+
+
+func update_held_pose(facing_direction: Vector2) -> void:
+	if placeholder == null:
+		return
+	if not _is_unplated_tomahawk():
+		placeholder.set_art_transform()
+		return
+	# The source art points toward local up. Rotate its steak head outward while
+	# keeping the long bone close to the player's hand, so it reads as an axe.
+	var direction := facing_direction.normalized()
+	if direction.is_zero_approx():
+		direction = Vector2.DOWN
+	placeholder.set_art_transform(TOMAHAWK_HELD_ART_SCALE, direction.angle() + PI * 0.5)
+
+
+func _apply_default_visual_pose() -> void:
+	if placeholder == null:
+		return
+	placeholder.set_art_transform()
+	placeholder.set_text_visible(true)
+
+
+func _is_unplated_tomahawk() -> bool:
+	return data != null and data.item_type == ItemData.ItemType.TOMAHAWK_STEAK
+
+
+func mark_as_loot_drop() -> void:
+	is_loot_drop = true
+	loot_pickup_counted = false
+	add_to_group("loot_drop")
+	refresh_visual()
+
+
+func mark_loot_picked_up() -> void:
+	is_loot_drop = false
+	remove_from_group("loot_drop")
+	refresh_visual()
 
 
 func refresh_visual() -> void:
@@ -83,7 +133,7 @@ func refresh_visual() -> void:
 	display_title = data.display_name
 	placeholder.set_title(data.display_name)
 	placeholder.set_color(ItemCatalog.get_item_color(data.item_type))
-	PrototypeArtCatalog.apply_to(placeholder, ItemCatalog.get_art_key(data.item_type))
+	PrototypeArtCatalog.apply_to(placeholder, ItemCatalog.get_art_key_for_data(data))
 	var status := ""
 	var title := data.display_name
 	if data.is_stackable:

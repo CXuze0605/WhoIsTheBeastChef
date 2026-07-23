@@ -13,6 +13,8 @@ signal health_changed(current: float, maximum: float)
 @onready var direction_marker: Polygon2D = $DirectionMarker
 
 var inventory := QuickInventory.new()
+var backpack: GridInventory
+var backpack_storage: Node2D
 var held_item: CarryableItem:
 	get:
 		return inventory.get_selected_item()
@@ -30,6 +32,9 @@ var hit_protection_left: float = 0.0
 var is_defeated: bool = false
 var hit_flash_left: float = 0.0
 var action_stun_left: float = 0.0
+var global_modal_overlay_open: bool = false
+var hold_progress_bar: ProgressBar
+var walk_animator: DirectionalWalkAnimator
 
 
 func _ready() -> void:
@@ -41,6 +46,28 @@ func _ready() -> void:
 	collision_mask = 5
 	inventory.changed.connect(_refresh_inventory_visuals)
 	inventory.selection_changed.connect(_on_inventory_selection_changed)
+	backpack_storage = Node2D.new()
+	backpack_storage.name = "BackpackStorage"
+	add_child(backpack_storage)
+	backpack = GridInventory.new(
+		ItemStorageCatalog.BACKPACK_SIZE.x,
+		ItemStorageCatalog.BACKPACK_SIZE.y,
+		backpack_storage
+	)
+	backpack.changed.connect(_refresh_inventory_visuals)
+	walk_animator = DirectionalWalkAnimator.new()
+	walk_animator.name = "DirectionalWalkAnimator"
+	add_child(walk_animator)
+	walk_animator.configure(
+		$PlayerArt,
+		PrototypeArtCatalog.TEXTURES.get(&"player_walk_sheet") as Texture2D,
+		Vector2(64.0, 64.0),
+		10.0,
+		true,
+		true,
+		false
+	)
+	_build_hold_progress_indicator()
 	_refresh_inventory_visuals()
 	health_changed.emit(current_health, prototype_max_health)
 
@@ -65,8 +92,11 @@ func _physics_process(delta: float) -> void:
 			facing_direction = input_direction.normalized()
 	move_and_slide()
 	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 500.0 * delta)
+	if walk_animator != null:
+		walk_animator.update_animation(delta, Vector2.ZERO if movement_locked else input_direction)
 	_update_facing_visual()
 	_update_active_interaction(delta)
+	_update_hold_progress_indicator()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -104,7 +134,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_cancel_active_interaction()
 
 
-func pickup_item(item: CarryableItem) -> bool:
+func _pickup_item_hotbar_only(item: CarryableItem) -> bool:
 	var destination := inventory.add_item(item)
 	if destination == -1:
 		notify_feedback("物品栏已满")
@@ -114,12 +144,77 @@ func pickup_item(item: CarryableItem) -> bool:
 	return true
 
 
-func can_receive_item(item: CarryableItem = null) -> bool:
+func pickup_item(item: CarryableItem) -> bool:
+	if item == null or item.data == null:
+		return false
+	var item_name := item.data.display_name
+	var accepted_any := inventory.merge_from_item(item) > 0
+	if item.data.stack_count <= 0:
+		_finish_world_pickup(item, accepted_any)
+		item.queue_free()
+		notify_feedback("已合并到快捷栏：%s" % item_name)
+		return true
+	var destination := inventory.add_item_to_empty(item)
+	if destination != -1:
+		_finish_world_pickup(item, true)
+		_refresh_inventory_visuals()
+		notify_feedback("收纳到快捷栏 %d：%s" % [destination + 1, item_name])
+		return true
+	if backpack != null and backpack.merge_from_item(item) > 0:
+		accepted_any = true
+	if item.data.stack_count <= 0:
+		_finish_world_pickup(item, accepted_any)
+		item.queue_free()
+		notify_feedback("已合并到异形背包：%s" % item_name)
+		return true
+	if backpack != null and backpack.add_item_auto(item, false):
+		_finish_world_pickup(item, true)
+		notify_feedback("快捷栏已满，已收入异形背包：%s" % item_name)
+		return true
+	if accepted_any:
+		_finish_world_pickup(item, true)
+		item.release_to_world(get_tree().current_scene, item.global_position)
+		notify_feedback("已收纳部分物品；快捷栏和背包均没有足够空间")
+		return false
+	notify_feedback("快捷栏和背包均没有足够空间")
+	return false
+
+
+func _can_receive_item_hotbar_only(item: CarryableItem = null) -> bool:
 	return inventory.can_accept_data(item.data) if item != null else not inventory.is_full()
 
 
+func can_receive_item(item: CarryableItem = null) -> bool:
+	if item == null:
+		if inventory.find_destination_slot() != -1:
+			return true
+		if backpack == null:
+			return false
+		for y in backpack.height:
+			for x in backpack.width:
+				if backpack.can_place_shape([Vector2i.ZERO], Vector2i(x, y)):
+					return true
+		return false
+	return can_receive_item_data(item.data)
+
+
 func can_receive_item_data(item_data: ItemData) -> bool:
-	return inventory.can_accept_data(item_data)
+	if item_data == null:
+		return false
+	if inventory.can_accept_data(item_data):
+		return true
+	var remaining := item_data.stack_count
+	if item_data.is_stackable:
+		remaining -= inventory.get_stack_capacity_for(item_data)
+		if remaining <= 0:
+			return true
+	if inventory.find_destination_slot() != -1:
+		return true
+	if backpack == null:
+		return false
+	var probe_data := ItemCatalog.duplicate_data(item_data)
+	probe_data.stack_count = maxi(1, remaining)
+	return backpack.can_accept_data(probe_data)
 
 
 func release_held_to_container(container: Node, local_position: Vector2) -> CarryableItem:
@@ -147,6 +242,40 @@ func receive_item_data(item_data: ItemData) -> bool:
 	if pickup_item(item):
 		return true
 	item.queue_free()
+	return false
+
+
+func get_backpack() -> GridInventory:
+	return backpack
+
+
+func move_quick_item_to_backpack(slot_index: int, origin := Vector2i(-1, -1), rotated: bool = false) -> bool:
+	var item := inventory.get_item(slot_index)
+	if item == null or backpack == null:
+		return false
+	var placed := false
+	if origin.x < 0 or origin.y < 0:
+		placed = backpack.add_item_auto(item)
+	else:
+		placed = backpack.add_item_at(item, origin, rotated)
+	if not placed:
+		return false
+	inventory.take_item(slot_index)
+	_refresh_inventory_visuals()
+	return true
+
+
+func move_backpack_item_to_quick(item: CarryableItem, slot_index: int = -1) -> bool:
+	if backpack == null or backpack.get_placement(item) == null:
+		return false
+	var destination := slot_index if slot_index >= 0 else inventory.find_destination_slot()
+	if destination < 0 or inventory.get_item(destination) != null:
+		return false
+	var old_placement := backpack.remove_item(item)
+	if inventory.put_item(destination, item):
+		_refresh_inventory_visuals()
+		return true
+	backpack.add_item_at(item, old_placement.origin, old_placement.rotated)
 	return false
 
 
@@ -219,10 +348,12 @@ func _start_primary_interaction() -> void:
 
 func _cancel_active_interaction() -> void:
 	if active_interactable == null:
+		_hide_hold_progress_indicator()
 		return
 	if is_instance_valid(active_interactable):
 		active_interactable.cancel_primary_interaction(self)
 	active_interactable = null
+	_hide_hold_progress_indicator()
 
 
 func _update_active_interaction(delta: float) -> void:
@@ -230,6 +361,7 @@ func _update_active_interaction(delta: float) -> void:
 		return
 	if not is_instance_valid(active_interactable):
 		active_interactable = null
+		_hide_hold_progress_indicator()
 		return
 	if global_position.distance_to(active_interactable.global_position) > prototype_interaction_distance:
 		_cancel_active_interaction()
@@ -239,6 +371,7 @@ func _update_active_interaction(delta: float) -> void:
 		return
 	if not active_interactable.update_primary_interaction(self, delta):
 		active_interactable = null
+		_hide_hold_progress_indicator()
 
 
 func set_modal_ui_open(value: bool) -> void:
@@ -248,6 +381,21 @@ func set_modal_ui_open(value: bool) -> void:
 	if modal_ui_open:
 		_cancel_active_interaction()
 		velocity = Vector2.ZERO
+	_hide_hold_progress_indicator()
+
+
+func set_global_modal_overlay_open(value: bool) -> void:
+	global_modal_overlay_open = value
+	if global_modal_overlay_open:
+		_hide_hold_progress_indicator()
+	else:
+		_update_hold_progress_indicator()
+
+
+func get_active_interaction_progress_ratio() -> float:
+	if active_interactable == null or not is_instance_valid(active_interactable) or not active_interactable.has_method("get_progress_ratio"):
+		return 0.0
+	return clampf(float(active_interactable.get_progress_ratio()), 0.0, 1.0)
 
 
 func get_combat_faction() -> int:
@@ -266,7 +414,11 @@ func receive_combat_hit(
 		return false
 	if not CombatRules.can_damage(attacker_faction, get_combat_faction(), friendly_fire):
 		return false
+	var health_before := current_health
 	current_health = maxf(0.0, current_health - damage)
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null:
+		stats.record_damage(health_before - current_health, attacker_faction, get_combat_faction())
 	health_changed.emit(current_health, prototype_max_health)
 	knockback_velocity += knockback_direction.normalized() * knockback_force
 	hit_protection_left = hit_protection_time
@@ -275,7 +427,7 @@ func receive_combat_hit(
 	if current_health <= 0.0:
 		is_defeated = true
 		velocity = Vector2.ZERO
-		notify_feedback("Prototype：测试波次失败，按 T 重新开始")
+		notify_feedback("厨房失守：请查看本局结算")
 		player_defeated.emit()
 	return true
 
@@ -306,6 +458,8 @@ func reset_wave_health() -> void:
 func reset_for_new_game(max_health: float, protection_time: float) -> void:
 	_cancel_active_interaction()
 	inventory.clear_all()
+	if backpack != null:
+		backpack.clear_all()
 	prototype_max_health = max_health
 	current_health = max_health
 	hit_protection_time = protection_time
@@ -317,8 +471,23 @@ func reset_for_new_game(max_health: float, protection_time: float) -> void:
 	global_position = spawn_position
 	facing_direction = Vector2.DOWN
 	modal_ui_open = false
+	global_modal_overlay_open = false
 	health_changed.emit(current_health, prototype_max_health)
 	_refresh_inventory_visuals()
+	_hide_hold_progress_indicator()
+	var attack_controller := get_node_or_null("DishAttackController") as DishAttackController
+	if attack_controller != null:
+		attack_controller.reset_for_new_game()
+
+
+func _finish_world_pickup(item: CarryableItem, accepted: bool) -> void:
+	if not accepted or item == null or not item.is_loot_drop or item.loot_pickup_counted:
+		return
+	item.loot_pickup_counted = true
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null and stats.has_method("record_loot_picked_up"):
+		stats.record_loot_picked_up()
+	item.mark_loot_picked_up()
 
 
 func _on_inventory_selection_changed(_slot_index: int) -> void:
@@ -358,3 +527,52 @@ func _update_current_target() -> void:
 func _update_facing_visual() -> void:
 	direction_marker.rotation = facing_direction.angle() + PI * 0.5
 	held_anchor.position = facing_direction * 34.0
+	if held_item != null and is_instance_valid(held_item):
+		held_item.update_held_pose(facing_direction)
+
+
+func _build_hold_progress_indicator() -> void:
+	hold_progress_bar = ProgressBar.new()
+	hold_progress_bar.name = "HoldInteractionProgress"
+	hold_progress_bar.position = Vector2(-34.0, -72.0)
+	hold_progress_bar.size = Vector2(68.0, 9.0)
+	hold_progress_bar.min_value = 0.0
+	hold_progress_bar.max_value = 100.0
+	hold_progress_bar.value = 0.0
+	hold_progress_bar.show_percentage = false
+	hold_progress_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hold_progress_bar.z_index = 40
+	var background := StyleBoxFlat.new()
+	background.bg_color = Color(0.035, 0.045, 0.065, 0.92)
+	background.border_color = Color(0.88, 0.92, 0.98, 0.9)
+	background.set_border_width_all(1)
+	background.set_corner_radius_all(3)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = Color("ffd166")
+	fill.set_corner_radius_all(2)
+	hold_progress_bar.add_theme_stylebox_override("background", background)
+	hold_progress_bar.add_theme_stylebox_override("fill", fill)
+	add_child(hold_progress_bar)
+	hold_progress_bar.visible = false
+
+
+func _update_hold_progress_indicator() -> void:
+	if hold_progress_bar == null:
+		return
+	var should_show := (
+		not modal_ui_open
+		and not global_modal_overlay_open
+		and active_interactable != null
+		and is_instance_valid(active_interactable)
+		and active_interactable.has_method("get_progress_ratio")
+	)
+	hold_progress_bar.visible = should_show
+	if should_show:
+		hold_progress_bar.value = get_active_interaction_progress_ratio() * 100.0
+
+
+func _hide_hold_progress_indicator() -> void:
+	if hold_progress_bar == null:
+		return
+	hold_progress_bar.visible = false
+	hold_progress_bar.value = 0.0

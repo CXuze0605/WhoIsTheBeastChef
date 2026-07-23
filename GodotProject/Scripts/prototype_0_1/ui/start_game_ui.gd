@@ -1,9 +1,13 @@
 class_name StartGameUI
 extends CanvasLayer
 
+const ACTION_PANEL_POSITION := Vector2(20.0, 164.0)
+const ACTION_PANEL_SIZE := Vector2(218.0, 88.0)
+
 var manager: PrototypeWaveManager
 var root_control: Control
 var start_button: Button
+var hint_label: Label
 
 
 func _ready() -> void:
@@ -18,20 +22,16 @@ func _process(_delta: float) -> void:
 	root_control.visible = manager != null and manager.phase in [
 		PrototypeWaveManager.Phase.FREE_PREPARATION,
 		PrototypeWaveManager.Phase.INTERMISSION,
-		PrototypeWaveManager.Phase.RUN_COMPLETE,
-		PrototypeWaveManager.Phase.FAILED,
 	]
 	if manager != null:
-		start_button.text = "开始营业" if manager.phase in [PrototypeWaveManager.Phase.FREE_PREPARATION, PrototypeWaveManager.Phase.INTERMISSION] else "重新开始"
+		start_button.text = "开始营业" if manager.phase == PrototypeWaveManager.Phase.FREE_PREPARATION else "提前开始下一波"
+		hint_label.text = "自由大厅 · 可测试与准备" if manager.phase == PrototypeWaveManager.Phase.FREE_PREPARATION else "波间准备 %.0f 秒" % manager.preparation_left
 
 
 func _on_start_pressed() -> void:
 	if manager == null:
 		return
-	if manager.phase in [PrototypeWaveManager.Phase.FREE_PREPARATION, PrototypeWaveManager.Phase.INTERMISSION]:
-		manager.start_service_early()
-	else:
-		manager.start_game()
+	manager.start_service_early()
 
 
 func _build_ui() -> void:
@@ -41,8 +41,8 @@ func _build_ui() -> void:
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root_control)
 	var panel := PanelContainer.new()
-	panel.position = Vector2(754.0, 104.0)
-	panel.size = Vector2(182.0, 88.0)
+	panel.position = ACTION_PANEL_POSITION
+	panel.size = ACTION_PANEL_SIZE
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color("20252e")
@@ -58,11 +58,11 @@ func _build_ui() -> void:
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 4)
 	panel.add_child(column)
-	var hint := Label.new()
-	hint.text = "自由准备中 · 世界继续运行"
-	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint.add_theme_font_size_override("font_size", 12)
-	column.add_child(hint)
+	hint_label = Label.new()
+	hint_label.text = "自由大厅 · 可测试与准备"
+	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint_label.add_theme_font_size_override("font_size", 12)
+	column.add_child(hint_label)
 	start_button = Button.new()
 	start_button.name = "StartGameButton"
 	start_button.text = "开始营业"

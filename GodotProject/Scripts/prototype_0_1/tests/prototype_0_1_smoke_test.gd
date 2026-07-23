@@ -183,9 +183,9 @@ func _test_quick_inventory_and_full_pickup() -> void:
 	scene.add_child(extra)
 	extra.global_position = player.global_position + Vector2(40.0, 0.0)
 	var original_parent := extra.get_parent()
-	_expect(not player.pickup_item(extra), "五格全满时拾取第六件物品应失败")
-	_expect(extra.get_parent() == original_parent and extra.is_inside_tree(), "拾取失败后世界物品必须留在原处")
-	_expect(player.get_visible_feedback() == "物品栏已满", "满栏拾取应显示明确提示")
+	_expect(player.pickup_item(extra), "0.6A：五格全满时第六件物品应进入背包")
+	_expect(extra.is_queued_for_deletion() and player.inventory.get_item(3).data.stack_count == 2, "0.6A：拾取应优先合并快捷栏中的兼容堆")
+	_expect(player.get_visible_feedback().contains("快捷栏"), "0.6A：优先合并应显示明确的快捷栏提示")
 	var slot_zero_item := player.inventory.get_item(0)
 	var slot_one_item := player.inventory.get_item(1)
 	player.drop_held_item()
@@ -210,12 +210,8 @@ func _test_station_inventory_safety() -> void:
 	player.receive_item_data(ItemCatalog.create(ItemData.ItemType.MUSTARD))
 	_expect(player.inventory.is_full(), "工位满栏测试前快捷栏应为满")
 	board.carry_interact(player)
-	_expect(board.stored_item == beef_instance, "满栏时工位物品必须继续留在工位")
-	_expect(player.inventory.is_full(), "满栏取出失败不能覆盖任何格子")
-	_expect(player.get_visible_feedback() == "物品栏已满", "工位满栏取出应显示明确提示")
-	player.drop_held_item()
-	board.carry_interact(player)
-	_expect(beef_instance in player.inventory.slots and board.stored_item == null, "腾出格子后应取回同一个加工物品实例")
+	_expect(board.stored_item == null, "0.6A：快捷栏满时应通过背包取回工位物品")
+	_expect(player.backpack.get_placement(beef_instance) != null, "0.6A：工位取回必须保留同一个加工物品实例")
 	await _dispose_scene(scene)
 
 
@@ -223,10 +219,14 @@ func _test_unified_cabinet_and_modal_input() -> void:
 	var scene := await _spawn_main_scene()
 	if scene == null:
 		return
+	var manager := scene.get_node("WaveManager") as PrototypeWaveManager
+	manager.start_service_early()
+	await process_frame
 	var player := scene.get_node("Kitchen/Player") as PrototypePlayer
 	var cabinet := scene.get_node("Kitchen/IngredientCabinet") as IngredientCabinet
 	var cabinet_ui := scene.get_node("IngredientCabinetUI") as IngredientCabinetUI
-	_expect(cabinet.get_supported_item_types().size() == 6, "统一食材柜应包含牛肉、腌肉料、辣椒、油、盐和芥末六种当前流程物品")
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and not cabinet.lobby_unlimited, "开始营业后应切换到正式有限库存柜")
+	_expect(cabinet.get_supported_item_types().size() == 6, "正式食材柜应包含牛肉、腌肉料、辣椒、油、盐和芥末六种当前流程物品")
 	var initial_beef := cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK)
 	cabinet.begin_primary_interaction(player)
 	_expect(cabinet_ui.is_open() and player.modal_ui_open, "按交互打开柜子后应显示 UI 并锁定玩家输入")
@@ -272,9 +272,8 @@ func _test_unified_cabinet_and_modal_input() -> void:
 	player.receive_item_data(ItemCatalog.create(ItemData.ItemType.MUSTARD))
 	var oil_before := cabinet.get_stock(ItemData.ItemType.COOKING_OIL)
 	_expect(player.inventory.is_full(), "柜子满栏测试前快捷栏应为满")
-	_expect(not cabinet.request_take(ItemData.ItemType.COOKING_OIL, player), "满栏时柜子取料应失败")
-	_expect(cabinet.get_stock(ItemData.ItemType.COOKING_OIL) == oil_before, "满栏失败时柜子库存不得减少")
-	_expect(player.get_visible_feedback() == "物品栏已满", "柜子满栏应显示明确提示")
+	_expect(cabinet.request_take(ItemData.ItemType.COOKING_OIL, player), "0.6A：快捷栏满时柜子取料应进入背包")
+	_expect(cabinet.get_stock(ItemData.ItemType.COOKING_OIL) == oil_before - 1, "0.6A：背包后备取料成功后实际库存应减少")
 	await _dispose_scene(scene)
 
 
@@ -332,6 +331,9 @@ func _test_integrated_correct_flow() -> void:
 	board.update_primary_interaction(player, board.prototype_first_cut_time + 0.1)
 	board.carry_interact(player)
 	board.carry_interact(player)
+	board.carry_interact(player)
+	player.inventory.select(0)
+	board.carry_interact(player)
 	board.begin_primary_interaction(player)
 	board.update_primary_interaction(player, board.prototype_second_cut_time + 0.1)
 	board.carry_interact(player)
@@ -355,9 +357,13 @@ func _test_integrated_correct_flow() -> void:
 	wok_station.carry_interact(player)
 	wok_station.advance_automatic_cooking(wok_station.config.automatic_stage_two_time + 0.1, player)
 	wok_station.carry_interact(player)
-	_expect(player.held_item.data.item_type == ItemData.ItemType.UNPLATED_STIR_FRY_BEEF, "集成正确流程：应取出待摆盘小炒黄牛肉")
-	_expect(player.held_item.data.failure_tags.is_empty(), "集成正确流程：成品不应有失败标签")
-	_expect(player.held_item.data.quality == ItemData.Quality.NORMAL, "集成正确流程：成品品质应为正常")
+	var cooked_dish := player.held_item
+	if cooked_dish == null or cooked_dish.data.item_type != ItemData.ItemType.UNPLATED_STIR_FRY_BEEF:
+		var dish_slot := player.inventory.find_item_slot(ItemData.ItemType.UNPLATED_STIR_FRY_BEEF)
+		cooked_dish = player.inventory.get_item(dish_slot) if dish_slot >= 0 else null
+	_expect(cooked_dish != null and cooked_dish.data.item_type == ItemData.ItemType.UNPLATED_STIR_FRY_BEEF, "集成正确流程：应取出待摆盘小炒黄牛肉")
+	_expect(cooked_dish != null and cooked_dish.data.failure_tags.is_empty(), "集成正确流程：成品不应有失败标签")
+	_expect(cooked_dish != null and cooked_dish.data.quality == ItemData.Quality.NORMAL, "集成正确流程：成品品质应为正常")
 	await _dispose_scene(scene)
 
 

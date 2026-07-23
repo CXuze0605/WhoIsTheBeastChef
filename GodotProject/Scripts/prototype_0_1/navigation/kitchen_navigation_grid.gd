@@ -3,7 +3,7 @@ extends Node2D
 
 @export var walkable_bounds := Rect2(42.0, 42.0, 1792.0, 1300.0)
 @export var cell_size: float = 32.0
-@export var agent_radius: float = 15.0
+@export var agent_radius: float = 24.0
 
 var grid := AStarGrid2D.new()
 
@@ -60,10 +60,15 @@ func _world_to_id(world_position: Vector2) -> Vector2i:
 func _nearest_open_id(origin: Vector2i) -> Vector2i:
 	if grid.is_in_boundsv(origin) and not grid.is_point_solid(origin):
 		return origin
-	for radius in range(1, 5):
-		for y in range(origin.y - radius, origin.y + radius + 1):
-			for x in range(origin.x - radius, origin.x + radius + 1):
-				var candidate := Vector2i(x, y)
-				if grid.is_in_boundsv(candidate) and not grid.is_point_solid(candidate):
-					return candidate
-	return Vector2i(-1, -1)
+	var nearest := Vector2i(-1, -1)
+	var nearest_distance_squared := INF
+	for y in range(grid.region.position.y, grid.region.end.y):
+		for x in range(grid.region.position.x, grid.region.end.x):
+			var candidate := Vector2i(x, y)
+			if grid.is_point_solid(candidate):
+				continue
+			var distance_squared := Vector2(candidate - origin).length_squared()
+			if distance_squared < nearest_distance_squared:
+				nearest = candidate
+				nearest_distance_squared = distance_squared
+	return nearest

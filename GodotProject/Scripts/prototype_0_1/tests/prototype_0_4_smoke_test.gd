@@ -40,10 +40,9 @@ func _test_a_free_preparation() -> void:
 	cabinet.request_take(ItemData.ItemType.RAW_BEEF_CHUNK, player)
 	stove.wok_item.add_oil()
 	stove.set_burner_on(true)
-	var held_before := player.held_item
 	_expect(manager.start_service_early(), "A: Start Service must be accepted from free preparation")
-	_expect(manager.phase == PrototypeWaveManager.Phase.GLOBAL_WARNING and player.held_item == held_before and stove.burner_on and stove.wok_item.has_oil(), "A: starting service must preserve player, inventory, fire and cookware")
-	_expect(cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == stock_before - 1 and not manager.early_started, "A: first free preparation shares finite stock and records no early reward")
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and manager.preparation_left >= 30.0 and player.held_item == null and not stove.burner_on and not stove.wok_item.has_oil(), "A: starting service must clear isolated lobby practice state before formal preparation")
+	_expect(cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == stock_before and not manager.early_started, "A: formal preparation must restore centralized initial stock and record no early reward")
 	await _dispose_scene(scene)
 
 

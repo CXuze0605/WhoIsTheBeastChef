@@ -57,11 +57,10 @@ func _test_02_waiting_and_manual_start_reset() -> void:
 	pile.available_plate_count = 0
 	station.wok_item.add_oil()
 	station.set_burner_on(true)
-	var stock_after_prep := cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK)
-	_expect(manager.start_service_early(), "02: Start Service must begin the first warning")
-	_expect(manager.phase == PrototypeWaveManager.Phase.GLOBAL_WARNING, "02: Start Service must enter warning rather than reset the run")
-	_expect(player.inventory.get_selected_item() != null and cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == stock_after_prep, "02: Start Service must preserve prepared inventory and finite stock")
-	_expect(pile.available_plate_count == 0 and station.burner_on and station.wok_item.has_oil(), "02: Start Service must preserve plate, burner and cookware state")
+	_expect(manager.start_service_early(), "02: Start Service must begin formal preparation")
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and manager.preparation_left >= 30.0, "02: Start Service must reset lobby practice state before formal preparation")
+	_expect(player.inventory.get_selected_item() == null and cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == manager.config.raw_beef_stock, "02: formal preparation must restore initial inventory and finite stock")
+	_expect(pile.available_plate_count == manager.config.clean_plate_stock and not station.burner_on and not station.wok_item.has_oil(), "02: formal preparation must restore plate, burner and cookware state")
 	_expect(not manager.early_started and is_zero_approx(manager.early_seconds), "02: initial free preparation must not record an early reward")
 	await _dispose_scene(scene)
 
@@ -90,7 +89,7 @@ func _test_03_five_slot_hotbar() -> void:
 	_expect(player.inventory.selected_index == 4 and player.held_item == player.inventory.get_item(4), "03: numeric key action must directly select the matching complete item instance")
 	var sixth := ItemFactory.create_carryable(ItemCatalog.create(ItemData.ItemType.MUSTARD))
 	scene.add_child(sixth)
-	_expect(not player.pickup_item(sixth) and sixth.is_inside_tree(), "03: sixth item must be rejected without deletion or overwrite")
+	_expect(player.pickup_item(sixth) and player.backpack.get_placement(sixth) != null, "03: 0.6A must preserve the sixth real instance in backpack fallback")
 	await _dispose_scene(scene)
 
 
@@ -163,6 +162,10 @@ func _test_07_regression_contract() -> void:
 	var manager := scene.get_node("WaveManager") as PrototypeWaveManager
 	var station := scene.get_node("Kitchen/WokStation") as WokStation
 	var cabinet := scene.get_node("Kitchen/IngredientCabinet") as IngredientCabinet
+	_expect(cabinet.lobby_unlimited and cabinet.get_supported_item_types().size() == ItemData.ItemType.size(), "07: free lobby must expose the unlimited all-item test catalog")
+	manager.start_service_early()
+	await process_frame
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION, "07: preparation Start Service and wave flow must remain intact")
 	_expect(cabinet.get_supported_item_types().size() == 6 and cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == manager.config.raw_beef_stock, "07: finite unified cabinet must remain intact")
 	station.wok_item.add_oil()
 	station.wok_item.insert_meat(ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES))
@@ -172,8 +175,6 @@ func _test_07_regression_contract() -> void:
 	station.advance_automatic_cooking(station.config.automatic_stage_two_time + 0.01)
 	_expect(station.wok_item.cook_stage == WokItem.CookStage.STAGE_TWO_DONE and station.wok_item.content_data.item_type == ItemData.ItemType.UNPLATED_STIR_FRY_BEEF, "07: existing automatic recipe route must remain complete")
 	_expect(scene.get_node_or_null("PlatingController") != null and scene.get_node_or_null("CombatRuntime") != null and scene.get_node_or_null("Kitchen/Sink") != null, "07: plating, combat and plate/wok cleaning systems must remain connected")
-	manager.start_service_early()
-	_expect(manager.phase == PrototypeWaveManager.Phase.GLOBAL_WARNING, "07: preparation Start Service and wave flow must remain intact")
 	await _dispose_scene(scene)
 
 

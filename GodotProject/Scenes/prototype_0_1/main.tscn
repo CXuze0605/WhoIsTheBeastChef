@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3]
+[gd_scene load_steps=37 format=3]
 
 [ext_resource type="Script" path="res://Scripts/prototype_0_1/prototype_main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://Scenes/prototype_0_1/player.tscn" id="2_player"]
@@ -25,6 +25,11 @@
 [ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/start_game_ui.gd" id="23_start_ui"]
 [ext_resource type="Script" path="res://Scripts/prototype_0_1/stations/cookware_rack.gd" id="24_cookware_rack"]
 [ext_resource type="Texture2D" path="res://Assets/Prototype/Static/room_floor_warm.png" id="25_floor_art"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/core/run_stats.gd" id="26_stats"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/preparation_countdown_ui.gd" id="27_prep_ui"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/run_summary_ui.gd" id="28_summary_ui"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/ui/prototype_tools_overlay.gd" id="29_tools_overlay"]
+[ext_resource type="Script" path="res://Scripts/prototype_0_1/stations/trash_bin.gd" id="30_trash_bin"]
 
 [sub_resource type="RectangleShape2D" id="WallTopBottom"]
 size = Vector2(1840, 28)
@@ -61,7 +66,7 @@ offset_left = 34.0
 offset_top = 1314.0
 offset_right = 1844.0
 offset_bottom = 1349.0
-text = "《谁是大厨生》Prototype 0.3.2 启动、HUD 与可读性调整（全部数值与表现均非最终设计）"
+text = "《谁是大厨生》Prototype 0.5 流程完善第一阶段（全部数值与表现均非最终设计）"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(0.82, 0.84, 0.88, 1)
 theme_override_font_sizes/font_size = 16
@@ -150,12 +155,12 @@ position = Vector2(240, 220)
 position = Vector2(470, 105)
 script = ExtResource("3_cabinet")
 prototype_art_key = &"ingredient_cabinet"
-raw_beef_stock = 12
-marinade_stock = 12
-chili_stock = 12
-cooking_oil_stock = 12
-salt_stock = 12
-mustard_stock = 12
+raw_beef_stock = 1
+marinade_stock = 1
+chili_stock = 2
+cooking_oil_stock = 2
+salt_stock = 1
+mustard_stock = 1
 
 [node name="Obstacle" type="StaticBody2D" parent="Kitchen/IngredientCabinet"]
 script = ExtResource("16_obstacle")
@@ -232,6 +237,14 @@ prototype_stuck_wok_wash_time = 2.2
 script = ExtResource("16_obstacle")
 obstacle_size = Vector2(136, 72)
 
+[node name="TrashBin" type="Node2D" parent="Kitchen"]
+position = Vector2(1040, 320)
+script = ExtResource("30_trash_bin")
+
+[node name="Obstacle" type="StaticBody2D" parent="Kitchen/TrashBin"]
+script = ExtResource("16_obstacle")
+obstacle_size = Vector2(72, 72)
+
 [node name="Player" parent="Kitchen" instance=ExtResource("2_player")]
 position = Vector2(470, 525)
 
@@ -282,6 +295,9 @@ script = ExtResource("15_plating")
 player_path = NodePath("../Kitchen/Player")
 qte_ui_path = NodePath("../PlatingQTEUI")
 
+[node name="RunStats" type="Node" parent="."]
+script = ExtResource("26_stats")
+
 [node name="WaveManager" type="Node2D" parent="."]
 script = ExtResource("19_wave")
 player_path = NodePath("../Kitchen/Player")
@@ -299,3 +315,15 @@ player_path = NodePath("../Kitchen/Player")
 [node name="StartGameUI" type="CanvasLayer" parent="."]
 layer = 40
 script = ExtResource("23_start_ui")
+
+[node name="PreparationCountdownUI" type="CanvasLayer" parent="."]
+layer = 35
+script = ExtResource("27_prep_ui")
+
+[node name="RunSummaryUI" type="CanvasLayer" parent="."]
+layer = 100
+script = ExtResource("28_summary_ui")
+
+[node name="PrototypeToolsOverlay" type="CanvasLayer" parent="."]
+layer = 200
+script = ExtResource("29_tools_overlay")

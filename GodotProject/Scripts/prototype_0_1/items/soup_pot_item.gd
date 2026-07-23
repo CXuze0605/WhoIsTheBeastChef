@@ -6,6 +6,7 @@ enum CookStage { EMPTY, WATER_HEATING, BOILING, SLICE_COOKING, READY, OVERCOOKED
 var cook_stage: int = CookStage.EMPTY
 var has_water: bool = false
 var content_data: ItemData
+var dish_recorded_for_content: bool = false
 
 
 func setup_soup_pot(station_id: StringName = &"") -> void:
@@ -40,6 +41,7 @@ func insert_slice(slice_data: ItemData) -> bool:
 	if not can_insert_slice():
 		return false
 	content_data = ItemCatalog.create(ItemData.ItemType.SHABU_BEEF)
+	dish_recorded_for_content = false
 	if cook_stage != CookStage.BOILING:
 		content_data.add_failure_tag(ItemData.FailureTag.COLD_WATER_ENTRY)
 	cook_stage = CookStage.SLICE_COOKING
@@ -51,7 +53,17 @@ func insert_slice(slice_data: ItemData) -> bool:
 func complete_slice() -> void:
 	cook_stage = CookStage.READY
 	data.processing_state = ItemData.ProcessingState.SOUP_READY
+	_record_completed_dish()
 	refresh_visual()
+
+
+func _record_completed_dish() -> void:
+	if dish_recorded_for_content or not is_inside_tree():
+		return
+	dish_recorded_for_content = true
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null:
+		stats.record_dish_created(content_data)
 
 
 func mark_overcooked() -> void:
@@ -71,6 +83,7 @@ func turn_to_mushy() -> void:
 func take_content() -> ItemData:
 	var result := content_data
 	content_data = null
+	dish_recorded_for_content = false
 	cook_stage = CookStage.BOILING if has_water else CookStage.EMPTY
 	data.processing_state = ItemData.ProcessingState.SOUP_POT_BOILING if has_water else ItemData.ProcessingState.SOUP_POT_EMPTY
 	refresh_visual()

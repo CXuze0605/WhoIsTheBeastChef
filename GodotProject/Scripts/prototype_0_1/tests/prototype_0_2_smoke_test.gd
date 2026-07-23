@@ -243,10 +243,14 @@ func _test_item_state_and_existing_system_regression() -> void:
 	var scene := await _spawn_main_scene()
 	if scene == null:
 		return
+	var manager := scene.get_node("WaveManager") as PrototypeWaveManager
+	manager.start_service_early()
+	await process_frame
 	var player := scene.get_node("Kitchen/Player") as PrototypePlayer
 	var cabinet := scene.get_node("Kitchen/IngredientCabinet") as IngredientCabinet
 	var pile := scene.get_node("Kitchen/CleanPlatePile") as CleanPlatePile
 	var combat := scene.get_node("CombatRuntime") as CombatManager
+	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and not cabinet.lobby_unlimited, "正式准备阶段应使用有限库存柜")
 	var plated_data := ItemCatalog.create(ItemData.ItemType.PLATED_STIR_FRY_BEEF)
 	plated_data.add_failure_tag(ItemData.FailureTag.UNMARINATED)
 	combat.config.apply_combat_dish_stats(plated_data)
@@ -266,7 +270,7 @@ func _test_item_state_and_existing_system_regression() -> void:
 	_expect(player.inventory.is_full(), "满栏盘子测试前应占满五格")
 	var claimed_before := pile.total_claimed
 	pile.carry_interact(player)
-	_expect(pile.total_claimed == claimed_before and player.get_visible_feedback() == "物品栏已满", "满栏且盘子堆已满时不能吞掉或生成额外盘子")
+	_expect(pile.total_claimed == claimed_before + 1 and player.backpack.get_items().any(func(item): return item.data.item_type == ItemData.ItemType.CLEAN_PLATE), "0.6A：快捷栏满时取得的干净盘应安全进入背包")
 	var beef_stock := cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK)
 	player.drop_held_item()
 	_expect(cabinet.request_take(ItemData.ItemType.RAW_BEEF_CHUNK, player), "Prototype 0.2 后统一食材柜仍应正常取料")
@@ -278,6 +282,9 @@ func _give_unplated_dish(player: PrototypePlayer, tags: Array[int]) -> Carryable
 	var data := ItemCatalog.create(ItemData.ItemType.UNPLATED_STIR_FRY_BEEF)
 	for tag in tags:
 		data.add_failure_tag(tag)
+	var combat := player.get_tree().get_first_node_in_group("combat_runtime") as CombatManager
+	if combat != null:
+		combat.config.apply_combat_dish_stats(data)
 	player.receive_item_data(data)
 	return player.inventory.get_item(player.inventory.find_item_slot(ItemData.ItemType.UNPLATED_STIR_FRY_BEEF))
 

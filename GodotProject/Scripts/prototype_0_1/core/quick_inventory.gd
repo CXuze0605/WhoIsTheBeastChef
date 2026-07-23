@@ -101,6 +101,71 @@ func add_item(item: CarryableItem) -> int:
 	return first_destination
 
 
+func get_stack_capacity_for(item_data: ItemData) -> int:
+	if item_data == null or not item_data.is_stackable:
+		return 0
+	var capacity := 0
+	for slot_index in _ordered_slot_indices():
+		var existing := slots[slot_index]
+		if existing != null and existing.data.can_stack_with(item_data):
+			capacity += existing.data.max_stack_count - existing.data.stack_count
+	return capacity
+
+
+func merge_from_item(item: CarryableItem) -> int:
+	if item == null or item.data == null or not item.data.is_stackable:
+		return 0
+	var accepted_total := 0
+	for slot_index in _ordered_slot_indices():
+		var existing := slots[slot_index]
+		if existing == null or not existing.data.can_stack_with(item.data):
+			continue
+		var accepted := existing.data.add_to_stack(item.data.stack_count)
+		if accepted <= 0:
+			continue
+		item.data.stack_count -= accepted
+		accepted_total += accepted
+		existing.refresh_visual()
+		if item.data.stack_count <= 0:
+			break
+	if accepted_total > 0:
+		changed.emit()
+	return accepted_total
+
+
+func add_item_to_empty(item: CarryableItem, preferred_slot: int = -1) -> int:
+	if item == null or item.data == null:
+		return -1
+	var destination := preferred_slot
+	if destination < 0 or destination >= SLOT_COUNT or slots[destination] != null:
+		destination = find_destination_slot()
+	if destination == -1:
+		return -1
+	slots[destination] = item
+	changed.emit()
+	return destination
+
+
+func put_item(slot_index: int, item: CarryableItem) -> bool:
+	if slot_index < 0 or slot_index >= SLOT_COUNT or slots[slot_index] != null or item == null:
+		return false
+	slots[slot_index] = item
+	changed.emit()
+	return true
+
+
+func swap_items(first_slot: int, second_slot: int) -> bool:
+	if first_slot < 0 or first_slot >= SLOT_COUNT or second_slot < 0 or second_slot >= SLOT_COUNT:
+		return false
+	if first_slot == second_slot:
+		return true
+	var first := slots[first_slot]
+	slots[first_slot] = slots[second_slot]
+	slots[second_slot] = first
+	changed.emit()
+	return true
+
+
 func find_item_slot(item_type: int) -> int:
 	if slots[selected_index] != null and slots[selected_index].data.item_type == item_type:
 		return selected_index

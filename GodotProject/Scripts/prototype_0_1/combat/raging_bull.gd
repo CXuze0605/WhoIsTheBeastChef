@@ -9,6 +9,7 @@ var turn_check_left: float = 0.0
 var warning_left: float = 0.0
 var pending_direction := Vector2.ZERO
 var target_cooldowns: Dictionary = {}
+var friendly_targets_hit: Dictionary = {}
 var reflection_count: int = 0
 var random_turn_warning_count: int = 0
 var random := RandomNumberGenerator.new()
@@ -34,7 +35,8 @@ func _ready() -> void:
 	random.randomize()
 	visual = PlaceholderVisual.new()
 	add_child(visual)
-	visual.configure(config.raging_bull_visual_size, Color("a51d2d"), "大型暴怒公牛", "横冲直撞 · 会友伤")
+	PrototypeArtCatalog.apply_to(visual, &"raging_bull")
+	visual.configure(config.raging_bull_visual_size, Color("d00000"), "⚠ 大型暴怒公牛", "友伤危险 · 注意躲避")
 	rotation = direction.angle()
 
 
@@ -90,7 +92,7 @@ func _update_random_turn(delta: float) -> void:
 			direction = pending_direction.normalized() if not pending_direction.is_zero_approx() else direction
 			pending_direction = Vector2.ZERO
 			if visual != null:
-				visual.set_status("横冲直撞 · 会友伤")
+				visual.set_status("友伤危险 · 注意躲避")
 		return
 	turn_check_left -= delta
 	if turn_check_left > 0.0:
@@ -105,11 +107,20 @@ func _hit_targets_with_cooldown() -> void:
 		if not is_instance_valid(target) or not target.has_method("get_combat_faction") or not target.has_method("receive_combat_hit"):
 			continue
 		var target_id := target.get_instance_id()
+		var target_faction: int = target.get_combat_faction()
+		var is_friendly_target := target_faction in [CombatRules.Faction.PLAYER, CombatRules.Faction.FRIENDLY]
+		if is_friendly_target and friendly_targets_hit.has(target_id):
+			continue
 		if float(target_cooldowns.get(target_id, 0.0)) > 0.0:
 			continue
 		if global_position.distance_to(target.global_position) <= config.raging_bull_radius + 28.0:
-			if target.receive_combat_hit(config.raging_bull_damage, attacker_faction, direction, config.raging_bull_knockback, true, config.raging_bull_stagger_power):
-				target_cooldowns[target_id] = config.raging_bull_hit_cooldown
+			var hit_damage := config.raging_bull_friendly_fire_damage if is_friendly_target else config.raging_bull_damage
+			var hit_knockback := config.raging_bull_friendly_knockback if is_friendly_target else config.raging_bull_knockback
+			if target.receive_combat_hit(hit_damage, attacker_faction, direction, hit_knockback, true, config.raging_bull_stagger_power):
+				if is_friendly_target:
+					friendly_targets_hit[target_id] = true
+				else:
+					target_cooldowns[target_id] = config.raging_bull_hit_cooldown
 
 
 func _update_target_cooldowns(delta: float) -> void:

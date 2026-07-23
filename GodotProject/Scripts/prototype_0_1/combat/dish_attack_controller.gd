@@ -11,6 +11,7 @@ enum SneezePhase {
 var player: PrototypePlayer
 var combat_manager: CombatManager
 var cooldown_left: float = 0.0
+var attack_buffer_left: float = 0.0
 var mustard_attack_active: bool = false
 var aim_time: float = 0.0
 var current_sway_angle: float = 0.0
@@ -33,10 +34,16 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	cooldown_left = maxf(0.0, cooldown_left - delta)
+	attack_buffer_left = maxf(0.0, attack_buffer_left - delta)
 	var can_attack := player != null and not player.modal_ui_open and player.action_stun_left <= 0.0
 	var dish := player.held_item if player != null else null
 	var melee_or_bone := dish != null and (dish.data.attack_form == ItemData.AttackForm.MELEE or dish.data.item_type == ItemData.ItemType.BIG_BONE)
-	var attack_pressed := can_attack and (Input.is_action_just_pressed("dish_attack") if melee_or_bone else Input.is_action_pressed("dish_attack"))
+	if melee_or_bone and can_attack and Input.is_action_just_pressed("dish_attack"):
+		var buffer_duration := combat_manager.config.tomahawk_input_buffer_time if combat_manager != null else 0.16
+		attack_buffer_left = maxf(attack_buffer_left, buffer_duration)
+	elif not melee_or_bone:
+		attack_buffer_left = 0.0
+	var attack_pressed := can_attack and (attack_buffer_left > 0.0 if melee_or_bone else Input.is_action_pressed("dish_attack"))
 	var mustard_selected := (
 		attack_pressed
 		and dish != null
@@ -48,7 +55,8 @@ func _process(delta: float) -> void:
 	_update_mustard_aim(delta, mustard_selected)
 	_update_aim_indicator()
 	if attack_pressed and cooldown_left <= 0.0:
-		fire_once()
+		if fire_once():
+			attack_buffer_left = 0.0
 
 
 func fire_once(forced_direction: Vector2 = Vector2.ZERO) -> bool:
@@ -70,6 +78,7 @@ func fire_once(forced_direction: Vector2 = Vector2.ZERO) -> bool:
 	if dish.data.attack_form == ItemData.AttackForm.MELEE:
 		return _swing_tomahawk(dish, attack_direction)
 	var is_perfect_finisher := dish.data.has_perfect_finisher and dish.data.current_durability == 1
+	var was_unused := not dish.data.has_been_used
 	if is_perfect_finisher:
 		combat_manager.spawn_raging_bull(player.global_position + attack_direction * 72.0, attack_direction)
 	else:
@@ -79,11 +88,17 @@ func fire_once(forced_direction: Vector2 = Vector2.ZERO) -> bool:
 	dish.data.mark_used()
 	cooldown_left = combat_manager.config.attack_interval
 	if dish.data.current_durability <= 0:
-		_convert_dish_to_dirty_plate(dish)
-		player.notify_feedback("料理耗尽：%s" % ("释放大型暴怒公牛并留下脏盘子" if is_perfect_finisher else "留下脏盘子"))
+		if dish.data.carried_plate_state == ItemData.PlateState.NONE:
+			_remove_unplated_dish(dish)
+			player.notify_feedback("未摆盘小炒耗尽：料理直接消失，不产生脏盘")
+		else:
+			_convert_dish_to_dirty_plate(dish)
+			player.notify_feedback("料理耗尽：%s" % ("释放大型暴怒公牛并留下脏盘子" if is_perfect_finisher else "留下脏盘子"))
 	else:
 		dish.refresh_visual()
 		player.inventory.notify_item_changed()
+		if was_unused and dish.data.item_type == ItemData.ItemType.UNPLATED_STIR_FRY_BEEF:
+			player.notify_feedback("未摆盘小炒已使用：永久失去摆盘资格")
 	return true
 
 
@@ -98,6 +113,7 @@ func _swing_tomahawk(dish: CarryableItem, attack_direction: Vector2) -> bool:
 	else:
 		dish.refresh_visual()
 		player.inventory.notify_item_changed()
+		player.notify_feedback("战斧挥砍已发动")
 	return true
 
 
@@ -257,6 +273,23 @@ func _convert_dish_to_dirty_plate(dish: CarryableItem) -> void:
 	dish.data = ItemCatalog.create(ItemData.ItemType.DIRTY_PLATE)
 	dish.refresh_visual()
 	player.inventory.notify_item_changed()
+	_reset_mustard_aim()
+
+
+func _remove_unplated_dish(dish: CarryableItem) -> void:
+	var selected := player.inventory.get_selected_item()
+	if selected != dish:
+		push_error("Unplated dish exhaustion lost its selected inventory reference")
+		return
+	var removed := player.inventory.take_selected_item()
+	if removed != null:
+		removed.queue_free()
+	_reset_mustard_aim()
+
+
+func reset_for_new_game() -> void:
+	cooldown_left = 0.0
+	attack_buffer_left = 0.0
 	_reset_mustard_aim()
 
 

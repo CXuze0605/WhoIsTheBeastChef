@@ -204,10 +204,32 @@ func can_stack_with(other: ItemData) -> bool:
 		and is_stackable
 		and other.is_stackable
 		and item_type == other.item_type
+		and processing_state == other.processing_state
 		and failure_tags == other.failure_tags
+		and components == other.components
 		and active_modifiers == other.active_modifiers
 		and quality == other.quality
+		and carried_plate_state == other.carried_plate_state
+		and is_combat_dish == other.is_combat_dish
+		and current_durability == other.current_durability
+		and max_durability == other.max_durability
+		and base_damage == other.base_damage
+		and actual_damage == other.actual_damage
+		and has_perfect_finisher == other.has_perfect_finisher
+		and poison_damage == other.poison_damage
+		and poison_interval == other.poison_interval
+		and poison_duration == other.poison_duration
+		and poison_refresh_duration == other.poison_refresh_duration
+		and has_been_used == other.has_been_used
+		and remaining_portions == other.remaining_portions
+		and attack_count == other.attack_count
+		and next_sneeze_attack == other.next_sneeze_attack
+		and bone_thrown == other.bone_thrown
+		and attack_form == other.attack_form
+		and cooking_method == other.cooking_method
+		and stagger_power == other.stagger_power
 		and stack_count < max_stack_count
+		and max_stack_count == other.max_stack_count
 	)
 
 

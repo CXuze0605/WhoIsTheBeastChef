@@ -7,6 +7,8 @@ var title_label: Label
 var status_label: Label
 var visual_size := Vector2(120.0, 70.0)
 var has_art: bool = false
+var art_scale_multiplier: float = 1.0
+var art_rotation: float = 0.0
 
 
 func _ready() -> void:
@@ -72,6 +74,22 @@ func set_art(texture: Texture2D) -> void:
 	_apply_layout()
 
 
+func set_art_transform(scale_multiplier: float = 1.0, rotation_radians: float = 0.0) -> void:
+	var next_scale := maxf(0.01, scale_multiplier)
+	if is_equal_approx(art_scale_multiplier, next_scale) and is_equal_approx(art_rotation, rotation_radians):
+		return
+	art_scale_multiplier = next_scale
+	art_rotation = rotation_radians
+	_apply_layout()
+
+
+func set_text_visible(value: bool) -> void:
+	if title_label != null:
+		title_label.visible = value
+	if status_label != null:
+		status_label.visible = value
+
+
 func get_art_display_size() -> Vector2:
 	if art_sprite == null or art_sprite.texture == null:
 		return Vector2.ZERO
@@ -94,9 +112,10 @@ func _apply_layout() -> void:
 	status_label.size = Vector2(visual_size.x, 24.0)
 	if art_sprite != null:
 		art_sprite.position = Vector2.ZERO
+		art_sprite.rotation = art_rotation
 		if art_sprite.texture != null:
 			var texture_size := art_sprite.texture.get_size()
-			var fit_scale := minf(visual_size.x / texture_size.x, visual_size.y / texture_size.y) * 0.92
+			var fit_scale := minf(visual_size.x / texture_size.x, visual_size.y / texture_size.y) * 0.92 * art_scale_multiplier
 			art_sprite.scale = Vector2.ONE * fit_scale
 	if has_art:
 		title_label.position = Vector2(-half.x, half.y * 0.28)

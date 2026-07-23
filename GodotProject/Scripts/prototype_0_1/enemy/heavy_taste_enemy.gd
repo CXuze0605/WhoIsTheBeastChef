@@ -27,6 +27,8 @@ func setup(enemy_config: PrototypeWaveConfig, player_target: PrototypePlayer, na
 
 func _ready() -> void:
 	super._ready()
+	PrototypeArtCatalog.apply_to(placeholder, &"heavy_taste_enemy")
+	_setup_walk_animation(&"heavy_taste_enemy_walk_sheet", 6.0, true)
 	add_to_group("heavy_taste_enemy")
 
 
