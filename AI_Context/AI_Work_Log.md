@@ -1,5 +1,16 @@
 # AI Work Log
 
+## 2026-07-24 — v0.0.2 GitHub 公开发布完成
+
+执行 AI：GPT Codex
+
+- GitHub CLI 登录恢复后先执行远端 fetch：`origin/main` 仍为 `921d549`，无远程分叉，`v0.0.2` 标签不存在；没有使用强推。
+- 将已确认属于今天版本的 129 个源码、AI 文档、测试、美术和音频文件作为 `03d0be5 feat: release v0.0.2 prototype 0.6A` 提交；此前未推送的 v0.0.1 归档提交 `4967faa` 一并按正常快进历史推送。
+- 创建注释标签 `v0.0.2` 并将 `main` 与标签推送到公开仓库 `CXuze0605/WhoIsTheBeastChef`。
+- 创建公开 Release `v0.0.2 — Prototype 0.6A Resource Loop Update`：`https://github.com/CXuze0605/WhoIsTheBeastChef/releases/tag/v0.0.2`。
+- 上传 `WhoIsTheBeastChef-v0.0.2-Windows.zip`；GitHub 返回资产状态 `uploaded`、大小 `45,447,902` 字节、摘要 `sha256:f2f5b638dc9678845ea3077dca109215c90eecf09222c10dc4dfa0bc7b990952`，与本地完全一致。Release 不是草稿或预发行版。
+- 本条及 `Current_Status.md`、`Pending_Tasks.md`、`AI_Handoff.md`、`Development_Roadmap.md` 用于归档实际发布结果；未修改玩法代码、发布标签或 Release 资产。
+
 ## 2026-07-24 — v0.0.2 最终候选重建与 GitHub 网络阻断确认
 
 执行 AI：GPT Codex
