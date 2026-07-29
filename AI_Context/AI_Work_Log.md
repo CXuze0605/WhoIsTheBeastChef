@@ -1,5 +1,19 @@
 # AI Work Log
 
+## 2026-07-30 — v0.0.3 GitHub 发布
+执行 AI：GPT Codex
+
+完成：
+- 将项目版本、Windows 导出元数据、README 与 CHANGELOG 更新为 `v0.0.3`。
+- 创建发布提交 `cdb6075`（`feat: release v0.0.3 systems and content expansion`），推送 `main` 并创建、推送 `v0.0.3` 标签。
+- 创建 GitHub Release 并上传 Windows 可试玩包：`https://github.com/CXuze0605/WhoIsTheBeastChef/releases/tag/v0.0.3`。
+- Windows ZIP 大小为 47,311,225 bytes，SHA-256 为 `184E22ABD063F51FBAFCDFFBCD5BE19A028CB82881F076FC4AF58F1CD27E5ADE`。
+
+验证：
+- Godot 4.6.2 资源与脚本扫描通过；关键 0.6A/0.6B、料理扩展、新鲜度和新美术专项已通过。
+- Windows 导出成功，导出包 Headless 启动检查退出码为 0。
+- 发布说明明确保留 Prototype 数值/表现、联机未实现、冰箱未实现等限制。
+
 ## 2026-07-30 — PixelLab 美术、远程敌人动画与料理战斗特效接入
 执行 AI：GPT Codex
 

@@ -1,5 +1,12 @@
 # AI Handoff
 
+## 2026-07-30 v0.0.3 发布交接
+- `main` 已推送到 GitHub，发布功能提交为 `cdb6075`，标签与 Release 均为 `v0.0.3`。
+- Release 地址：`https://github.com/CXuze0605/WhoIsTheBeastChef/releases/tag/v0.0.3`。
+- Windows 包 `WhoIsTheBeastChef-v0.0.3-Windows.zip` 已作为 Release 附件上传；SHA-256 为 `184E22ABD063F51FBAFCDFFBCD5BE19A028CB82881F076FC4AF58F1CD27E5ADE`。
+- 后续开发以 `v0.0.3` 为公开基线；文档中早期“公开版本仍为 v0.0.2”仅是历史阶段记录，不代表当前发布状态。
+- 本次发布没有把无尽模式设计误写为已实现；无尽模式仍只有设计归档与后续任务说明。
+
 ## 下一接手点：无尽试炼尚未实现
 - 保留固定三波单机模式，新增独立无尽模式；完整设计见 `Prototype_Endless_Mode_Design.md`。
 - DeepSeek Codex 总交接见 `DeepSeek_Codex_Handoff_2026_07_30.md`；首项待执行开发指令见 `DeepSeek_Codex_First_Task_Endless_Mode.md`。
