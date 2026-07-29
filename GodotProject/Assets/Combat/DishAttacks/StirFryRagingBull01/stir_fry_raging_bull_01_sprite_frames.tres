@@ -1,0 +1,338 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/east/frame_000.png" id="1_iw4qk"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/east/frame_001.png" id="2_soauj"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/east/frame_002.png" id="3_0k73x"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/east/frame_003.png" id="4_eiyb8"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/east/frame_004.png" id="5_u540n"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/east/frame_005.png" id="6_ytrie"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/east/frame_006.png" id="7_a5r37"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/east/frame_007.png" id="8_73vqy"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-b6f811d6/frame_000.png" id="9_cy6va"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-b6f811d6/frame_001.png" id="10_ys7wx"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-b6f811d6/frame_002.png" id="11_8c3mu"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-b6f811d6/frame_003.png" id="12_fvxb4"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-b6f811d6/frame_004.png" id="13_jerk6"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-b6f811d6/frame_005.png" id="14_kxkdg"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-b6f811d6/frame_006.png" id="15_3kl5u"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-b6f811d6/frame_007.png" id="16_rr81h"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-east/frame_000.png" id="17_s5j26"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-east/frame_001.png" id="18_b6a4g"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-east/frame_002.png" id="19_edu87"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-east/frame_003.png" id="20_83q1j"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-east/frame_004.png" id="21_8wd3y"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-east/frame_005.png" id="22_rpuh8"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-east/frame_006.png" id="23_os7hw"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-east/frame_007.png" id="24_o4b28"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-west/frame_000.png" id="25_2aa5d"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-west/frame_001.png" id="26_kp3or"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-west/frame_002.png" id="27_2x6jc"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-west/frame_003.png" id="28_7gjqm"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-west/frame_004.png" id="29_5nunp"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-west/frame_005.png" id="30_itccr"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-west/frame_006.png" id="31_o0v1c"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-west/frame_007.png" id="32_r5gkh"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-0941c069/frame_000.png" id="33_eckgr"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-0941c069/frame_001.png" id="34_cjdfx"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-0941c069/frame_002.png" id="35_n8vnp"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-0941c069/frame_003.png" id="36_pwlgw"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-0941c069/frame_004.png" id="37_70rsa"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-0941c069/frame_005.png" id="38_mx32o"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-0941c069/frame_006.png" id="39_60435"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/north-0941c069/frame_007.png" id="40_mem8g"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south/frame_000.png" id="41_haxus"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south/frame_001.png" id="42_2uj4n"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south/frame_002.png" id="43_6s6l4"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south/frame_003.png" id="44_6aom7"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south/frame_004.png" id="45_g6ttv"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south/frame_005.png" id="46_6r0l3"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south/frame_006.png" id="47_10bqs"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south/frame_007.png" id="48_rkstu"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-east/frame_000.png" id="49_388vk"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-east/frame_001.png" id="50_ordhq"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-east/frame_002.png" id="51_6iipy"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-east/frame_003.png" id="52_da2c1"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-east/frame_004.png" id="53_g0x7l"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-east/frame_005.png" id="54_ie4x7"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-east/frame_006.png" id="55_4qphd"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-east/frame_007.png" id="56_4pnyn"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-west/frame_000.png" id="57_636f6"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-west/frame_001.png" id="58_pk17m"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-west/frame_002.png" id="59_4uls2"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-west/frame_003.png" id="60_emp47"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-west/frame_004.png" id="61_6mkcc"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-west/frame_005.png" id="62_2prg1"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-west/frame_006.png" id="63_vd2cs"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/south-west/frame_007.png" id="64_0hq3k"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/west/frame_000.png" id="65_q81th"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/west/frame_001.png" id="66_yb04a"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/west/frame_002.png" id="67_jgbtt"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/west/frame_003.png" id="68_4a4jy"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/west/frame_004.png" id="69_nko0h"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/west/frame_005.png" id="70_gpu8l"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/west/frame_006.png" id="71_e7uxp"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryRagingBull01/animations/Run/west/frame_007.png" id="72_g75tv"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_iw4qk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_soauj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_0k73x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_eiyb8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_u540n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ytrie")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_a5r37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_73vqy")
+}],
+"loop": true,
+"name": &"run_east",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_cy6va")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ys7wx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_8c3mu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_fvxb4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_jerk6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_kxkdg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_3kl5u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_rr81h")
+}],
+"loop": true,
+"name": &"run_north",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_s5j26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_b6a4g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_edu87")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_83q1j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_8wd3y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_rpuh8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_os7hw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_o4b28")
+}],
+"loop": true,
+"name": &"run_north-east",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_2aa5d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_kp3or")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_2x6jc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_7gjqm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_5nunp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_itccr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_o0v1c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_r5gkh")
+}],
+"loop": true,
+"name": &"run_north-west",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_eckgr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_cjdfx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_n8vnp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_pwlgw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_70rsa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_mx32o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_60435")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_mem8g")
+}],
+"loop": true,
+"name": &"run_north_variant",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("41_haxus")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_2uj4n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_6s6l4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_6aom7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_g6ttv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_6r0l3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_10bqs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_rkstu")
+}],
+"loop": true,
+"name": &"run_south",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_388vk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_ordhq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_6iipy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_da2c1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_g0x7l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_ie4x7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_4qphd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_4pnyn")
+}],
+"loop": true,
+"name": &"run_south-east",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("57_636f6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_pk17m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_4uls2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_emp47")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_6mkcc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_2prg1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_vd2cs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_0hq3k")
+}],
+"loop": true,
+"name": &"run_south-west",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_q81th")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_yb04a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_jgbtt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_4a4jy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_nko0h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_gpu8l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_e7uxp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_g75tv")
+}],
+"loop": true,
+"name": &"run_west",
+"speed": 10.0
+}]

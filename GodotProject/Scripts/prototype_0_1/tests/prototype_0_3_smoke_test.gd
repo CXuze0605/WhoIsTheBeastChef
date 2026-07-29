@@ -137,9 +137,10 @@ func _test_07_player_damage_and_failure() -> void:
 	var before := player.current_health
 	_expect(player.receive_combat_hit(12.0, CombatRules.Faction.ENEMY, Vector2.RIGHT, 30.0, false), "07: enemy swing must damage player")
 	_expect(not player.receive_combat_hit(12.0, CombatRules.Faction.ENEMY, Vector2.RIGHT, 30.0, false), "07: short Prototype protection must block duplicate same-swing damage")
-	_expect(player.current_health == before - 12.0 and player.knockback_velocity.x > 0.0, "07: player must lose HP and receive light knockback")
+	_expect(player.current_health == before and player.current_shield == player.prototype_max_shield - 12.0 and player.knockback_velocity.x > 0.0, "07: player damage must consume shield first and still apply light knockback")
 	player.hit_protection_left = 0.0
 	player.current_health = 1.0
+	player.current_shield = 0.0
 	player.receive_combat_hit(12.0, CombatRules.Faction.ENEMY, Vector2.RIGHT, 30.0, false)
 	_expect(player.is_defeated and manager.phase == PrototypeWaveManager.Phase.FAILED, "07: zero HP must fail the current wave instead of silently resetting")
 	await _dispose_scene(scene)
@@ -265,7 +266,7 @@ func _test_14_regression_contracts() -> void:
 	await process_frame
 	_expect(player.inventory.slots.size() == 5, "14: five-slot quick inventory must remain intact")
 	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and not cabinet.lobby_unlimited, "14: formal preparation must switch to the finite cabinet")
-	_expect(cabinet.get_supported_item_types().size() == 6, "14: formal unified cabinet with salt and mustard must remain intact")
+	_expect(cabinet.get_supported_item_types().size() == 8 and cabinet.get_stock(ItemData.ItemType.RICE_BAG) == 1 and cabinet.get_stock(ItemData.ItemType.WHOLE_GREENS) == 1, "14: formal unified cabinet must retain old ingredients and add the rice bag plus current Prototype whole greens")
 	wok.wok_item.add_oil()
 	wok.wok_item.insert_meat(ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES))
 	wok.set_burner_on(true)

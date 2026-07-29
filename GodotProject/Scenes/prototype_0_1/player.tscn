@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/prototype_0_1/player/prototype_player.gd" id="1_player"]
 [ext_resource type="Script" path="res://Scripts/prototype_0_1/combat/dish_attack_controller.gd" id="2_attack"]
 [ext_resource type="Script" path="res://Scripts/prototype_0_1/combat/trap_controller.gd" id="3_trap"]
-[ext_resource type="Texture2D" path="res://Assets/Prototype/Static/player_chef.png" id="4_player_art"]
+[ext_resource type="SpriteFrames" path="res://Assets/Characters/Player/ChefWuxia01/chef_wuxia_01_sprite_frames.tres" id="4_player_frames"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(34, 34)
@@ -18,16 +18,11 @@ visible = false
 polygon = PackedVector2Array(-18, -18, 18, -18, 18, 18, -18, 18)
 color = Color(0.2, 0.65, 0.95, 1)
 
-[node name="PlayerArt" type="Sprite2D" parent="."]
+[node name="PlayerArt" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -5)
-scale = Vector2(0.092, 0.092)
-texture = ExtResource("4_player_art")
-
-[node name="DirectionMarker" type="Polygon2D" parent="."]
-z_index = 2
-polygon = PackedVector2Array(0, -28, 8, -14, -8, -14)
-color = Color(1, 0.92, 0.35, 1)
+sprite_frames = ExtResource("4_player_frames")
+animation = &"idle_south"
 
 [node name="PlayerLabel" type="Label" parent="."]
 offset_left = -29.0

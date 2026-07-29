@@ -73,7 +73,7 @@ func get_cells_for_placement(placement: Placement) -> Array[Vector2i]:
 	if placement == null or placement.item == null or placement.item.data == null:
 		return []
 	var cells: Array[Vector2i] = []
-	for shape_cell in ItemStorageCatalog.get_shape_cells(placement.item.data.item_type, placement.rotated):
+	for shape_cell in ItemStorageCatalog.get_shape_cells_for_data(placement.item.data, placement.rotated):
 		cells.append(placement.origin + shape_cell)
 	return cells
 
@@ -81,7 +81,7 @@ func get_cells_for_placement(placement: Placement) -> Array[Vector2i]:
 func can_place_item(item: CarryableItem, origin: Vector2i, rotated: bool = false, ignored_items: Array[CarryableItem] = []) -> bool:
 	if item == null or item.data == null:
 		return false
-	return can_place_shape(ItemStorageCatalog.get_shape_cells(item.data.item_type, rotated), origin, ignored_items)
+	return can_place_shape(ItemStorageCatalog.get_shape_cells_for_data(item.data, rotated), origin, ignored_items)
 
 
 func can_place_shape(shape_cells: Array[Vector2i], origin: Vector2i, ignored_items: Array[CarryableItem] = []) -> bool:
@@ -100,7 +100,7 @@ func can_place_shape(shape_cells: Array[Vector2i], origin: Vector2i, ignored_ite
 func find_first_position(item: CarryableItem, rotated: bool = false, ignored_items: Array[CarryableItem] = []) -> Vector2i:
 	if item == null or item.data == null:
 		return Vector2i(-1, -1)
-	var bounds := ItemStorageCatalog.get_shape_bounds(ItemStorageCatalog.get_shape_cells(item.data.item_type, rotated))
+	var bounds := ItemStorageCatalog.get_shape_bounds(ItemStorageCatalog.get_shape_cells_for_data(item.data, rotated))
 	for y in maxi(0, height - bounds.y + 1):
 		for x in maxi(0, width - bounds.x + 1):
 			var origin := Vector2i(x, y)
@@ -165,11 +165,17 @@ func merge_from_item(item: CarryableItem) -> int:
 	if item == null or item.data == null or not item.data.is_stackable:
 		return 0
 	var accepted_total := 0
-	for placement in placements:
-		var existing := placement.item
+	var candidates: Array[Placement] = []
+	for candidate in placements:
+		candidates.append(candidate)
+	candidates.sort_custom(func(a: Placement, b: Placement) -> bool:
+		return absf(a.item.data.spoilage_ratio - item.data.spoilage_ratio) < absf(b.item.data.spoilage_ratio - item.data.spoilage_ratio)
+	)
+	for placement in candidates:
+		var existing: CarryableItem = placement.item
 		if existing == item or not existing.data.can_stack_with(item.data):
 			continue
-		var accepted := existing.data.add_to_stack(item.data.stack_count)
+		var accepted: int = existing.data.add_from_stack(item.data)
 		if accepted <= 0:
 			continue
 		item.data.stack_count -= accepted
@@ -254,17 +260,17 @@ func _build_occupied_cells(ignored_items: Array[CarryableItem]) -> Dictionary:
 
 func _translated_shape(item: CarryableItem, origin: Vector2i, rotated: bool) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
-	for shape_cell in ItemStorageCatalog.get_shape_cells(item.data.item_type, rotated):
+	for shape_cell in ItemStorageCatalog.get_shape_cells_for_data(item.data, rotated):
 		cells.append(origin + shape_cell)
 	return cells
 
 
 func _has_distinct_rotated_shape(item: CarryableItem) -> bool:
 	var normal := {}
-	for cell in ItemStorageCatalog.get_shape_cells(item.data.item_type, false):
+	for cell in ItemStorageCatalog.get_shape_cells_for_data(item.data, false):
 		normal[cell] = true
 	var rotated := {}
-	for cell in ItemStorageCatalog.get_shape_cells(item.data.item_type, true):
+	for cell in ItemStorageCatalog.get_shape_cells_for_data(item.data, true):
 		rotated[cell] = true
 	return normal != rotated
 

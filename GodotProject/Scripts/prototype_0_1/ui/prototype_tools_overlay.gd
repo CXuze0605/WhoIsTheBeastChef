@@ -8,6 +8,7 @@ enum Mode {
 	PAUSE_MENU,
 	EXIT_CONFIRMATION,
 	PLAYTEST_NOTES,
+	SETTINGS,
 }
 
 const TEST_VERSION: String = "Prototype 0.5"
@@ -24,6 +25,8 @@ var notes_status_label: Label
 var save_notes_button: Button
 var close_notes_button: Button
 var continue_button: Button
+var settings_button: Button
+var settings_panel: SettingsPanel
 var previous_mouse_mode: int = Input.MOUSE_MODE_VISIBLE
 var previous_tree_paused: bool = false
 var previous_music_paused: bool = false
@@ -37,6 +40,7 @@ func _ready() -> void:
 	add_to_group("prototype_tools_overlay")
 	_build_pause_ui()
 	_build_notes_ui()
+	_build_settings_ui()
 	_apply_mode_visibility()
 
 
@@ -47,6 +51,8 @@ func _exit_tree() -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.echo:
 		return
+	if mode == Mode.SETTINGS:
+		return
 	if event.is_action_pressed("toggle_playtest_notes") and development_tools_enabled:
 		if mode in [Mode.NONE, Mode.PAUSE_MENU]:
 			open_playtest_notes()
@@ -56,7 +62,7 @@ func _input(event: InputEvent) -> void:
 			return
 		get_viewport().set_input_as_handled()
 		return
-	if not event.is_action_pressed("toggle_pause"):
+	if not event.is_action_pressed("toggle_pause") and not _is_escape_pressed(event):
 		return
 	match mode:
 		Mode.NONE:
@@ -104,6 +110,14 @@ func show_exit_confirmation() -> void:
 		return
 	mode = Mode.EXIT_CONFIRMATION
 	_apply_mode_visibility()
+
+
+func open_settings() -> void:
+	if mode != Mode.PAUSE_MENU or settings_panel == null:
+		return
+	mode = Mode.SETTINGS
+	_apply_mode_visibility()
+	settings_panel.open_panel("暂停 · 设置")
 
 
 func close_overlay() -> void:
@@ -240,6 +254,8 @@ func _apply_mode_visibility() -> void:
 		confirmation_panel.visible = mode == Mode.EXIT_CONFIRMATION
 	if notes_root != null:
 		notes_root.visible = mode == Mode.PLAYTEST_NOTES
+	if settings_panel != null and mode != Mode.SETTINGS:
+		settings_panel.visible = false
 
 
 func _get_notes_path() -> String:
@@ -262,18 +278,24 @@ func _build_pause_ui() -> void:
 	add_child(pause_root)
 	_add_fullscreen_dim(pause_root)
 
-	pause_panel = _make_panel(Vector2(430.0, 316.0), Vector2(425.0, 202.0))
+	pause_panel = _make_panel(Vector2(430.0, 390.0), Vector2(425.0, 165.0))
 	pause_root.add_child(pause_panel)
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 18)
 	pause_panel.add_child(column)
 	var title := _make_label("游戏暂停", 38, Color("ffd166"), HORIZONTAL_ALIGNMENT_CENTER)
 	column.add_child(title)
-	var hint := _make_label("ESC 可继续游戏", 16, Color("d7e3fc"), HORIZONTAL_ALIGNMENT_CENTER)
+	var pause_binding := InputPrompt.action_text(&"toggle_pause", "ESC")
+	var hint_text := "ESC 可继续游戏" if pause_binding == "Escape" or pause_binding == "ESC" else "ESC / %s 可继续游戏" % pause_binding
+	var hint := _make_label(hint_text, 16, Color("d7e3fc"), HORIZONTAL_ALIGNMENT_CENTER)
 	column.add_child(hint)
 	continue_button = _make_button("继续游戏")
 	continue_button.pressed.connect(close_overlay)
 	column.add_child(continue_button)
+	settings_button = _make_button("设置")
+	settings_button.name = "PauseSettingsButton"
+	settings_button.pressed.connect(open_settings)
+	column.add_child(settings_button)
 	var exit_button := _make_button("退出本局")
 	exit_button.pressed.connect(show_exit_confirmation)
 	column.add_child(exit_button)
@@ -284,7 +306,7 @@ func _build_pause_ui() -> void:
 	confirmation_column.add_theme_constant_override("separation", 18)
 	confirmation_panel.add_child(confirmation_column)
 	confirmation_column.add_child(_make_label("确定退出本局？", 32, Color("ff8fa3"), HORIZONTAL_ALIGNMENT_CENTER))
-	confirmation_column.add_child(_make_label("当前战斗进度将被清理，并返回自由活动大厅。", 17, Color("f1f3f5"), HORIZONTAL_ALIGNMENT_CENTER))
+	confirmation_column.add_child(_make_label("当前战斗进度将被清理，并返回主菜单。", 17, Color("f1f3f5"), HORIZONTAL_ALIGNMENT_CENTER))
 	var confirmation_buttons := HBoxContainer.new()
 	confirmation_buttons.add_theme_constant_override("separation", 14)
 	confirmation_column.add_child(confirmation_buttons)
@@ -341,6 +363,26 @@ func _build_notes_ui() -> void:
 	close_notes_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	close_notes_button.pressed.connect(close_playtest_notes)
 	buttons.add_child(close_notes_button)
+
+
+func _build_settings_ui() -> void:
+	var scene := load("res://Scenes/menu/settings_panel.tscn") as PackedScene
+	if scene == null:
+		push_error("Pause overlay could not load the shared settings panel")
+		return
+	settings_panel = scene.instantiate() as SettingsPanel
+	settings_panel.name = "PauseSettingsPanel"
+	settings_panel.closed.connect(_on_settings_closed)
+	add_child(settings_panel)
+
+
+func _on_settings_closed() -> void:
+	if mode != Mode.SETTINGS:
+		return
+	mode = Mode.PAUSE_MENU
+	_apply_mode_visibility()
+	if settings_button != null:
+		settings_button.grab_focus()
 
 
 func _add_fullscreen_dim(parent: Control) -> void:
@@ -400,3 +442,10 @@ func _set_player_global_modal_visible(visible: bool) -> void:
 	for node in get_tree().get_nodes_in_group("player_target"):
 		if is_instance_valid(node) and node.has_method("set_global_modal_overlay_open"):
 			node.set_global_modal_overlay_open(visible)
+
+
+func _is_escape_pressed(event: InputEvent) -> bool:
+	if event is not InputEventKey:
+		return false
+	var key := event as InputEventKey
+	return key.pressed and not key.echo and (key.keycode == KEY_ESCAPE or key.physical_keycode == KEY_ESCAPE)

@@ -42,10 +42,10 @@ func _test_grid_and_atomic_instances() -> void:
 	var steak := _new_item(holder, ItemData.ItemType.RAW_STEAK)
 	_expect(not grid.add_item_at(steak, Vector2i(2, 0)), "Grid: overlap must be rejected")
 	_expect(grid.get_placement(steak) == null and steak.get_parent() == holder, "Grid: failed placement must keep the real item instance untouched")
-	_expect(grid.add_item_at(steak, Vector2i(3, 0), true), "Grid: rotating 1x3 to 3x1 must permit a legal placement")
+	_expect(grid.add_item_at(steak, Vector2i(3, 0), true), "Grid: rotating the confirmed 3x1 steak to 1x3 must permit a legal placement")
 	var steak_id := steak.get_instance_id()
 	_expect(grid.move_item(steak, Vector2i(3, 1), true), "Grid: an existing item must move atomically")
-	_expect(grid.get_item_at(Vector2i(4, 1)) == steak and steak.get_instance_id() == steak_id, "Grid: moving must preserve the same actual item instance")
+	_expect(grid.get_item_at(Vector2i(3, 2)) == steak and steak.get_instance_id() == steak_id, "Grid: moving must preserve the same actual item instance")
 	_expect(chunk.data.has_failure_tag(ItemData.FailureTag.UNMARINATED), "Grid: stored processing/failure state must survive placement")
 	var l_shape: Array[Vector2i] = [Vector2i(0, 0), Vector2i(0, 1), Vector2i(1, 1)]
 	_expect(not grid.can_place_shape(l_shape, Vector2i(2, 2)), "Grid: arbitrary mask overlap must be evaluated per occupied cell")
@@ -105,10 +105,17 @@ func _test_stack_compatibility_and_limits() -> void:
 		"Art: unplated tomahawk steak must use the dedicated bone-in steak texture"
 	)
 	var tomahawk_image := (PrototypeArtCatalog.TEXTURES.get(&"tomahawk_steak") as Texture2D).get_image()
+	var tomahawk_texture := PrototypeArtCatalog.TEXTURES.get(&"tomahawk_steak") as Texture2D
+	var tomahawk_ui_region := PrototypeArtCatalog.get_ui_source_rect(&"tomahawk_steak", tomahawk_texture)
 	_expect(
 		tomahawk_image.get_pixel(0, 0).a == 0.0
 		and tomahawk_image.get_pixel(floori(tomahawk_image.get_width() * 0.5), floori(tomahawk_image.get_height() * 0.5)).a > 0.99,
 		"Art: tomahawk steak must have a transparent background while preserving the opaque steak subject"
+	)
+	_expect(
+		tomahawk_ui_region == Rect2(Vector2.ZERO, tomahawk_texture.get_size())
+		and tomahawk_texture.get_size() == Vector2(64.0, 96.0),
+		"Art: the accepted 64x96 tomahawk must use its complete transparent game canvas"
 	)
 	var held_anchor := Node2D.new()
 	holder.add_child(held_anchor)
@@ -128,12 +135,17 @@ func _test_stack_compatibility_and_limits() -> void:
 		and held_tomahawk.placeholder.title_label.visible,
 		"Art: leaving the hand must restore the normal storage/world visual transform"
 	)
-	var marinade_image := (PrototypeArtCatalog.TEXTURES.get(&"marinade") as Texture2D).get_image()
-	var mustard_image := (PrototypeArtCatalog.TEXTURES.get(&"mustard") as Texture2D).get_image()
-	var marinade_center := marinade_image.get_pixel(floori(marinade_image.get_width() * 0.5), floori(marinade_image.get_height() * 0.5))
-	var mustard_center := mustard_image.get_pixel(floori(mustard_image.get_width() * 0.5), floori(mustard_image.get_height() * 0.5))
-	_expect(marinade_center.r > marinade_center.g, "Art: marinade must use the brown-label bottle after import, not the stale reversed cache")
-	_expect(mustard_center.g > mustard_center.r, "Art: mustard must use the green-label bottle after import, not the stale reversed cache")
+	var marinade_texture := PrototypeArtCatalog.TEXTURES.get(&"marinade") as Texture2D
+	var mustard_texture := PrototypeArtCatalog.TEXTURES.get(&"mustard") as Texture2D
+	_expect(
+		marinade_texture.resource_path.ends_with("ingredient_marinade_seasoning.png"),
+		"Art: marinade must use the authoritative V3 marinade asset, not a reversed cache"
+	)
+	_expect(
+		mustard_texture.resource_path.ends_with("ingredient_mustard_sauce.png")
+		and mustard_texture.resource_path != marinade_texture.resource_path,
+		"Art: mustard must use the distinct authoritative V3 mustard asset, not a reversed cache"
+	)
 	var animation_keys: Array[StringName] = [
 		&"player_walk_sheet",
 		&"basic_taste_enemy_walk_sheet",
@@ -217,8 +229,9 @@ func _test_actual_cabinet_and_modal_input() -> void:
 	_expect(
 		cabinet.lobby_unlimited
 		and cabinet.storage.width == 20
-		and cabinet.storage.height == 20
-		and lobby_types.size() == 22
+		and cabinet.storage.height == 40
+		and cabinet.storage.width * cabinet.storage.height == 800
+		and lobby_types.size() == cabinet.get_all_item_types().size()
 		and cabinet.storage.get_items().size() == lobby_types.size()
 		and lobby_types.all(func(item_type: int): return cabinet._find_item(item_type) != null),
 		"Cabinet: the free test lobby must expose one real representative of every current item type"
@@ -228,21 +241,37 @@ func _test_actual_cabinet_and_modal_input() -> void:
 		and cabinet._find_item(ItemData.ItemType.PLATED_TOMAHAWK_STEAK).data.current_durability > 0,
 		"Cabinet: lobby finished dishes must be immediately usable test samples with initialized combat durability"
 	)
-	player.walk_animator.update_animation(0.12, Vector2.RIGHT)
-	_expect(not player.walk_animator.sprite.flip_h, "Animation: the corrected player source art must face right without an accidental horizontal inversion")
-	player.walk_animator.update_animation(0.12, Vector2.UP)
-	_expect(not player.walk_animator.sprite.flip_h, "Animation: moving vertically must preserve the player's corrected right-facing direction")
-	player.walk_animator.update_animation(0.12, Vector2.LEFT)
-	_expect(player.walk_animator.sprite.flip_h, "Animation: moving left must flip the corrected source-right player art")
+	player.walk_animator.update_animation(Vector2.RIGHT, Vector2.RIGHT, false, false)
+	_expect(player.walk_animator.sprite.animation == &"run_east" and not player.walk_animator.sprite.flip_h, "Animation: the player must use the native east running frames")
+	player.walk_animator.update_animation(Vector2.UP, Vector2.UP, false, false)
+	_expect(player.walk_animator.sprite.animation == &"run_north" and not player.walk_animator.sprite.flip_h, "Animation: moving north must use its native frames")
+	player.walk_animator.update_animation(Vector2.LEFT, Vector2.LEFT, false, false)
+	_expect(player.walk_animator.sprite.animation == &"run_west" and not player.walk_animator.sprite.flip_h, "Animation: moving west must use its native frames without mirroring")
+	_expect(player.get_node_or_null("DirectionMarker") == null, "Animation: the player must not keep a graybox direction arrow after directional walk art is available")
 	var initial_chunk := cabinet._find_item(ItemData.ItemType.RAW_BEEF_CHUNK)
 	var initial_id := initial_chunk.get_instance_id()
 	var old := cabinet.storage.get_placement(initial_chunk)
+	player.global_position = cabinet.global_position
 	ui.open_cabinet(cabinet, player)
 	_expect(
 		ui.cabinet_scroll.visible
 		and ui.cabinet_view.cell_size == 32.0
-		and ui.cabinet_view.custom_minimum_size == Vector2(640.0, 640.0),
-		"Cabinet UI: the 20x20 lobby catalog must use a scrollable 640x640 grid inside the 1280x720 panel"
+		and ui.cabinet_view.custom_minimum_size == Vector2(640.0, 1280.0)
+		and ui.cabinet_title_label.text == "20×40 测试目录（滚动查看·取走后自动补充）",
+		"Cabinet UI: the 20x40 lobby catalog must use a scrollable 640x1280 grid and the exact test-tool title"
+	)
+	await process_frame
+	ui.cabinet_scroll.scroll_vertical = 100000
+	await process_frame
+	_expect(ui.cabinet_scroll.scroll_vertical > 640, "Cabinet UI: vertical scrolling must reach the lower half containing rows 21-40")
+	ui.cabinet_scroll.scroll_vertical = 0
+	await process_frame
+	var cabinet_tomahawk := cabinet._find_item(ItemData.ItemType.TOMAHAWK_STEAK)
+	var cabinet_tomahawk_texture := PrototypeArtCatalog.TEXTURES.get(&"tomahawk_steak") as Texture2D
+	_expect(
+		ui.cabinet_view.get_item_art_source_rect(cabinet_tomahawk)
+		== Rect2(Vector2.ZERO, cabinet_tomahawk_texture.get_size()),
+		"Cabinet UI: the accepted tomahawk must use its complete 64x96 transparent texture"
 	)
 	var hover_event := InputEventMouseMotion.new()
 	hover_event.position = (Vector2(old.origin) + Vector2(0.5, 0.5)) * ui.cabinet_view.cell_size
@@ -359,7 +388,7 @@ func _test_actual_cabinet_and_modal_input() -> void:
 		not cabinet.lobby_unlimited
 		and cabinet.storage.width == 10
 		and cabinet.storage.height == 8
-		and cabinet.get_supported_item_types().size() == 6
+		and cabinet.get_supported_item_types().size() == 8
 		and cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == manager.config.raw_beef_stock
 		and cabinet.get_stock(ItemData.ItemType.TOMAHAWK_STEAK) == 0,
 		"Cabinet: starting formal service must replace the unlimited lobby catalog with centralized finite run stock"
@@ -369,7 +398,7 @@ func _test_actual_cabinet_and_modal_input() -> void:
 	_expect(
 		cabinet.lobby_unlimited
 		and cabinet.storage.width == 20
-		and cabinet.storage.height == 20
+		and cabinet.storage.height == 40
 		and cabinet.storage.get_items().size() == lobby_types.size()
 		and lobby_types.all(func(item_type: int): return cabinet._find_item(item_type) != null),
 		"Cabinet: returning to the free lobby must restore the complete unlimited test catalog"
@@ -426,23 +455,32 @@ func _test_physical_loot_loop() -> void:
 	manager.set_process(false)
 	var stats := scene.get_node("RunStats") as RunStats
 	stats.begin_run()
-	_expect(is_equal_approx(manager.config.normal_loot_chance, 0.35) and manager.config.normal_loot_mustard_weight < manager.config.normal_loot_salt_weight, "Loot: normal 35% chance and lower mustard weight must remain centralized Prototype parameters")
+	_expect(
+		is_equal_approx(manager.config.basic_loot_chance, 0.30)
+		and manager.config.basic_loot_oil_weight == 35.0
+		and manager.config.basic_loot_whole_greens_weight == 20.0,
+		"Loot: basic 30% chance and its oil/salt/whole-greens pool must remain centralized Prototype parameters"
+	)
 	var debug_dummy := scene.get_node("Kitchen/EnemyDummyA") as DebugCombatTarget
 	_expect(not debug_dummy.is_in_group("basic_taste_enemy") and not debug_dummy.has_signal("reflavor_completed"), "Loot: lobby test dummies must have no formal enemy loot settlement route")
 	var player := scene.get_node("Kitchen/Player") as PrototypePlayer
 	_expect(
 		player.walk_animator != null
-		and player.walk_animator.sprite.texture == PrototypeArtCatalog.TEXTURES.get(&"player_walk_sheet")
-		and player.walk_animator.sprite.hframes == 4
-		and player.walk_animator.sprite.vframes == 3,
-		"Animation: the actual player node must use the 4x3 protagonist walk sheet"
+		and player.walk_animator.sprite is AnimatedSprite2D
+		and player.walk_animator.sprite.sprite_frames.has_animation(&"idle_south")
+		and player.walk_animator.sprite.sprite_frames.has_animation(&"walk_south")
+		and player.walk_animator.sprite.sprite_frames.has_animation(&"run_south")
+		and player.walk_animator.sprite.sprite_frames.has_animation(&"defeat_fall"),
+		"Animation: the actual player node must expose native eight-direction idle, walk, run, and defeat animations"
 	)
 	var normal := manager.spawn_enemy_for_test(Vector2(900.0, 700.0))
 	normal.set_physics_process(false)
 	_expect(
-		normal.walk_animator != null
-		and normal.walk_animator.sprite.texture == PrototypeArtCatalog.TEXTURES.get(&"basic_taste_enemy_walk_sheet"),
-		"Animation: the actual normal enemy must use its dedicated walk sheet"
+		normal.character_animator != null
+		and normal.walk_animator == null
+		and normal.character_animator.sprite is AnimatedSprite2D
+		and normal.character_animator.sprite.sprite_frames.has_animation(&"run_south"),
+		"Animation: the actual normal enemy must use its native PixelLab character animation set"
 	)
 	var normal_loot := manager.settle_enemy_loot_for_test(normal)
 	_expect(normal_loot != null and normal_loot.is_loot_drop and normal_loot.pickup_enabled, "Loot: normal enemy forced test settlement must create one physical pickable resource")
@@ -455,7 +493,7 @@ func _test_physical_loot_loop() -> void:
 		"Animation: the actual heavy enemy must use its dedicated walk sheet"
 	)
 	var heavy_loot := manager.settle_enemy_loot_for_test(heavy)
-	_expect(heavy_loot != null and heavy_loot.data.item_type == ItemData.ItemType.RAW_BEEF_CHUNK, "Loot: heavy enemy must guarantee one 3x3 raw beef chunk")
+	_expect(heavy_loot != null and heavy_loot.data.item_type == ItemData.ItemType.RAW_STEAK, "Loot: heavy enemy must guarantee one horizontal 3x1 raw steak")
 	_expect(heavy_loot is Node2D and not heavy_loot.has_method("get_collision_layer"), "Loot: world drops must not block navigation or physical movement")
 	var combat := scene.get_node("CombatRuntime") as CombatManager
 	var aroma_trap := ShabuTrap.new()

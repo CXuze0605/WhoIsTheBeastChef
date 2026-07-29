@@ -1,0 +1,542 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Falling_Back_Death/south/frame_000.png" id="1_2uc1b"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Falling_Back_Death/south/frame_001.png" id="2_l8tvk"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Falling_Back_Death/south/frame_002.png" id="3_naiql"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Falling_Back_Death/south/frame_003.png" id="4_acqcy"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Falling_Back_Death/south/frame_004.png" id="5_1shqt"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Falling_Back_Death/south/frame_005.png" id="6_puxuv"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Falling_Back_Death/south/frame_006.png" id="7_uuj04"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/east/frame_000.png" id="8_3mpsc"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/east/frame_001.png" id="9_m71vb"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/east/frame_002.png" id="10_iueiu"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/east/frame_003.png" id="11_xkt6s"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north/frame_000.png" id="12_f8s7q"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north/frame_001.png" id="13_s38ol"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north/frame_002.png" id="14_ucxnv"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north/frame_003.png" id="15_b2imp"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north-east/frame_000.png" id="16_amxkn"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north-east/frame_001.png" id="17_cgl55"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north-east/frame_002.png" id="18_llpw4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north-east/frame_003.png" id="19_62ijd"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north-west/frame_000.png" id="20_eo13c"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north-west/frame_001.png" id="21_psbos"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north-west/frame_002.png" id="22_vu48k"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/north-west/frame_003.png" id="23_qn632"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south/frame_000.png" id="24_13t6p"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south/frame_001.png" id="25_1e3bs"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south/frame_002.png" id="26_lo4ok"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south/frame_003.png" id="27_oj43s"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south-east/frame_000.png" id="28_wnsai"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south-east/frame_001.png" id="29_o5t7u"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south-east/frame_002.png" id="30_poyh4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south-east/frame_003.png" id="31_x58qq"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south-west/frame_000.png" id="32_688xu"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south-west/frame_001.png" id="33_n36mo"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south-west/frame_002.png" id="34_fuba7"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/south-west/frame_003.png" id="35_hu1t4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/west/frame_000.png" id="36_rxhqx"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/west/frame_001.png" id="37_s52nv"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/west/frame_002.png" id="38_npg4w"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Breathing_Idle/west/frame_003.png" id="39_5gk27"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/east/frame_000.png" id="40_illev"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/east/frame_001.png" id="41_7g5r8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/east/frame_002.png" id="42_js51f"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/east/frame_003.png" id="43_wkw27"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north/frame_000.png" id="44_px48r"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north/frame_001.png" id="45_hjfkg"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north/frame_002.png" id="46_tn3br"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north/frame_003.png" id="47_1gd8x"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north-east/frame_000.png" id="48_d61po"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north-east/frame_001.png" id="49_5cdw4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north-east/frame_002.png" id="50_j7wdd"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north-east/frame_003.png" id="51_28e7s"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north-west/frame_000.png" id="52_b41qk"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north-west/frame_001.png" id="53_xfphw"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north-west/frame_002.png" id="54_dpxkb"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/north-west/frame_003.png" id="55_40uqj"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south/frame_000.png" id="56_jwnnd"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south/frame_001.png" id="57_kid8j"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south/frame_002.png" id="58_ei4nh"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south/frame_003.png" id="59_iywgk"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south-east/frame_000.png" id="60_vc56r"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south-east/frame_001.png" id="61_a80rv"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south-east/frame_002.png" id="62_x3liu"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south-east/frame_003.png" id="63_i6dsd"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south-west/frame_000.png" id="64_v51kg"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south-west/frame_001.png" id="65_5add8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south-west/frame_002.png" id="66_1a5h3"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/south-west/frame_003.png" id="67_fax06"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/west/frame_000.png" id="68_1ylwd"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/west/frame_001.png" id="69_nel2e"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/west/frame_002.png" id="70_iv5e4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Running/west/frame_003.png" id="71_ktdk6"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/east/frame_000.png" id="72_ib7je"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/east/frame_001.png" id="73_a5djs"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/east/frame_002.png" id="74_omwur"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/east/frame_003.png" id="75_kaq6l"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north/frame_000.png" id="76_t7rs3"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north/frame_001.png" id="77_3xjex"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north/frame_002.png" id="78_fr2l6"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north/frame_003.png" id="79_dk5sm"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north-east/frame_000.png" id="80_oh0k4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north-east/frame_001.png" id="81_1fjtm"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north-east/frame_002.png" id="82_e6tmw"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north-east/frame_003.png" id="83_0rcx8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north-west/frame_000.png" id="84_br7kb"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north-west/frame_001.png" id="85_rd3u7"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north-west/frame_002.png" id="86_gtrpj"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/north-west/frame_003.png" id="87_ha6od"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south/frame_000.png" id="88_mr4lt"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south/frame_001.png" id="89_okn5y"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south/frame_002.png" id="90_k8337"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south/frame_003.png" id="91_rfwtj"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south-east/frame_000.png" id="92_ilhsp"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south-east/frame_001.png" id="93_isllf"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south-east/frame_002.png" id="94_gnkcs"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south-east/frame_003.png" id="95_jqi45"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south-west/frame_000.png" id="96_qnu1w"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south-west/frame_001.png" id="97_1n4sr"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south-west/frame_002.png" id="98_1viif"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/south-west/frame_003.png" id="99_m2ohq"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/west/frame_000.png" id="100_bamg4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/west/frame_001.png" id="101_gu2ty"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/west/frame_002.png" id="102_wcj1r"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Player/ChefWuxia01/animations/Walking/west/frame_003.png" id="103_v817t"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_2uc1b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_l8tvk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_naiql")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_acqcy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_1shqt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_puxuv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_uuj04")
+}],
+"loop": false,
+"name": &"defeat_fall",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_3mpsc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_m71vb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_iueiu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_xkt6s")
+}],
+"loop": true,
+"name": &"idle_east",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_f8s7q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_s38ol")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ucxnv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_b2imp")
+}],
+"loop": true,
+"name": &"idle_north",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_amxkn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_cgl55")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_llpw4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_62ijd")
+}],
+"loop": true,
+"name": &"idle_north-east",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_eo13c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_psbos")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_vu48k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_qn632")
+}],
+"loop": true,
+"name": &"idle_north-west",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_13t6p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_1e3bs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_lo4ok")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_oj43s")
+}],
+"loop": true,
+"name": &"idle_south",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_wnsai")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_o5t7u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_poyh4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_x58qq")
+}],
+"loop": true,
+"name": &"idle_south-east",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("32_688xu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_n36mo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_fuba7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_hu1t4")
+}],
+"loop": true,
+"name": &"idle_south-west",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("36_rxhqx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_s52nv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_npg4w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_5gk27")
+}],
+"loop": true,
+"name": &"idle_west",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("40_illev")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_7g5r8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_js51f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_wkw27")
+}],
+"loop": true,
+"name": &"run_east",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("44_px48r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_hjfkg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_tn3br")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_1gd8x")
+}],
+"loop": true,
+"name": &"run_north",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("48_d61po")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_5cdw4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_j7wdd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_28e7s")
+}],
+"loop": true,
+"name": &"run_north-east",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_b41qk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_xfphw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_dpxkb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_40uqj")
+}],
+"loop": true,
+"name": &"run_north-west",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_jwnnd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_kid8j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_ei4nh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_iywgk")
+}],
+"loop": true,
+"name": &"run_south",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("60_vc56r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_a80rv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_x3liu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_i6dsd")
+}],
+"loop": true,
+"name": &"run_south-east",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("64_v51kg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_5add8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_1a5h3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_fax06")
+}],
+"loop": true,
+"name": &"run_south-west",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("68_1ylwd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_nel2e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_iv5e4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_ktdk6")
+}],
+"loop": true,
+"name": &"run_west",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("72_ib7je")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_a5djs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_omwur")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_kaq6l")
+}],
+"loop": true,
+"name": &"walk_east",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("76_t7rs3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_3xjex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_fr2l6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_dk5sm")
+}],
+"loop": true,
+"name": &"walk_north",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("80_oh0k4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_1fjtm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_e6tmw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_0rcx8")
+}],
+"loop": true,
+"name": &"walk_north-east",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("84_br7kb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_rd3u7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("86_gtrpj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_ha6od")
+}],
+"loop": true,
+"name": &"walk_north-west",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("88_mr4lt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("89_okn5y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_k8337")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_rfwtj")
+}],
+"loop": true,
+"name": &"walk_south",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("92_ilhsp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_isllf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_gnkcs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_jqi45")
+}],
+"loop": true,
+"name": &"walk_south-east",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("96_qnu1w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_1n4sr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("98_1viif")
+}, {
+"duration": 1.0,
+"texture": ExtResource("99_m2ohq")
+}],
+"loop": true,
+"name": &"walk_south-west",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("100_bamg4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("101_gu2ty")
+}, {
+"duration": 1.0,
+"texture": ExtResource("102_wcj1r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("103_v817t")
+}],
+"loop": true,
+"name": &"walk_west",
+"speed": 6.0
+}]

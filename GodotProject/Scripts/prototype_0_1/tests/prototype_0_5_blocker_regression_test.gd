@@ -346,6 +346,7 @@ func _test_f_tomahawk_trigger_and_hit_reliability() -> void:
 	attack.cooldown_left = 0.08
 	await _press_mouse_left()
 	for frame in 10:
+		attack._process(0.02)
 		await process_frame
 	_expect(combat.melee_swings_spawned == swing_count_before + 1 and buffered_target.current_health < buffered_health, "F: a real click near cooldown end must be buffered into one successful damaging swing")
 	_expect(attack.attack_buffer_left <= 0.0, "F: a consumed melee buffer must clear instead of turning into held-button auto attack")

@@ -226,7 +226,12 @@ func _test_unified_cabinet_and_modal_input() -> void:
 	var cabinet := scene.get_node("Kitchen/IngredientCabinet") as IngredientCabinet
 	var cabinet_ui := scene.get_node("IngredientCabinetUI") as IngredientCabinetUI
 	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and not cabinet.lobby_unlimited, "开始营业后应切换到正式有限库存柜")
-	_expect(cabinet.get_supported_item_types().size() == 6, "正式食材柜应包含牛肉、腌肉料、辣椒、油、盐和芥末六种当前流程物品")
+	_expect(
+		cabinet.get_supported_item_types().size() == 8
+		and cabinet.get_stock(ItemData.ItemType.RICE_BAG) == 1
+		and cabinet.get_stock(ItemData.ItemType.WHOLE_GREENS) == 1,
+		"正式食材柜应包含原六种流程物品、一个实例化米袋和一颗 Prototype 青菜"
+	)
 	var initial_beef := cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK)
 	cabinet.begin_primary_interaction(player)
 	_expect(cabinet_ui.is_open() and player.modal_ui_open, "按交互打开柜子后应显示 UI 并锁定玩家输入")
@@ -428,6 +433,7 @@ func _test_integrated_interruption_rules() -> void:
 	player.receive_item_data(ItemCatalog.create(ItemData.ItemType.COOKING_OIL))
 	wok_station.carry_interact(player)
 	player.receive_item_data(ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES))
+	player.inventory.select(player.inventory.find_item_slot(ItemData.ItemType.MARINATED_BEEF_SLICES))
 	wok_station.carry_interact(player)
 	wok_station.set_burner_on(true, player)
 	wok_station.advance_automatic_cooking(wok_station.config.automatic_stage_one_time * 0.4, player)

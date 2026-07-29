@@ -249,7 +249,7 @@ func _test_12_full_regression_contract() -> void:
 	await process_frame
 	_expect(player.inventory.slots.size() == 5, "12: five-slot inventory must remain intact")
 	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and not cabinet.lobby_unlimited, "12: formal preparation must use the finite cabinet")
-	_expect(cabinet.get_supported_item_types().size() == 6, "12: unified finite cabinet must remain intact")
+	_expect(cabinet.get_supported_item_types().size() == 8 and cabinet.get_stock(ItemData.ItemType.RICE_BAG) == 1 and cabinet.get_stock(ItemData.ItemType.WHOLE_GREENS) == 1, "12: unified finite cabinet must include the rice bag and current Prototype whole greens")
 	_expect(scene.get_node_or_null("PlatingController") != null and scene.get_node_or_null("CombatRuntime") != null, "12: plating and combat-dish runtime must remain connected")
 	_expect(scene.get_node_or_null("Kitchen/Sink") != null and scene.get_node_or_null("Kitchen/CleanPlatePile") != null, "12: plate and stuck-wok cleaning loop must remain connected")
 	_expect(InputMap.has_action("start_service") and manager.config.global_warning_time == 2.0 and manager.config.local_warning_time == 0.8, "12: service input and existing warning rules must remain unchanged")

@@ -10,9 +10,11 @@ var stagger_power: float = 0.0
 var on_hit_effect: StatusEffectData
 var hit_target_ids: Dictionary = {}
 var active_time_left: float = 0.13
+var source_entity: Node
+var source_dish: ItemData
 
 
-func setup(origin: Vector2, attack_direction: Vector2, item_data: ItemData, config: PrototypeCombatConfig) -> void:
+func setup(origin: Vector2, attack_direction: Vector2, item_data: ItemData, config: PrototypeCombatConfig, attack_source: Node = null) -> void:
 	global_position = origin
 	direction = attack_direction.normalized() if not attack_direction.is_zero_approx() else Vector2.RIGHT
 	damage = item_data.actual_damage
@@ -21,6 +23,8 @@ func setup(origin: Vector2, attack_direction: Vector2, item_data: ItemData, conf
 	knockback = config.tomahawk_knockback
 	stagger_power = item_data.stagger_power
 	on_hit_effect = config.create_on_hit_effect(item_data)
+	source_entity = attack_source
+	source_dish = item_data
 
 
 func _ready() -> void:
@@ -60,7 +64,21 @@ func _hit_available_targets() -> void:
 		var offset: Vector2 = target_node.global_position - global_position
 		if not _target_intersects_arc(target_node, offset):
 			continue
-		if target.receive_combat_hit(damage, CombatRules.Faction.PLAYER, direction, knockback, false, stagger_power):
+		var hit_succeeded := false
+		if target.has_method("receive_damage_context"):
+			var context := DamageContext.new()
+			context.source_entity = source_entity
+			context.source_dish = source_dish
+			context.source_type = DamageContext.SourceType.PLAYER_DIRECT_MELEE
+			context.attacker_faction = CombatRules.Faction.PLAYER
+			context.target_faction = int(target.get_combat_faction())
+			context.base_damage = damage
+			context.friendly_fire = false
+			context.allow_direct_attack_bonus = true
+			hit_succeeded = target.receive_damage_context(context, direction, knockback, stagger_power)
+		else:
+			hit_succeeded = target.receive_combat_hit(damage, CombatRules.Faction.PLAYER, direction, knockback, false, stagger_power)
+		if hit_succeeded:
 			hit_target_ids[id] = true
 			if on_hit_effect != null and target.has_method("apply_status_effect"):
 				target.apply_status_effect(on_hit_effect.copy_effect())

@@ -1,0 +1,254 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "93c5b4bb-7656-422c-803d-a93dc78c6acf",
+        "name": "A MODERN-DAY Chinese urban adult transformed into an exaggerated speed-type Weizhen monster. Full-body humanoid with a narrow, violently forward-leaning silhouette. Its body has been unnaturally stretched by runaway hunger energy: elongated forearms and lower legs, sharply raised shoulders, oversized running shoes, enlarged hooked hands and a neck thrust forward like a hunting animal. Very lean, but no exposed bones.\n\nMessy wind-swept black hair, pale gray face, deep dark eye sockets, blazing orange pupils and an unnaturally wide clenched grin. The abdomen is replaced visually by a black hollow taste-energy vortex surrounded by a jagged amber-orange glow. This is a magical void appearing across the clothing, not an open wound. It seems to pull the torso inward while red-orange energy lines spread toward the limbs.\n\nWear a torn dark-teal modern sports jacket, faded gray T-shirt, cropped black track pants and worn red-and-white running shoes. The long jacket sleeves and hem whip backward like speed fins. Empty hooked hands held apart, ready to pounce. Add short attached red and orange afterimage fragments around the elbows, heels and back, but no long detached trail.\n\nLow top-down three-quarter camera view. Exaggerated predatory ready stance suitable for animation, with both arms and both legs clearly separated. Strong instantly recognizable silhouette at 48\u00d748 pixels. Lively 16-bit pixel art, crisp hard pixel clusters, limited palette, thick dark outline, transparent background. Consistent identity and proportions across all 8 directions. Monstrous, frantic and slightly absurd, but not realistic gore or hopeless horror.\n\nAvoid: ancient clothing, martial-arts costume, armor, weapon, delivery uniform, ordinary thin human, realistic eating-disorder patient, skeleton, exposed ribs, exposed bones, zombie, corpse, blood, wounds, organs, realistic gore, demon horns, wings, giant detached claws, long smoke trail, excessive particles, blurry pixels, anti-aliasing or inconsist",
+        "prompt": "A MODERN-DAY Chinese urban adult transformed into an exaggerated speed-type Weizhen monster. Full-body humanoid with a narrow, violently forward-leaning silhouette. Its body has been unnaturally stretched by runaway hunger energy: elongated forearms and lower legs, sharply raised shoulders, oversized running shoes, enlarged hooked hands and a neck thrust forward like a hunting animal. Very lean, but no exposed bones.\n\nMessy wind-swept black hair, pale gray face, deep dark eye sockets, blazing orange pupils and an unnaturally wide clenched grin. The abdomen is replaced visually by a black hollow taste-energy vortex surrounded by a jagged amber-orange glow. This is a magical void appearing across the clothing, not an open wound. It seems to pull the torso inward while red-orange energy lines spread toward the limbs.\n\nWear a torn dark-teal modern sports jacket, faded gray T-shirt, cropped black track pants and worn red-and-white running shoes. The long jacket sleeves and hem whip backward like speed fins. Empty hooked hands held apart, ready to pounce. Add short attached red and orange afterimage fragments around the elbows, heels and back, but no long detached trail.\n\nLow top-down three-quarter camera view. Exaggerated predatory ready stance suitable for animation, with both arms and both legs clearly separated. Strong instantly recognizable silhouette at 48\u00d748 pixels. Lively 16-bit pixel art, crisp hard pixel clusters, limited palette, thick dark outline, transparent background. Consistent identity and proportions across all 8 directions. Monstrous, frantic and slightly absurd, but not realistic gore or hopeless horror.\n\nAvoid: ancient clothing, martial-arts costume, armor, weapon, delivery uniform, ordinary thin human, realistic eating-disorder patient, skeleton, exposed ribs, exposed bones, zombie, corpse, blood, wounds, organs, realistic gore, demon horns, wings, giant detached claws, long smoke trail, excessive particles, blurry pixels, anti-aliasing or inconsist",
+        "size": {
+          "width": 100,
+          "height": 100
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-07-28T03:57:35.578747+00:00"
+      },
+      "folder": "A_MODERN-DAY_Chinese_urban_adult_transformed_into",
+      "frames": {
+        "rotations": {
+          "south": "A_MODERN-DAY_Chinese_urban_adult_transformed_into/rotations/south.png",
+          "south-east": "A_MODERN-DAY_Chinese_urban_adult_transformed_into/rotations/south-east.png",
+          "east": "A_MODERN-DAY_Chinese_urban_adult_transformed_into/rotations/east.png",
+          "north-east": "A_MODERN-DAY_Chinese_urban_adult_transformed_into/rotations/north-east.png",
+          "north": "A_MODERN-DAY_Chinese_urban_adult_transformed_into/rotations/north.png",
+          "north-west": "A_MODERN-DAY_Chinese_urban_adult_transformed_into/rotations/north-west.png",
+          "west": "A_MODERN-DAY_Chinese_urban_adult_transformed_into/rotations/west.png",
+          "south-west": "A_MODERN-DAY_Chinese_urban_adult_transformed_into/rotations/south-west.png"
+        },
+        "animations": {
+          "feipu": {
+            "west": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/west/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/west/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/west/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/west/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/west/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/west/frame_005.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/west/frame_006.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/west/frame_007.png"
+            ],
+            "south-east": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-east/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-east/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-east/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-east/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-east/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-east/frame_005.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-east/frame_006.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-east/frame_007.png"
+            ],
+            "north": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north/frame_005.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north/frame_006.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north/frame_007.png"
+            ],
+            "north-east": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-east/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-east/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-east/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-east/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-east/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-east/frame_005.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-east/frame_006.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-east/frame_007.png"
+            ],
+            "east": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/east/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/east/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/east/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/east/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/east/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/east/frame_005.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/east/frame_006.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/east/frame_007.png"
+            ],
+            "north-west": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-west/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-west/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-west/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-west/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-west/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-west/frame_005.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-west/frame_006.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/north-west/frame_007.png"
+            ],
+            "south-west": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-west/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-west/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-west/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-west/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-west/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-west/frame_005.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-west/frame_006.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south-west/frame_007.png"
+            ],
+            "south": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south/frame_005.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south/frame_006.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/feipu/south/frame_007.png"
+            ]
+          },
+          "Crouching": {
+            "south-west": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-west/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-west/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-west/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-west/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-west/frame_004.png"
+            ],
+            "south": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south/frame_004.png"
+            ],
+            "east": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/east/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/east/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/east/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/east/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/east/frame_004.png"
+            ],
+            "north-east": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-east/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-east/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-east/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-east/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-east/frame_004.png"
+            ],
+            "north": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north/frame_004.png"
+            ],
+            "north-west": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-west/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-west/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-west/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-west/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/north-west/frame_004.png"
+            ],
+            "south-east": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-east/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-east/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-east/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-east/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/south-east/frame_004.png"
+            ],
+            "west": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/west/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/west/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/west/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/west/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Crouching/west/frame_004.png"
+            ]
+          },
+          "Falling_Back_Death": {
+            "south": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Falling_Back_Death/south/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Falling_Back_Death/south/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Falling_Back_Death/south/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Falling_Back_Death/south/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Falling_Back_Death/south/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Falling_Back_Death/south/frame_005.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Falling_Back_Death/south/frame_006.png"
+            ]
+          },
+          "Running": {
+            "east": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/east/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/east/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/east/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/east/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/east/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/east/frame_005.png"
+            ],
+            "west": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/west/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/west/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/west/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/west/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/west/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/west/frame_005.png"
+            ],
+            "south-west": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-west/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-west/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-west/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-west/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-west/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-west/frame_005.png"
+            ],
+            "north-west": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-west/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-west/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-west/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-west/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-west/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-west/frame_005.png"
+            ],
+            "north-east": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-east/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-east/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-east/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-east/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-east/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north-east/frame_005.png"
+            ],
+            "south": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south/frame_005.png"
+            ],
+            "south-east": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-east/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-east/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-east/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-east/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-east/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/south-east/frame_005.png"
+            ],
+            "north": [
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north/frame_000.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north/frame_001.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north/frame_002.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north/frame_003.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north/frame_004.png",
+              "A_MODERN-DAY_Chinese_urban_adult_transformed_into/animations/Running/north/frame_005.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-07-28T04:55:34.152713"
+}

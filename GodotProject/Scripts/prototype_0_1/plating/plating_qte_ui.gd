@@ -88,7 +88,7 @@ func _build_ui() -> void:
 	var hint := Label.new()
 	hint.position = Vector2(0.0, 158.0)
 	hint.size = Vector2(590.0, 34.0)
-	hint.text = "再次按 Space 确认 · 黄色区域为完美"
+	hint.text = "再次按 %s 确认 · 黄色区域为完美" % InputPrompt.action_text(&"plate_dish", "Space")
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	panel.add_child(hint)
 	track = ColorRect.new()

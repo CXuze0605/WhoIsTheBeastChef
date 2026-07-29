@@ -1,0 +1,237 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/east/frame_000.png" id="1_nnrgg"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/east/frame_001.png" id="2_re4cu"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/east/frame_002.png" id="3_lijwq"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/east/frame_003.png" id="4_7gej4"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/east/frame_004.png" id="5_1yh6d"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/east/frame_005.png" id="6_wfjkj"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north/frame_000.png" id="7_q0g5t"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north/frame_001.png" id="8_4mq8x"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north/frame_002.png" id="9_fdqtq"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north/frame_003.png" id="10_f04uj"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north/frame_004.png" id="11_gbdcm"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north/frame_005.png" id="12_w7icq"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-east/frame_000.png" id="13_qenlx"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-east/frame_001.png" id="14_u7mux"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-east/frame_002.png" id="15_87jr6"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-east/frame_003.png" id="16_b82it"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-east/frame_004.png" id="17_frpjw"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-east/frame_005.png" id="18_sdg11"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-west/frame_000.png" id="19_nfea6"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-west/frame_001.png" id="20_tnpp1"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-west/frame_002.png" id="21_6yids"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-west/frame_003.png" id="22_yos8o"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-west/frame_004.png" id="23_3rjof"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/north-west/frame_005.png" id="24_pixss"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south/frame_000.png" id="25_6gaw8"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south/frame_001.png" id="26_trsfh"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south/frame_002.png" id="27_pbubh"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south/frame_003.png" id="28_mkxa5"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south/frame_004.png" id="29_gfuev"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south/frame_005.png" id="30_d2sex"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-east/frame_000.png" id="31_h4180"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-east/frame_001.png" id="32_rh5xl"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-east/frame_002.png" id="33_k0h64"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-east/frame_003.png" id="34_2yy6x"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-east/frame_004.png" id="35_nei6d"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-east/frame_005.png" id="36_v2i11"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-west/frame_000.png" id="37_ngy6j"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-west/frame_001.png" id="38_663u6"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-west/frame_002.png" id="39_t7oxg"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-west/frame_003.png" id="40_gbctq"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-west/frame_004.png" id="41_vv37i"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/south-west/frame_005.png" id="42_xsj7d"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/west/frame_000.png" id="43_040na"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/west/frame_001.png" id="44_c65hl"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/west/frame_002.png" id="45_1ps44"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/west/frame_003.png" id="46_ncass"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/west/frame_004.png" id="47_q6yyb"]
+[ext_resource type="Texture2D" path="res://Assets/Combat/DishAttacks/StirFryNormalBull01/animations/Run/west/frame_005.png" id="48_tvhyt"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_nnrgg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_re4cu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_lijwq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_7gej4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_1yh6d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_wfjkj")
+}],
+"loop": true,
+"name": &"run_east",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_q0g5t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_4mq8x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_fdqtq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_f04uj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_gbdcm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_w7icq")
+}],
+"loop": true,
+"name": &"run_north",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_qenlx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_u7mux")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_87jr6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_b82it")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_frpjw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_sdg11")
+}],
+"loop": true,
+"name": &"run_north-east",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_nfea6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_tnpp1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_6yids")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_yos8o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_3rjof")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_pixss")
+}],
+"loop": true,
+"name": &"run_north-west",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_6gaw8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_trsfh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_pbubh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_mkxa5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_gfuev")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_d2sex")
+}],
+"loop": true,
+"name": &"run_south",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_h4180")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_rh5xl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_k0h64")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_2yy6x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_nei6d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_v2i11")
+}],
+"loop": true,
+"name": &"run_south-east",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_ngy6j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_663u6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_t7oxg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_gbctq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_vv37i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_xsj7d")
+}],
+"loop": true,
+"name": &"run_south-west",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_040na")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_c65hl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_1ps44")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_ncass")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_q6yyb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_tvhyt")
+}],
+"loop": true,
+"name": &"run_west",
+"speed": 12.0
+}]

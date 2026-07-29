@@ -14,12 +14,18 @@ var feedback_label: Label
 var combat_label: Label
 var plate_label: Label
 var wave_label: Label
+var controls_label: Label
 var progress_bar: ProgressBar
+var enemy_dummy_a: DebugCombatTarget
+var auto_attack_toggle: CheckButton
 
 
 func _ready() -> void:
 	player = get_node(player_path) as PrototypePlayer
+	enemy_dummy_a = get_node_or_null("../Kitchen/EnemyDummyA") as DebugCombatTarget
 	_build_ui()
+	if enemy_dummy_a != null:
+		enemy_dummy_a.auto_attack_changed.connect(_on_dummy_auto_attack_changed)
 	set_developer_ui_visible(true)
 
 
@@ -40,6 +46,8 @@ func is_developer_ui_visible() -> bool:
 func _process(_delta: float) -> void:
 	if player == null:
 		return
+	_refresh_auto_attack_toggle()
+	controls_label.text = _get_controls_text()
 	held_label.text = "手持：\n%s" % (player.held_item.get_debug_description() if player.held_item != null else "空")
 	var target := player.current_target
 	target_label.text = "当前目标：%s" % (target.display_title if target != null else "无")
@@ -90,8 +98,8 @@ func _build_ui() -> void:
 
 	var title := _make_label("Prototype 0.5 / 开发辅助 UI\nF3 可切换玩家模式 · 非最终数值", 17, Color("ffd166"))
 	column.add_child(title)
-	var controls := _make_label("WASD 移动  E 交互/切洗  F 投料/拿取\nR 锅具  滚轮/1—5 切格  B 开始营业\nM 芥末  G 陷阱  Space 摆盘  左键攻击\nESC 暂停  F3 隐藏开发 UI  F9 试玩记录  T 重置", 12, Color("d7e3fc"))
-	column.add_child(controls)
+	controls_label = _make_label(_get_controls_text(), 12, Color("d7e3fc"))
+	column.add_child(controls_label)
 	wave_label = _make_label("波次：等待初始化", 12, Color("ffd166"))
 	column.add_child(wave_label)
 	held_label = _make_label("手持：空", 14, Color.WHITE)
@@ -117,6 +125,66 @@ func _build_ui() -> void:
 	column.add_child(stock_label)
 	feedback_label = _make_label("操作反馈：", 14, Color("ffadad"))
 	column.add_child(feedback_label)
+
+	auto_attack_toggle = CheckButton.new()
+	auto_attack_toggle.name = "EnemyDummyAAutoAttackToggle"
+	auto_attack_toggle.position = Vector2(966.0, 675.0)
+	auto_attack_toggle.size = Vector2(296.0, 36.0)
+	auto_attack_toggle.text = "假人 A 自动攻击：关"
+	auto_attack_toggle.tooltip_text = "周期攻击范围内的玩家与友方角色；用于测试护盾、防具和召唤物。"
+	auto_attack_toggle.add_theme_font_size_override("font_size", 14)
+	auto_attack_toggle.add_theme_color_override("font_color", Color("ffb4a2"))
+	auto_attack_toggle.toggled.connect(_on_auto_attack_toggled)
+	add_child(auto_attack_toggle)
+
+
+func _get_controls_text() -> String:
+	var movement := "%s%s%s%s" % [
+		InputPrompt.action_text(&"move_up", "W"),
+		InputPrompt.action_text(&"move_left", "A"),
+		InputPrompt.action_text(&"move_down", "S"),
+		InputPrompt.action_text(&"move_right", "D"),
+	]
+	var hotbar := "%s—%s" % [
+		InputPrompt.action_text(&"select_hotbar_1", "1"),
+		InputPrompt.action_text(&"select_hotbar_5", "5"),
+	]
+	return "%s 移动  %s 交互/切洗  %s 投料/拿取\n%s 锅具  滚轮/%s 切格  %s 开始营业\n%s 调味  %s 陷阱  %s 摆盘  %s 攻击\nESC/%s 暂停  F3 隐藏开发 UI  F9 试玩记录  T 重置" % [
+		movement,
+		InputPrompt.action_text(&"interact_primary", "E"),
+		InputPrompt.action_text(&"interact_carry", "F"),
+		InputPrompt.action_text(&"interact_cookware", "R"),
+		hotbar,
+		InputPrompt.action_text(&"start_service", "B"),
+		InputPrompt.action_text(&"season_dish", "M"),
+		InputPrompt.action_text(&"place_trap", "G"),
+		InputPrompt.action_text(&"plate_dish", "Space"),
+		InputPrompt.action_text(&"dish_attack", "Mouse Left"),
+		InputPrompt.action_text(&"toggle_pause", "ESC"),
+	]
+
+
+func _on_auto_attack_toggled(enabled: bool) -> void:
+	if enemy_dummy_a != null:
+		enemy_dummy_a.set_auto_attack_enabled(enabled)
+	_refresh_auto_attack_toggle()
+
+
+func _on_dummy_auto_attack_changed(_enabled: bool) -> void:
+	_refresh_auto_attack_toggle()
+
+
+func _refresh_auto_attack_toggle() -> void:
+	if auto_attack_toggle == null:
+		return
+	var available := enemy_dummy_a != null and enemy_dummy_a.auto_attack_available and enemy_dummy_a.lobby_active
+	auto_attack_toggle.disabled = not available
+	var enabled := available and enemy_dummy_a.auto_attack_enabled
+	if auto_attack_toggle.button_pressed != enabled:
+		auto_attack_toggle.set_pressed_no_signal(enabled)
+	auto_attack_toggle.text = "假人 A 自动攻击：%s" % ("开" if enabled else "关")
+	if enabled:
+		auto_attack_toggle.text += "  |  命中 %d" % enemy_dummy_a.last_auto_attack_hit_count
 
 
 func _make_label(text: String, font_size: int, color: Color) -> Label:
@@ -152,7 +220,11 @@ func _get_wave_text() -> String:
 	var manager := get_tree().get_first_node_in_group("prototype_wave_manager") as PrototypeWaveManager
 	if manager == null:
 		return "波次：未找到 PrototypeWaveManager"
-	return "波次状态（Prototype）：\n%s" % manager.get_debug_summary()
+	var freshness := get_tree().get_first_node_in_group("freshness_manager") as FreshnessManager
+	return "波次状态（Prototype）：\n%s%s" % [
+		manager.get_debug_summary(),
+		"\n%s" % freshness.get_debug_summary() if freshness != null else "",
+	]
 
 
 func _get_plate_text() -> String:
@@ -166,4 +238,9 @@ func _get_plate_text() -> String:
 	var plating := get_tree().get_first_node_in_group("plating_controller") as PlatingController
 	if actual_sink == null or pile == null:
 		return "盘子循环：节点未就绪"
-	return "盘子循环：脏盘池 %d / 洗净累计 %d\n清洗档位：%s\n摆盘 QTE：%s" % [actual_sink.dirty_plate_count, pile.washed_plate_count, actual_sink.locked_plate_speed_tier, "进行中（Space 确认）" if plating != null and plating.active else "未开始"]
+	return "盘子循环：脏盘池 %d / 洗净累计 %d\n清洗档位：%s\n摆盘 QTE：%s" % [
+		actual_sink.dirty_plate_count,
+		pile.washed_plate_count,
+		actual_sink.locked_plate_speed_tier,
+		"进行中（%s 确认）" % InputPrompt.action_text(&"plate_dish", "Space") if plating != null and plating.active else "未开始",
+	]

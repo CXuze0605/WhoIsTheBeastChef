@@ -80,7 +80,7 @@ func add_item(item: CarryableItem) -> int:
 			var existing := slots[slot_index]
 			if existing == null or not existing.data.can_stack_with(item.data):
 				continue
-			var accepted := existing.data.add_to_stack(item.data.stack_count)
+			var accepted := existing.data.add_from_stack(item.data)
 			if accepted <= 0:
 				continue
 			item.data.stack_count -= accepted
@@ -116,11 +116,21 @@ func merge_from_item(item: CarryableItem) -> int:
 	if item == null or item.data == null or not item.data.is_stackable:
 		return 0
 	var accepted_total := 0
-	for slot_index in _ordered_slot_indices():
+	var ordered := _ordered_slot_indices()
+	ordered.sort_custom(func(a: int, b: int) -> bool:
+		var a_item := slots[a]
+		var b_item := slots[b]
+		if a_item == null:
+			return false
+		if b_item == null:
+			return true
+		return absf(a_item.data.spoilage_ratio - item.data.spoilage_ratio) < absf(b_item.data.spoilage_ratio - item.data.spoilage_ratio)
+	)
+	for slot_index in ordered:
 		var existing := slots[slot_index]
 		if existing == null or not existing.data.can_stack_with(item.data):
 			continue
-		var accepted := existing.data.add_to_stack(item.data.stack_count)
+		var accepted := existing.data.add_from_stack(item.data)
 		if accepted <= 0:
 			continue
 		item.data.stack_count -= accepted

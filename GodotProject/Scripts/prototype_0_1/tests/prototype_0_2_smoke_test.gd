@@ -55,7 +55,10 @@ func _test_normal_quality_and_normal_bulls() -> void:
 	var dish := _give_unplated_dish(player, [])
 	player.receive_item_data(ItemCatalog.create(ItemData.ItemType.CLEAN_PLATE))
 	_expect(plating.request_start(), "正常品质测试应能主动开始摆盘")
-	_expect(player.modal_ui_open and not paused, "QTE 应锁定玩家但不暂停世界")
+	_expect(
+		player.action_qte_locked and not player.modal_ui_open and not paused,
+		"移动摆盘 QTE 应只锁定攻击/交互，不锁定移动或暂停世界"
+	)
 	qte_ui.set_pointer_ratio_for_test(0.1)
 	_expect(plating.confirm_qte(), "QTE 普通区域应能完成摆盘")
 	_expect(dish.data.item_type == ItemData.ItemType.PLATED_STIR_FRY_BEEF, "摆盘应原地生成已摆盘小炒黄牛肉")
@@ -124,9 +127,10 @@ func _test_perfect_finisher_and_raging_bull() -> void:
 	_expect(raging.direction.dot(warned_direction) > 0.9, "预警结束后大型公牛应改变方向")
 
 	var player_health := player.current_health
+	var player_shield := player.current_shield
 	raging.global_position = player.global_position
 	raging._hit_targets_with_cooldown()
-	_expect(player.current_health < player_health, "大型公牛应能伤害释放者本人")
+	_expect(player.current_health < player_health or player.current_shield < player_shield, "大型公牛应经过统一护盾管线伤害释放者本人")
 	var enemy_health := enemy.current_health
 	raging.global_position = enemy.global_position
 	raging._hit_targets_with_cooldown()

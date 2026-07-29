@@ -175,6 +175,7 @@ func is_track_playing(track: int) -> bool:
 func _create_music_player(player_name: String) -> AudioStreamPlayer:
 	var player := AudioStreamPlayer.new()
 	player.name = player_name
+	player.bus = &"Music"
 	player.volume_db = SILENCE_DB
 	add_child(player)
 	return player

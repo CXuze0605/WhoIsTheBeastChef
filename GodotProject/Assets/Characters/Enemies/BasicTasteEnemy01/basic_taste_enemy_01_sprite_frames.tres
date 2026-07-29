@@ -1,0 +1,623 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/east/frame_000.png" id="1_jt01y"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/east/frame_001.png" id="2_i1ld1"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/east/frame_002.png" id="3_k6t8o"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/north/frame_000.png" id="4_1nu31"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/north/frame_001.png" id="5_2yuxm"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/north/frame_002.png" id="6_agy7x"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/south/frame_000.png" id="7_pqhfn"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/south/frame_001.png" id="8_kgk1x"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/south/frame_002.png" id="9_gra0p"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/west/frame_000.png" id="10_djn0b"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/west/frame_001.png" id="11_5t1i6"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Lead_Jab/west/frame_002.png" id="12_5214b"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Falling_Back_Death/south/frame_000.png" id="13_0jnw3"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Falling_Back_Death/south/frame_001.png" id="14_wf4ou"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Falling_Back_Death/south/frame_002.png" id="15_dgg8t"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Falling_Back_Death/south/frame_003.png" id="16_j4kfa"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Falling_Back_Death/south/frame_004.png" id="17_taakc"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Falling_Back_Death/south/frame_005.png" id="18_vocbd"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Falling_Back_Death/south/frame_006.png" id="19_heqba"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/rotations/east.png" id="20_5d2ug"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/rotations/north.png" id="21_8cqsy"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/rotations/north-east.png" id="22_3w446"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/rotations/north-west.png" id="23_83ead"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/rotations/south.png" id="24_m21fl"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/rotations/south-east.png" id="25_t3g1u"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/rotations/south-west.png" id="26_d04q4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/rotations/west.png" id="27_xrtsy"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/east/frame_000.png" id="28_66r2j"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/east/frame_001.png" id="29_ufoir"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/east/frame_002.png" id="30_wdtys"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/east/frame_003.png" id="31_ufwvp"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/east/frame_004.png" id="32_n5pfa"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/east/frame_005.png" id="33_8nnmr"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north/frame_000.png" id="34_1inim"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north/frame_001.png" id="35_36qv5"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north/frame_002.png" id="36_xvlax"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north/frame_003.png" id="37_47rp8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north/frame_004.png" id="38_vkqa4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north/frame_005.png" id="39_7vsng"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-east/frame_000.png" id="40_k0oqv"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-east/frame_001.png" id="41_dwq3p"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-east/frame_002.png" id="42_4gbny"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-east/frame_003.png" id="43_s26pl"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-east/frame_004.png" id="44_hf34d"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-east/frame_005.png" id="45_dv2er"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-west/frame_000.png" id="46_sup01"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-west/frame_001.png" id="47_uk37h"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-west/frame_002.png" id="48_257ig"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-west/frame_003.png" id="49_btw41"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-west/frame_004.png" id="50_gp8d5"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/north-west/frame_005.png" id="51_kvy0r"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south/frame_000.png" id="52_jm2a8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south/frame_001.png" id="53_nvi6p"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south/frame_002.png" id="54_rnuwl"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south/frame_003.png" id="55_fdeor"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south/frame_004.png" id="56_kky4p"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south/frame_005.png" id="57_unvuc"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-c21cebdf/frame_000.png" id="58_d8s7y"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-c21cebdf/frame_001.png" id="59_ip3be"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-c21cebdf/frame_002.png" id="60_akw0j"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-c21cebdf/frame_003.png" id="61_e1td4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-c21cebdf/frame_004.png" id="62_4fu5q"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-c21cebdf/frame_005.png" id="63_chpic"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-fabc4a3e/frame_000.png" id="64_7cq4p"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-fabc4a3e/frame_001.png" id="65_hwg65"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-fabc4a3e/frame_002.png" id="66_3i0ej"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-fabc4a3e/frame_003.png" id="67_2jmd3"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-fabc4a3e/frame_004.png" id="68_51qsh"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-east-fabc4a3e/frame_005.png" id="69_vooqd"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-west/frame_000.png" id="70_w2tme"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-west/frame_001.png" id="71_7ooga"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-west/frame_002.png" id="72_k0g0a"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-west/frame_003.png" id="73_lquun"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-west/frame_004.png" id="74_4loyh"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/south-west/frame_005.png" id="75_snowa"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/west/frame_000.png" id="76_sk4hp"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/west/frame_001.png" id="77_wm8x1"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/west/frame_002.png" id="78_ueowm"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/west/frame_003.png" id="79_rw0ep"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/west/frame_004.png" id="80_8sk8t"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/BasicTasteEnemy01/animations/Running/west/frame_005.png" id="81_go4ch"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_jt01y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_i1ld1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_k6t8o")
+}],
+"loop": false,
+"name": &"attack_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_1nu31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_2yuxm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_agy7x")
+}],
+"loop": false,
+"name": &"attack_north",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_pqhfn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_kgk1x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_gra0p")
+}],
+"loop": false,
+"name": &"attack_south",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_djn0b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_5t1i6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_5214b")
+}],
+"loop": false,
+"name": &"attack_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_0jnw3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_wf4ou")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_dgg8t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_j4kfa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_taakc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_vocbd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_heqba")
+}],
+"loop": false,
+"name": &"defeat_fall",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_5d2ug")
+}],
+"loop": true,
+"name": &"idle_east",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_8cqsy")
+}],
+"loop": true,
+"name": &"idle_north",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_3w446")
+}],
+"loop": true,
+"name": &"idle_north-east",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23_83ead")
+}],
+"loop": true,
+"name": &"idle_north-west",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_m21fl")
+}],
+"loop": true,
+"name": &"idle_south",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_t3g1u")
+}],
+"loop": true,
+"name": &"idle_south-east",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_d04q4")
+}],
+"loop": true,
+"name": &"idle_south-west",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_xrtsy")
+}],
+"loop": true,
+"name": &"idle_west",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_66r2j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_ufoir")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_wdtys")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_ufwvp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_n5pfa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_8nnmr")
+}],
+"loop": true,
+"name": &"run_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_1inim")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_36qv5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_xvlax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_47rp8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_vkqa4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_7vsng")
+}],
+"loop": true,
+"name": &"run_north",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("40_k0oqv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_dwq3p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_4gbny")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_s26pl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_hf34d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_dv2er")
+}],
+"loop": true,
+"name": &"run_north-east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("46_sup01")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_uk37h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_257ig")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_btw41")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_gp8d5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_kvy0r")
+}],
+"loop": true,
+"name": &"run_north-west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_jm2a8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_nvi6p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_rnuwl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_fdeor")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_kky4p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_unvuc")
+}],
+"loop": true,
+"name": &"run_south",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("58_d8s7y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_ip3be")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_akw0j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_e1td4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_4fu5q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_chpic")
+}],
+"loop": true,
+"name": &"run_south-east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("64_7cq4p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_hwg65")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_3i0ej")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_2jmd3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_51qsh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_vooqd")
+}],
+"loop": true,
+"name": &"run_south-east_variant",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("70_w2tme")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_7ooga")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_k0g0a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_lquun")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_4loyh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_snowa")
+}],
+"loop": true,
+"name": &"run_south-west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("76_sk4hp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_wm8x1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_ueowm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_rw0ep")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_8sk8t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_go4ch")
+}],
+"loop": true,
+"name": &"run_west",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_66r2j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_ufoir")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_wdtys")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_ufwvp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_n5pfa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_8nnmr")
+}],
+"loop": true,
+"name": &"slow_run_east",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_1inim")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_36qv5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_xvlax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_47rp8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_vkqa4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_7vsng")
+}],
+"loop": true,
+"name": &"slow_run_north",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("40_k0oqv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_dwq3p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_4gbny")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_s26pl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_hf34d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_dv2er")
+}],
+"loop": true,
+"name": &"slow_run_north-east",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("46_sup01")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_uk37h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_257ig")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_btw41")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_gp8d5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_kvy0r")
+}],
+"loop": true,
+"name": &"slow_run_north-west",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_jm2a8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_nvi6p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_rnuwl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_fdeor")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_kky4p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_unvuc")
+}],
+"loop": true,
+"name": &"slow_run_south",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("58_d8s7y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_ip3be")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_akw0j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_e1td4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_4fu5q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_chpic")
+}],
+"loop": true,
+"name": &"slow_run_south-east",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("70_w2tme")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_7ooga")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_k0g0a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_lquun")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_4loyh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_snowa")
+}],
+"loop": true,
+"name": &"slow_run_south-west",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("76_sk4hp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_wm8x1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_ueowm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_rw0ep")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_8sk8t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_go4ch")
+}],
+"loop": true,
+"name": &"slow_run_west",
+"speed": 5.0
+}]

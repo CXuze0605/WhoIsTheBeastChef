@@ -29,8 +29,8 @@ func _ready() -> void:
 
 
 func get_carry_prompt(player: Node) -> String:
-	if player.held_item is SoupPotItem and not (player.held_item as SoupPotItem).has_water:
-		return "[F] 给汤锅加水"
+	if player.held_item is SoupPotItem and (player.held_item as SoupPotItem).content_data == null and (player.held_item as SoupPotItem).water_units < 2:
+		return "[F] 给汤锅加 1 份水（当前 %d/2）" % (player.held_item as SoupPotItem).water_units
 	if player.held_item != null and player.held_item.data.item_type == ItemData.ItemType.DIRTY_PLATE:
 		return "[F] 将脏盘子投入水池"
 	return ""
@@ -40,9 +40,9 @@ func carry_interact(player: Node) -> void:
 	if player.held_item is SoupPotItem:
 		var pot := player.held_item as SoupPotItem
 		if pot.fill_water():
-			player.notify_feedback("汤锅已加水；放到开火灶位后自动加热")
+			player.notify_feedback("汤锅已加水：%d/2；可继续加水或放到开火灶位" % pot.water_units)
 			return
-		player.notify_feedback("汤锅已有水或锅内有内容")
+		player.notify_feedback("汤锅已满 2 份水或锅内有内容")
 		return
 	if player.held_item == null or player.held_item.data.item_type != ItemData.ItemType.DIRTY_PLATE:
 		player.notify_feedback("需要当前选中脏盘子")
@@ -58,10 +58,21 @@ func carry_interact(player: Node) -> void:
 
 func get_primary_prompt(player: Node) -> String:
 	if player.held_item is CookwareItem and (player.held_item as CookwareItem).is_stuck():
-		return "[按住 E] 清洗粘锅"
+		return "[按住 %s] 清洗粘锅" % InputPrompt.action_text(&"interact_primary", "E")
 	if dirty_plate_count > 0:
-		return "[按住 E] 连续清洗脏盘子"
+		return "[按住 %s] 连续清洗脏盘子" % InputPrompt.action_text(&"interact_primary", "E")
 	return ""
+
+
+func get_secondary_prompt(player: Node) -> String:
+	if player.held_item is SoupPotItem and (player.held_item as SoupPotItem).content_data == null and (player.held_item as SoupPotItem).water_units > 0:
+		return "[%s] 倒掉汤锅中的水" % InputPrompt.action_text(&"interact_cookware", "R")
+	return ""
+
+
+func secondary_interact(player: Node) -> void:
+	if player.held_item is SoupPotItem and (player.held_item as SoupPotItem).drain_water():
+		player.notify_feedback("已倒掉汤锅中的水")
 
 
 func begin_primary_interaction(player: Node) -> bool:

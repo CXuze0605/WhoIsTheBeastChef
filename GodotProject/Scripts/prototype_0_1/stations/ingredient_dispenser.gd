@@ -14,7 +14,7 @@ func _ready() -> void:
 
 
 func get_primary_prompt(_player: Node) -> String:
-	return "[E] 取得 %s" % ItemCatalog.create(prototype_item_type).display_name
+	return "[%s] 取得 %s" % [InputPrompt.action_text(&"interact_primary", "E"), ItemCatalog.create(prototype_item_type).display_name]
 
 
 func begin_primary_interaction(player: Node) -> bool:

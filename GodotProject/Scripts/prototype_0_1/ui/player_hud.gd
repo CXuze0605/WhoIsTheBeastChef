@@ -6,10 +6,15 @@ extends CanvasLayer
 var player: PrototypePlayer
 var health_bar: ProgressBar
 var health_label: Label
+var shield_bar: ProgressBar
+var shield_label: Label
+var shield_status: Label
+var armor_status: Label
 var panel: PanelContainer
 var danger_panel: PanelContainer
 var danger_label: Label
 var flash_left: float = 0.0
+var shield_flash_left: float = 0.0
 
 
 func _ready() -> void:
@@ -18,13 +23,20 @@ func _ready() -> void:
 	_build_ui()
 	if player != null:
 		player.health_changed.connect(_on_health_changed)
+		player.shield_changed.connect(_on_shield_changed)
+		player.shield_feedback.connect(_on_shield_feedback)
 		_on_health_changed(player.current_health, player.prototype_max_health)
+		_on_shield_changed(player.current_shield, player.prototype_max_shield)
 
 
 func _process(delta: float) -> void:
 	flash_left = maxf(0.0, flash_left - delta)
+	shield_flash_left = maxf(0.0, shield_flash_left - delta)
 	panel.modulate = Color("ff9b9b") if flash_left > 0.0 and int(flash_left * 20.0) % 2 == 0 else Color.WHITE
+	if shield_bar != null:
+		shield_bar.modulate = Color("ffffff") if shield_flash_left <= 0.0 or int(shield_flash_left * 24.0) % 2 == 0 else Color("66d9ff")
 	_update_raging_bull_warning()
+	_update_armor_status()
 
 
 func _on_health_changed(current: float, maximum: float) -> void:
@@ -38,11 +50,41 @@ func _on_health_changed(current: float, maximum: float) -> void:
 		flash_left = 0.28
 
 
+func _on_shield_changed(current: float, maximum: float) -> void:
+	if shield_bar == null:
+		return
+	var previous := shield_bar.value
+	shield_bar.max_value = maxf(maximum, 1.0)
+	shield_bar.value = current
+	shield_label.text = "%d / %d" % [roundi(current), roundi(maximum)]
+	if current < previous:
+		shield_flash_left = 0.32
+
+
+func _on_shield_feedback(event_name: StringName) -> void:
+	if shield_status == null:
+		return
+	match event_name:
+		&"broken":
+			shield_status.text = "◇ 护盾破碎"
+			shield_status.add_theme_color_override("font_color", Color("ffb4a2"))
+			shield_flash_left = 0.8
+		&"regen_started":
+			shield_status.text = "↻ 护盾恢复中"
+			shield_status.add_theme_color_override("font_color", Color("90e0ef"))
+		&"full":
+			shield_status.text = "◆ 护盾充满"
+			shield_status.add_theme_color_override("font_color", Color("caf0f8"))
+		_:
+			shield_status.text = "◇ 护盾受击"
+			shield_status.add_theme_color_override("font_color", Color("ffd166"))
+
+
 func _build_ui() -> void:
 	panel = PanelContainer.new()
 	panel.name = "PlayerHealthPanel"
 	panel.position = Vector2(20.0, 18.0)
-	panel.size = Vector2(300.0, 76.0)
+	panel.size = Vector2(300.0, 148.0)
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.08, 0.10, 0.14, 0.92)
 	style.border_color = Color("8ecae6")
@@ -77,10 +119,42 @@ func _build_ui() -> void:
 	health_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	health_label.add_theme_color_override("font_color", Color.WHITE)
 	row.add_child(health_label)
+	var shield_row := HBoxContainer.new()
+	shield_row.add_theme_constant_override("separation", 8)
+	column.add_child(shield_row)
+	shield_bar = ProgressBar.new()
+	shield_bar.name = "ShieldBar"
+	shield_bar.custom_minimum_size = Vector2(190.0, 20.0)
+	shield_bar.show_percentage = false
+	var shield_fill := StyleBoxFlat.new()
+	shield_fill.bg_color = Color("219ebc")
+	shield_fill.border_color = Color("caf0f8")
+	shield_fill.set_border_width_all(2)
+	shield_fill.set_corner_radius_all(3)
+	shield_bar.add_theme_stylebox_override("fill", shield_fill)
+	shield_row.add_child(shield_bar)
+	shield_label = Label.new()
+	shield_label.name = "ShieldValue"
+	shield_label.custom_minimum_size = Vector2(72.0, 20.0)
+	shield_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	shield_label.add_theme_color_override("font_color", Color("caf0f8"))
+	shield_row.add_child(shield_label)
+	shield_status = Label.new()
+	shield_status.name = "ShieldStatus"
+	shield_status.text = "◆ 护盾充满"
+	shield_status.add_theme_font_size_override("font_size", 12)
+	shield_status.add_theme_color_override("font_color", Color("caf0f8"))
+	column.add_child(shield_status)
+	armor_status = Label.new()
+	armor_status.name = "CrispyRiceArmorStatus"
+	armor_status.text = "锅巴防具：无"
+	armor_status.add_theme_font_size_override("font_size", 12)
+	armor_status.add_theme_color_override("font_color", Color("dda15e"))
+	column.add_child(armor_status)
 
 	danger_panel = PanelContainer.new()
 	danger_panel.name = "FriendlyFireDangerPanel"
-	danger_panel.position = Vector2(20.0, 102.0)
+	danger_panel.position = Vector2(20.0, 176.0)
 	danger_panel.size = Vector2(340.0, 52.0)
 	var danger_style := StyleBoxFlat.new()
 	danger_style.bg_color = Color(0.42, 0.03, 0.05, 0.94)
@@ -115,3 +189,17 @@ func _update_raging_bull_warning() -> void:
 	danger_panel.visible = danger_nearby
 	if danger_nearby:
 		danger_panel.modulate.a = 0.72 + sin(Time.get_ticks_msec() * 0.018) * 0.28
+
+
+func _update_armor_status() -> void:
+	if armor_status == null or player == null:
+		return
+	var armor := player.get_active_crispy_rice()
+	if armor == null:
+		armor_status.text = "锅巴防具：无"
+		return
+	armor_status.text = "▣ 锅巴生效：减伤 %d%% · %d/%d" % [
+		roundi(armor.data.armor_reduction * 100.0),
+		armor.data.current_durability,
+		armor.data.max_durability,
+	]

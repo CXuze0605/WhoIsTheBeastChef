@@ -141,6 +141,13 @@ func consume_by(enemy: BasicTasteEnemy) -> void:
 	queue_free()
 
 
+func receive_enemy_attack(enemy: BasicTasteEnemy) -> void:
+	if enemy != null and locked_enemy != null and locked_enemy != enemy:
+		return
+	locked_enemy = null
+	queue_free()
+
+
 func _refresh_visual() -> void:
 	if placeholder == null:
 		return

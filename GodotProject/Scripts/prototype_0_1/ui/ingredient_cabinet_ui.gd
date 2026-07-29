@@ -6,31 +6,45 @@ class DragPreviewArtwork:
 
 	var texture: Texture2D
 	var is_rotated: bool = false
+	var source_rect := Rect2()
 
-	func configure(new_texture: Texture2D, rotated: bool) -> void:
+	func configure(new_texture: Texture2D, rotated: bool, new_source_rect: Rect2) -> void:
 		texture = new_texture
 		is_rotated = rotated
+		source_rect = new_source_rect
 		queue_redraw()
 
 	func _draw() -> void:
 		if texture == null or size.x <= 0.0 or size.y <= 0.0:
 			return
+		var active_source_rect := source_rect
+		if active_source_rect.size.x <= 0.0 or active_source_rect.size.y <= 0.0:
+			active_source_rect = Rect2(Vector2.ZERO, texture.get_size())
 		if not is_rotated:
-			var fitted_size := _fit_texture_size(size)
-			draw_texture_rect(texture, Rect2((size - fitted_size) * 0.5, fitted_size), false, Color.WHITE)
+			var fitted_size := _fit_source_size(active_source_rect.size, size)
+			draw_texture_rect_region(
+				texture,
+				Rect2((size - fitted_size) * 0.5, fitted_size),
+				active_source_rect,
+				Color.WHITE
+			)
 			return
 		var unrotated_bounds := Vector2(size.y, size.x)
-		var unrotated_size := _fit_texture_size(unrotated_bounds)
+		var unrotated_size := _fit_source_size(active_source_rect.size, unrotated_bounds)
 		draw_set_transform(size * 0.5, PI * 0.5, Vector2.ONE)
-		draw_texture_rect(texture, Rect2(-unrotated_size * 0.5, unrotated_size), false, Color.WHITE)
+		draw_texture_rect_region(
+			texture,
+			Rect2(-unrotated_size * 0.5, unrotated_size),
+			active_source_rect,
+			Color.WHITE
+		)
 		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
-	func _fit_texture_size(bounds: Vector2) -> Vector2:
-		var texture_size := texture.get_size()
-		if texture_size.x <= 0.0 or texture_size.y <= 0.0:
+	func _fit_source_size(source_size: Vector2, bounds: Vector2) -> Vector2:
+		if source_size.x <= 0.0 or source_size.y <= 0.0:
 			return bounds
-		var fit_scale := minf(bounds.x / texture_size.x, bounds.y / texture_size.y)
-		return texture_size * fit_scale
+		var fit_scale := minf(bounds.x / source_size.x, bounds.y / source_size.y)
+		return source_size * fit_scale
 
 @export var player_path: NodePath
 
@@ -150,11 +164,13 @@ func _open_common() -> void:
 	cabinet_scroll.visible = cabinet_mode
 	cabinet_title_label.visible = cabinet_mode
 	if cabinet_mode:
-		cabinet_title_label.text = "20×20 测试目录（滚动查看 · 取走后自动补充）" if cabinet.lobby_unlimited else "10×8 异形食材柜"
+		cabinet_title_label.text = "20×80 测试目录（滚动查看·取走后自动补充）" if cabinet.lobby_unlimited else "10×8 异形食材柜"
+	var rotate_key := InputPrompt.action_text(&"rotate_inventory_item", "R")
+	var backpack_key := InputPrompt.action_text(&"toggle_backpack", "Tab")
 	feedback_label.text = (
-		"测试物品取走后自动补充 · 鼠标拖放 · R 旋转 · Tab / Esc 关闭"
+		"测试物品取走后自动补充 · 鼠标拖放 · %s 旋转 · %s / Esc 关闭" % [rotate_key, backpack_key]
 		if cabinet_mode and cabinet.lobby_unlimited
-		else "鼠标拖放 · 拖拽时按 R 旋转 · Tab / Esc 关闭"
+		else "鼠标拖放 · 拖拽时按 %s 旋转 · %s / Esc 关闭" % [rotate_key, backpack_key]
 	)
 	item_detail_label.text = "将鼠标移到物品上，查看完整名称、占格和状态"
 	_bind_inventories()
@@ -189,7 +205,7 @@ func _bind_inventories() -> void:
 	backpack_view.setup(player.backpack, 54.0, "6×6 随身背包")
 	if cabinet_mode:
 		var cabinet_cell_size := 32.0 if cabinet.lobby_unlimited else 42.0
-		var cabinet_label := "20×20 测试目录" if cabinet.lobby_unlimited else "10×8 食材柜"
+		var cabinet_label := "20×80 测试目录" if cabinet.lobby_unlimited else "10×8 食材柜"
 		cabinet_view.setup(cabinet.storage, cabinet_cell_size, cabinet_label)
 		cabinet_scroll.scroll_horizontal = 0
 		cabinet_scroll.scroll_vertical = 0
@@ -203,7 +219,7 @@ func _begin_grid_drag(item: CarryableItem, source_kind: int) -> void:
 	drag_rotated = placement.rotated if placement != null else item.storage_rotated
 	_get_view_for_kind(source_kind).set_hidden_drag_item(item)
 	_refresh_drag_preview()
-	feedback_label.text = "拖拽：%s · R 旋转" % item.data.display_name
+	feedback_label.text = "拖拽：%s · %s 旋转" % [item.data.display_name, InputPrompt.action_text(&"rotate_inventory_item", "R")]
 
 
 func _begin_quick_drag(slot_index: int) -> void:
@@ -278,7 +294,7 @@ func _drop_to_quick(slot_index: int) -> bool:
 
 
 func _merge_dragged_into(target_item: CarryableItem) -> bool:
-	var accepted := target_item.data.add_to_stack(dragged_item.data.stack_count)
+	var accepted := target_item.data.add_from_stack(dragged_item.data)
 	if accepted <= 0:
 		return false
 	dragged_item.data.stack_count -= accepted
@@ -340,7 +356,7 @@ func _refresh_drag_preview() -> void:
 	if drag_preview == null or dragged_item == null or dragged_item.data == null:
 		return
 	var bounds := ItemStorageCatalog.get_shape_bounds(
-		ItemStorageCatalog.get_shape_cells(dragged_item.data.item_type, drag_rotated)
+		ItemStorageCatalog.get_shape_cells_for_data(dragged_item.data, drag_rotated)
 	)
 	var preview_cell_size := 38.0
 	drag_preview.size = Vector2(bounds) * preview_cell_size
@@ -348,9 +364,12 @@ func _refresh_drag_preview() -> void:
 	drag_preview_style.bg_color = ItemCatalog.get_item_color(dragged_item.data.item_type).darkened(0.18)
 	drag_preview_icon.position = Vector2(4.0, 4.0)
 	drag_preview_icon.size = drag_preview.size - Vector2(8.0, 8.0)
+	var art_key := ItemCatalog.get_art_key_for_data(dragged_item.data)
+	var texture := PrototypeArtCatalog.TEXTURES.get(art_key) as Texture2D
 	drag_preview_icon.configure(
-		PrototypeArtCatalog.TEXTURES.get(ItemCatalog.get_art_key_for_data(dragged_item.data)) as Texture2D,
-		drag_rotated
+		texture,
+		drag_rotated,
+		PrototypeArtCatalog.get_ui_source_rect(art_key, texture)
 	)
 	drag_preview_label.position = Vector2(3.0, drag_preview.size.y - 20.0)
 	drag_preview_label.size = Vector2(drag_preview.size.x - 6.0, 18.0)
@@ -474,6 +493,7 @@ func _build_ui() -> void:
 	backpack_view = InventoryGridView.new()
 	backpack_view.position = Vector2(82.0, 232.0)
 	backpack_view.item_pressed.connect(func(item: CarryableItem, _cell: Vector2i): _begin_grid_drag(item, SourceKind.BACKPACK))
+	backpack_view.item_double_clicked.connect(func(item: CarryableItem, _cell: Vector2i): _request_backpack_item_action(item))
 	backpack_view.item_hovered.connect(_on_grid_item_hovered)
 	backpack_view.item_hover_ended.connect(_on_grid_item_hover_ended)
 	root_control.add_child(backpack_view)
@@ -514,7 +534,7 @@ func _build_ui() -> void:
 	root_control.add_child(feedback_label)
 	var close_button := Button.new()
 	close_button.name = "CloseButton"
-	close_button.text = "关闭（Tab / Esc）"
+	close_button.text = "关闭（%s / Esc）" % InputPrompt.action_text(&"toggle_backpack", "Tab")
 	close_button.position = Vector2(950.0, 620.0)
 	close_button.size = Vector2(220.0, 48.0)
 	close_button.pressed.connect(close_cabinet)
@@ -559,7 +579,31 @@ func _build_ui() -> void:
 
 func _on_quick_gui_input(event: InputEvent, slot_index: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if event.double_click:
+			var item := player.inventory.get_item(slot_index)
+			if item != null and player.auto_dish_controller != null and player.auto_dish_controller.toggle_auto_equipment(item):
+				_cancel_drag()
+				_refresh_content()
+				return
 		_begin_quick_drag(slot_index)
+
+
+func _request_backpack_item_action(item: CarryableItem) -> void:
+	if item == null or item.data == null:
+		return
+	if player.auto_dish_controller != null and player.auto_dish_controller.toggle_auto_equipment(item):
+		_cancel_drag()
+		_refresh_content()
+		return
+	if item.data.item_type != ItemData.ItemType.WHOLE_GREENS:
+		return
+	var plating := get_tree().get_first_node_in_group("plating_controller") as PlatingController
+	if plating == null:
+		feedback_label.text = "移动 QTE 控制器未就绪"
+		return
+	_cancel_drag()
+	close_cabinet()
+	plating.call_deferred("request_split_greens", item, true)
 
 
 func _on_legacy_take_pressed(item_type: int) -> void:
@@ -579,13 +623,29 @@ func _on_grid_item_hover_ended() -> void:
 func _ensure_backpack_input() -> void:
 	if not InputMap.has_action("toggle_backpack"):
 		InputMap.add_action("toggle_backpack")
-	InputMap.action_erase_events("toggle_backpack")
-	var tab := InputEventKey.new()
-	tab.keycode = KEY_TAB
-	InputMap.action_add_event("toggle_backpack", tab)
+	var backpack_events := InputMap.action_get_events("toggle_backpack")
+	if backpack_events.is_empty():
+		var tab := InputEventKey.new()
+		tab.keycode = KEY_TAB
+		InputMap.action_add_event("toggle_backpack", tab)
+	elif backpack_events.size() == 1 and _event_uses_key(backpack_events[0], KEY_TAB):
+		# Preserve the historical semantic Tab event used by the 0.6A input
+		# path. Do not touch this action after a player remaps it to another key.
+		InputMap.action_erase_events("toggle_backpack")
+		var tab := InputEventKey.new()
+		tab.keycode = KEY_TAB
+		InputMap.action_add_event("toggle_backpack", tab)
 	if not InputMap.has_action("rotate_inventory_item"):
 		InputMap.add_action("rotate_inventory_item")
-	InputMap.action_erase_events("rotate_inventory_item")
-	var rotate := InputEventKey.new()
-	rotate.physical_keycode = KEY_R
-	InputMap.action_add_event("rotate_inventory_item", rotate)
+	if InputMap.action_get_events("rotate_inventory_item").is_empty():
+		var rotate := InputEventKey.new()
+		rotate.physical_keycode = KEY_R
+		InputMap.action_add_event("rotate_inventory_item", rotate)
+
+
+func _event_uses_key(event: InputEvent, expected_key: Key) -> bool:
+	if event is not InputEventKey:
+		return false
+	var key := event as InputEventKey
+	var effective_key := key.physical_keycode if key.physical_keycode != 0 else key.keycode
+	return effective_key == expected_key

@@ -14,6 +14,7 @@ var reflection_count: int = 0
 var random_turn_warning_count: int = 0
 var random := RandomNumberGenerator.new()
 var visual: PlaceholderVisual
+var visual_animator: RagingBullVisualAnimator
 
 
 func setup(
@@ -37,7 +38,14 @@ func _ready() -> void:
 	add_child(visual)
 	PrototypeArtCatalog.apply_to(visual, &"raging_bull")
 	visual.configure(config.raging_bull_visual_size, Color("d00000"), "⚠ 大型暴怒公牛", "友伤危险 · 注意躲避")
-	rotation = direction.angle()
+	var frames := load(
+		"res://Assets/Combat/DishAttacks/StirFryRagingBull01/stir_fry_raging_bull_01_sprite_frames.tres"
+	) as SpriteFrames
+	visual_animator = RagingBullVisualAnimator.new()
+	visual_animator.name = "RagingBullVisualAnimator"
+	add_child(visual_animator)
+	visual_animator.configure(visual, frames)
+	visual_animator.set_direction(direction)
 
 
 func _physics_process(delta: float) -> void:
@@ -82,7 +90,8 @@ func _move_and_reflect(delta: float) -> void:
 			direction = direction.normalized() if not direction.is_zero_approx() else Vector2.RIGHT
 			next_position = global_position + direction * step_distance
 		global_position = Vector2(clampf(next_position.x, min_x, max_x), clampf(next_position.y, min_y, max_y))
-	rotation = direction.angle()
+	if visual_animator != null:
+		visual_animator.set_direction(direction)
 
 
 func _update_random_turn(delta: float) -> void:
@@ -91,6 +100,8 @@ func _update_random_turn(delta: float) -> void:
 		if warning_left <= 0.0:
 			direction = pending_direction.normalized() if not pending_direction.is_zero_approx() else direction
 			pending_direction = Vector2.ZERO
+			if visual_animator != null:
+				visual_animator.set_direction(direction)
 			if visual != null:
 				visual.set_status("友伤危险 · 注意躲避")
 		return

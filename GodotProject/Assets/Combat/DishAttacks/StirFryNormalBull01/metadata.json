@@ -1,0 +1,103 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "c9a246de-a7a5-49bd-84d9-20ca85654bf1",
+        "name": "English prompt:\n\nUse the uploaded east-facing image as a strict identity, silhouette and composition reference. Create a moving bull-head taste-energy projectile for the normal attack of Chinese stir-fried yellow beef. Preserve the complete magical bull head at the front/right and the short attached wok-steam trail behind/left.\n\nThis is food energy shaped like a bull head, not a severed animal head. Low top-down three-quarter view. Compact golden-brown and caramel bull head, two large ivory forward horns, one clearly glowing amber eye, squared snout, small ear, hot-orange highlights, subtle chili-red accents, and a strong dark-brown outline. The short tail consists of two or three bold curls of golden wok steam and cooking-oil energy attached directly to the head.\n\nThe entire silhouette must remain readable at 48\u00d732 pixels. Use crisp hard-edged pixel clusters, a limited warm palette and lively 16-bit Chinese street-kitchen fantasy styling. Create consistent 8-direction object sprites with transparent backgrounds.\n\nAvoid: full bull body, legs, bull skull, blood, gore, realistic cow, buffalo, minotaur, demon, armor, rider, weapon, long smoke trail, large flames, circular aura, detached particles, blurry pixels, anti-aliasing, excessive texture, inconsistent size or identity between directions.",
+        "prompt": "English prompt:\n\nUse the uploaded east-facing image as a strict identity, silhouette and composition reference. Create a moving bull-head taste-energy projectile for the normal attack of Chinese stir-fried yellow beef. Preserve the complete magical bull head at the front/right and the short attached wok-steam trail behind/left.\n\nThis is food energy shaped like a bull head, not a severed animal head. Low top-down three-quarter view. Compact golden-brown and caramel bull head, two large ivory forward horns, one clearly glowing amber eye, squared snout, small ear, hot-orange highlights, subtle chili-red accents, and a strong dark-brown outline. The short tail consists of two or three bold curls of golden wok steam and cooking-oil energy attached directly to the head.\n\nThe entire silhouette must remain readable at 48\u00d732 pixels. Use crisp hard-edged pixel clusters, a limited warm palette and lively 16-bit Chinese street-kitchen fantasy styling. Create consistent 8-direction object sprites with transparent backgrounds.\n\nAvoid: full bull body, legs, bull skull, blood, gore, realistic cow, buffalo, minotaur, demon, armor, rider, weapon, long smoke trail, large flames, circular aura, detached particles, blurry pixels, anti-aliasing, excessive texture, inconsistent size or identity between directions.",
+        "size": {
+          "width": 84,
+          "height": 84
+        },
+        "template_id": "lion",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-07-28T02:59:24.370133+00:00"
+      },
+      "folder": "English_prompt_Use_the_uploaded_east-facing_image",
+      "frames": {
+        "rotations": {
+          "south": "English_prompt_Use_the_uploaded_east-facing_image/rotations/south.png",
+          "south-east": "English_prompt_Use_the_uploaded_east-facing_image/rotations/south-east.png",
+          "east": "English_prompt_Use_the_uploaded_east-facing_image/rotations/east.png",
+          "north-east": "English_prompt_Use_the_uploaded_east-facing_image/rotations/north-east.png",
+          "north": "English_prompt_Use_the_uploaded_east-facing_image/rotations/north.png",
+          "north-west": "English_prompt_Use_the_uploaded_east-facing_image/rotations/north-west.png",
+          "west": "English_prompt_Use_the_uploaded_east-facing_image/rotations/west.png",
+          "south-west": "English_prompt_Use_the_uploaded_east-facing_image/rotations/south-west.png"
+        },
+        "animations": {
+          "Run": {
+            "south-east": [
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-east/frame_000.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-east/frame_001.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-east/frame_002.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-east/frame_003.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-east/frame_004.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-east/frame_005.png"
+            ],
+            "south-west": [
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-west/frame_000.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-west/frame_001.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-west/frame_002.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-west/frame_003.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-west/frame_004.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south-west/frame_005.png"
+            ],
+            "east": [
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/east/frame_000.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/east/frame_001.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/east/frame_002.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/east/frame_003.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/east/frame_004.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/east/frame_005.png"
+            ],
+            "south": [
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south/frame_000.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south/frame_001.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south/frame_002.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south/frame_003.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south/frame_004.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/south/frame_005.png"
+            ],
+            "north": [
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north/frame_000.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north/frame_001.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north/frame_002.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north/frame_003.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north/frame_004.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north/frame_005.png"
+            ],
+            "north-east": [
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-east/frame_000.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-east/frame_001.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-east/frame_002.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-east/frame_003.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-east/frame_004.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-east/frame_005.png"
+            ],
+            "west": [
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/west/frame_000.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/west/frame_001.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/west/frame_002.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/west/frame_003.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/west/frame_004.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/west/frame_005.png"
+            ],
+            "north-west": [
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-west/frame_000.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-west/frame_001.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-west/frame_002.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-west/frame_003.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-west/frame_004.png",
+              "English_prompt_Use_the_uploaded_east-facing_image/animations/Run/north-west/frame_005.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-07-28T03:10:39.093728"
+}

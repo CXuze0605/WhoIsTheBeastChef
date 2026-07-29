@@ -7,9 +7,11 @@ signal stock_changed
 @export var raw_beef_stock: int = 1
 @export var marinade_stock: int = 1
 @export var chili_stock: int = 2
-@export var cooking_oil_stock: int = 2
+@export var cooking_oil_stock: int = 1
 @export var salt_stock: int = 1
 @export var mustard_stock: int = 1
+@export var rice_bag_stock: int = 1
+@export var whole_greens_stock: int = 1
 
 var storage: GridInventory
 var storage_node: Node2D
@@ -40,11 +42,13 @@ func _ready() -> void:
 		ItemData.ItemType.COOKING_OIL: cooking_oil_stock,
 		ItemData.ItemType.SALT: salt_stock,
 		ItemData.ItemType.MUSTARD: mustard_stock,
+		ItemData.ItemType.RICE_BAG: rice_bag_stock,
+		ItemData.ItemType.WHOLE_GREENS: whole_greens_stock,
 	})
 
 
 func get_primary_prompt(_player: Node) -> String:
-	return "[E] 打开异形食材柜"
+	return "[%s] 打开异形食材柜" % InputPrompt.action_text(&"interact_primary", "E")
 
 
 func begin_primary_interaction(player: Node) -> bool:
@@ -68,6 +72,17 @@ func get_stock(item_type: int) -> int:
 	for item in storage.get_items():
 		if item.data.item_type == item_type:
 			total += item.data.stack_count
+	return total
+
+
+func get_resource_portions(item_type: int) -> int:
+	var total := 0
+	if storage == null:
+		return total
+	for item in storage.get_items():
+		if item.data.item_type != item_type:
+			continue
+		total += item.data.remaining_portions if item.data.is_reusable_resource_container() else item.data.stack_count
 	return total
 
 
@@ -158,16 +173,20 @@ func take_item(item: CarryableItem) -> GridInventory.Placement:
 
 func get_debug_state() -> String:
 	if lobby_unlimited:
-		return "测试大厅全物品柜（20×20，无限取用）\n%s" % get_stock_summary()
+		return "测试大厅全物品柜（20×80，无限取用）\n%s" % get_stock_summary()
 	return "异形食材柜（10×8，正式有限库存）\n%s" % get_stock_summary()
 
 
 func get_stock_summary() -> String:
 	var lines: PackedStringArray = []
 	for item_type in get_supported_item_types():
+		var sample := ItemCatalog.create(item_type)
+		var amount_text := "∞" if lobby_unlimited else str(get_stock(item_type))
+		if not lobby_unlimited and sample.is_reusable_resource_container():
+			amount_text = "%d件 / %d份" % [get_stock(item_type), get_resource_portions(item_type)]
 		lines.append("%s：%s" % [
-			ItemCatalog.create(item_type).display_name,
-			"∞" if lobby_unlimited else str(get_stock(item_type)),
+			sample.display_name,
+			amount_text,
 		])
 	return "\n".join(lines)
 
@@ -184,36 +203,16 @@ static func get_formal_item_types() -> Array[int]:
 		ItemData.ItemType.COOKING_OIL,
 		ItemData.ItemType.SALT,
 		ItemData.ItemType.MUSTARD,
+		ItemData.ItemType.RICE_BAG,
+		ItemData.ItemType.WHOLE_GREENS,
 	]
 
 
 static func get_all_item_types() -> Array[int]:
-	# Largest shapes first so one representative of all 22 current item types
-	# fits in the existing 10x8 test-lobby cabinet.
-	return [
-		ItemData.ItemType.RAW_BEEF_CHUNK,
-		ItemData.ItemType.WOK,
-		ItemData.ItemType.SOUP_POT,
-		ItemData.ItemType.PAN,
-		ItemData.ItemType.PLATED_TOMAHAWK_STEAK,
-		ItemData.ItemType.UNPLATED_STIR_FRY_BEEF,
-		ItemData.ItemType.PLATED_STIR_FRY_BEEF,
-		ItemData.ItemType.CLEAN_PLATE,
-		ItemData.ItemType.DIRTY_PLATE,
-		ItemData.ItemType.RAW_STEAK,
-		ItemData.ItemType.TOMAHAWK_STEAK,
-		ItemData.ItemType.BIG_BONE,
-		ItemData.ItemType.COOKING_OIL,
-		ItemData.ItemType.RAW_BEEF_SLICES,
-		ItemData.ItemType.MARINATED_BEEF_SLICES,
-		ItemData.ItemType.MARINADE,
-		ItemData.ItemType.CHILI_SEGMENTS,
-		ItemData.ItemType.CHARCOAL,
-		ItemData.ItemType.SALT,
-		ItemData.ItemType.MUSTARD,
-		ItemData.ItemType.SHABU_BEEF,
-		ItemData.ItemType.MUSHY_BOILED_BEEF,
-	]
+	var all_types: Array[int] = []
+	for item_type in ItemData.ItemType.size():
+		all_types.append(item_type)
+	return all_types
 
 
 func _find_item(item_type: int) -> CarryableItem:
@@ -233,9 +232,9 @@ func _on_storage_changed() -> void:
 
 func _refresh_status() -> void:
 	if lobby_unlimited:
-		set_placeholder_status("[E] 测试大厅 · 全物品无限取用")
+		set_placeholder_status("[%s] 测试大厅 · 全物品无限取用" % InputPrompt.action_text(&"interact_primary", "E"))
 	else:
-		set_placeholder_status("[E] 正式本局 · 10×8 有限实际仓储")
+		set_placeholder_status("[%s] 正式本局 · 10×8 有限实际仓储" % InputPrompt.action_text(&"interact_primary", "E"))
 
 
 func _replenish_lobby_catalog() -> void:
@@ -254,9 +253,27 @@ func _populate_missing_lobby_items() -> void:
 			continue
 		var item := ItemFactory.create_carryable(_create_lobby_sample_data(item_type))
 		add_child(item)
-		if not storage.add_item_auto(item, false):
+		var catalog_position := _find_lobby_catalog_position(item)
+		if catalog_position == Vector2i(-1, -1) or not storage.add_item_at(item, catalog_position, false):
 			push_error("Test-lobby unlimited cabinet could not fit item_type=%d" % item_type)
 			item.queue_free()
+
+
+func _find_lobby_catalog_position(item: CarryableItem) -> Vector2i:
+	# Keep the first three rows empty as a visible manipulation workbench. This
+	# makes rotating and comparing large items practical instead of packing the
+	# unlimited catalog into every available top-left cell. The scan deliberately
+	# uses storage.height so replenishment can continue through the full
+	# 20×80 test-only catalog as the ItemType list grows.
+	var bounds := ItemStorageCatalog.get_shape_bounds(
+		ItemStorageCatalog.get_shape_cells_for_data(item.data, false)
+	)
+	for y in range(3, storage.height - bounds.y + 1):
+		for x in range(0, storage.width - bounds.x + 1):
+			var origin := Vector2i(x, y)
+			if storage.can_place_item(item, origin, false):
+				return origin
+	return Vector2i(-1, -1)
 
 
 func _create_lobby_sample_data(item_type: int) -> ItemData:
@@ -268,4 +285,324 @@ func _create_lobby_sample_data(item_type: int) -> ItemData:
 			combat_config.apply_combat_dish_stats(data)
 		ItemData.ItemType.TOMAHAWK_STEAK, ItemData.ItemType.PLATED_TOMAHAWK_STEAK:
 			combat_config.apply_tomahawk_stats(data)
+		ItemData.ItemType.UNPLATED_WHITE_RICE, ItemData.ItemType.PLATED_WHITE_RICE:
+			combat_config.apply_white_rice_stats(data)
+		ItemData.ItemType.UNPLATED_RICE_PORRIDGE, ItemData.ItemType.PLATED_RICE_PORRIDGE:
+			combat_config.apply_rice_porridge_stats(data)
+		ItemData.ItemType.UNPLATED_CRISPY_RICE, ItemData.ItemType.PLATED_CRISPY_RICE:
+			combat_config.apply_crispy_rice_stats(data)
+		ItemData.ItemType.UNPLATED_BOILED_GREENS, ItemData.ItemType.PLATED_BOILED_GREENS:
+			data = ExpandedRecipeCatalog.create_boiled_greens(5, [], combat_config)
+			if item_type == ItemData.ItemType.PLATED_BOILED_GREENS:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_STIR_FRY_GREENS, ItemData.ItemType.PLATED_STIR_FRY_GREENS:
+			data = ExpandedRecipeCatalog.create_stir_fry_greens(5, ExpandedRecipeCatalog.STIR_FRY_GREENS, [], combat_config)
+			if item_type == ItemData.ItemType.PLATED_STIR_FRY_GREENS:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_SPICY_STIR_FRY_GREENS, ItemData.ItemType.PLATED_SPICY_STIR_FRY_GREENS:
+			data = ExpandedRecipeCatalog.create_stir_fry_greens(5, ExpandedRecipeCatalog.SPICY_STIR_FRY_GREENS, [], combat_config)
+			if item_type == ItemData.ItemType.PLATED_SPICY_STIR_FRY_GREENS:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_FLASH_STIR_FRY_GREENS, ItemData.ItemType.PLATED_FLASH_STIR_FRY_GREENS:
+			data = ExpandedRecipeCatalog.create_stir_fry_greens(5, ExpandedRecipeCatalog.FLASH_STIR_FRY_GREENS, [], combat_config)
+			if item_type == ItemData.ItemType.PLATED_FLASH_STIR_FRY_GREENS:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_GREENS_PORRIDGE, ItemData.ItemType.PLATED_GREENS_PORRIDGE:
+			data = ExpandedRecipeCatalog.create_porridge(ExpandedRecipeCatalog.GREENS_PORRIDGE, 5, [], combat_config)
+			if item_type == ItemData.ItemType.PLATED_GREENS_PORRIDGE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_BEEF_PORRIDGE, ItemData.ItemType.PLATED_BEEF_PORRIDGE:
+			data = ExpandedRecipeCatalog.create_porridge(ExpandedRecipeCatalog.BEEF_PORRIDGE, 0, [], combat_config)
+			if item_type == ItemData.ItemType.PLATED_BEEF_PORRIDGE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_PLAIN_BEEF_PORRIDGE, ItemData.ItemType.PLATED_PLAIN_BEEF_PORRIDGE:
+			data = ExpandedRecipeCatalog.create_porridge(ExpandedRecipeCatalog.PLAIN_BEEF_PORRIDGE, 0, [], combat_config)
+			if item_type == ItemData.ItemType.PLATED_PLAIN_BEEF_PORRIDGE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_BEEF_GREENS, ItemData.ItemType.PLATED_BEEF_GREENS:
+			data = ExpandedRecipeCatalog.create_wok_combination(ExpandedRecipeCatalog.BEEF_GREENS, [ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES), _lobby_leaf_stack()], combat_config)
+			if item_type == ItemData.ItemType.PLATED_BEEF_GREENS:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_GREENS_FRIED_RICE, ItemData.ItemType.PLATED_GREENS_FRIED_RICE:
+			data = ExpandedRecipeCatalog.create_wok_combination(ExpandedRecipeCatalog.GREENS_FRIED_RICE, [_lobby_leaf_stack(), ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE)], combat_config)
+			if item_type == ItemData.ItemType.PLATED_GREENS_FRIED_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_BEEF_FRIED_RICE, ItemData.ItemType.PLATED_BEEF_FRIED_RICE:
+			data = ExpandedRecipeCatalog.create_wok_combination(ExpandedRecipeCatalog.BEEF_FRIED_RICE, [ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_DICE), ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE)], combat_config)
+			if item_type == ItemData.ItemType.PLATED_BEEF_FRIED_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_MIXED_FRIED_RICE, ItemData.ItemType.PLATED_MIXED_FRIED_RICE:
+			data = ExpandedRecipeCatalog.create_wok_combination(ExpandedRecipeCatalog.MIXED_FRIED_RICE, [ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_DICE), _lobby_leaf_stack(), ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE)], combat_config)
+			if item_type == ItemData.ItemType.PLATED_MIXED_FRIED_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_VEGETABLE_RICE, ItemData.ItemType.PLATED_VEGETABLE_RICE:
+			data = ExpandedRecipeCatalog.create_rice_function_dish(ExpandedRecipeCatalog.VEGETABLE_RICE, 5, [_lobby_leaf_stack()], combat_config)
+			if item_type == ItemData.ItemType.PLATED_VEGETABLE_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_SOAKED_RICE, ItemData.ItemType.PLATED_SOAKED_RICE:
+			data = ExpandedRecipeCatalog.create_rice_function_dish(ExpandedRecipeCatalog.SOAKED_RICE, 0, [ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE)], combat_config)
+			if item_type == ItemData.ItemType.PLATED_SOAKED_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_GREENS_SOAKED_RICE, ItemData.ItemType.PLATED_GREENS_SOAKED_RICE:
+			data = ExpandedRecipeCatalog.create_rice_function_dish(ExpandedRecipeCatalog.GREENS_SOAKED_RICE, 5, [ItemCatalog.create(ItemData.ItemType.UNPLATED_SOAKED_RICE), _lobby_leaf_stack()], combat_config)
+			if item_type == ItemData.ItemType.PLATED_GREENS_SOAKED_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.PLATED_BEEF_GREENS_RICE_BOWL:
+			data = ExpandedRecipeCatalog.create_advanced_dish(
+				ExpandedRecipeCatalog.BEEF_GREENS_RICE_BOWL,
+				5,
+				[ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE), ExpandedRecipeCatalog.create_wok_combination(ExpandedRecipeCatalog.BEEF_GREENS, [ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES), _lobby_leaf_stack()], combat_config)],
+				combat_config
+			)
+		ItemData.ItemType.UNPLATED_BEEF_GREENS_SOUP, ItemData.ItemType.PLATED_BEEF_GREENS_SOUP:
+			data = ExpandedRecipeCatalog.create_advanced_dish(ExpandedRecipeCatalog.BEEF_GREENS_SOUP, 5, [ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES), _lobby_leaf_stack()], combat_config)
+			if item_type == ItemData.ItemType.PLATED_BEEF_GREENS_SOUP:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_MUSTARD_GREENS, ItemData.ItemType.PLATED_MUSTARD_GREENS:
+			data = ExpandedRecipeCatalog.create_advanced_dish(ExpandedRecipeCatalog.MUSTARD_GREENS, 5, [_lobby_leaf_stack(), ItemCatalog.create(ItemData.ItemType.MUSTARD)], combat_config)
+			if item_type == ItemData.ItemType.PLATED_MUSTARD_GREENS:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_FRIED_WHITE_RICE, ItemData.ItemType.PLATED_FRIED_WHITE_RICE:
+			data = ExpandedRecipeCatalog.create_missing_group_1_dish(
+				ExpandedRecipeCatalog.FRIED_WHITE_RICE,
+				[ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE)],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_FRIED_WHITE_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_CLEAR_STIR_FRY_BEEF, ItemData.ItemType.PLATED_CLEAR_STIR_FRY_BEEF:
+			data = ExpandedRecipeCatalog.create_missing_group_1_dish(
+				ExpandedRecipeCatalog.CLEAR_STIR_FRY_BEEF,
+				[ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES)],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_CLEAR_STIR_FRY_BEEF:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_GREENS_SOUP, ItemData.ItemType.PLATED_GREENS_SOUP:
+			data = ExpandedRecipeCatalog.create_missing_group_1_dish(
+				ExpandedRecipeCatalog.GREENS_SOUP,
+				[_lobby_leaf_stack()],
+				combat_config,
+				5
+			)
+			if item_type == ItemData.ItemType.PLATED_GREENS_SOUP:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_BEEF_SOUP, ItemData.ItemType.PLATED_BEEF_SOUP:
+			data = ExpandedRecipeCatalog.create_missing_group_1_dish(
+				ExpandedRecipeCatalog.BEEF_SOUP,
+				[ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_DICE)],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_BEEF_SOUP:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_GREENS_RICE_BOWL, ItemData.ItemType.PLATED_GREENS_RICE_BOWL:
+			var greens_component := ExpandedRecipeCatalog.create_boiled_greens(5, [_lobby_leaf_stack()], combat_config)
+			data = ExpandedRecipeCatalog.create_group_2_rice_bowl(
+				ExpandedRecipeCatalog.GREENS_RICE_BOWL,
+				[ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE), greens_component],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_GREENS_RICE_BOWL:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_BEEF_RICE_BOWL, ItemData.ItemType.PLATED_BEEF_RICE_BOWL:
+			var beef_component := ExpandedRecipeCatalog.create_missing_group_1_dish(
+				ExpandedRecipeCatalog.CLEAR_STIR_FRY_BEEF,
+				[ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES)],
+				combat_config
+			)
+			data = ExpandedRecipeCatalog.create_group_2_rice_bowl(
+				ExpandedRecipeCatalog.BEEF_RICE_BOWL,
+				[ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE), beef_component],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_BEEF_RICE_BOWL:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_BEEF_BRAISED_RICE, ItemData.ItemType.PLATED_BEEF_BRAISED_RICE:
+			data = ExpandedRecipeCatalog.create_group_3_braised_rice(
+				ExpandedRecipeCatalog.BEEF_BRAISED_RICE,
+				[
+					ItemCatalog.create(ItemData.ItemType.RAW_RICE),
+					ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_DICE),
+				],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_BEEF_BRAISED_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_GREENS_BEEF_BRAISED_RICE, ItemData.ItemType.PLATED_GREENS_BEEF_BRAISED_RICE:
+			data = ExpandedRecipeCatalog.create_group_3_braised_rice(
+				ExpandedRecipeCatalog.GREENS_BEEF_BRAISED_RICE,
+				[
+					ItemCatalog.create(ItemData.ItemType.RAW_RICE),
+					ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_DICE),
+					_lobby_leaf_stack(),
+				],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_GREENS_BEEF_BRAISED_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_GREENS_BEEF_PORRIDGE, ItemData.ItemType.PLATED_GREENS_BEEF_PORRIDGE:
+			data = ExpandedRecipeCatalog.create_porridge(
+				ExpandedRecipeCatalog.GREENS_BEEF_PORRIDGE,
+				5,
+				[
+					ItemCatalog.create(ItemData.ItemType.UNPLATED_RICE_PORRIDGE),
+					ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES),
+					_lobby_leaf_stack(),
+				],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_GREENS_BEEF_PORRIDGE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_BEEF_SOAKED_RICE, ItemData.ItemType.PLATED_BEEF_SOAKED_RICE:
+			data = ExpandedRecipeCatalog.create_rice_function_dish(
+				ExpandedRecipeCatalog.BEEF_SOAKED_RICE,
+				0,
+				[
+					ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE),
+					ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES),
+				],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_BEEF_SOAKED_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_GREENS_BEEF_SOAKED_RICE, ItemData.ItemType.PLATED_GREENS_BEEF_SOAKED_RICE:
+			data = ExpandedRecipeCatalog.create_rice_function_dish(
+				ExpandedRecipeCatalog.GREENS_BEEF_SOAKED_RICE,
+				5,
+				[
+					ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE),
+					ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES),
+					_lobby_leaf_stack(),
+				],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_GREENS_BEEF_SOAKED_RICE:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_CRISPY_RICE_BEEF, ItemData.ItemType.PLATED_CRISPY_RICE_BEEF:
+			var crispy_component := ItemCatalog.create(ItemData.ItemType.UNPLATED_CRISPY_RICE)
+			combat_config.apply_crispy_rice_stats(crispy_component)
+			var clear_beef_component := ExpandedRecipeCatalog.create_missing_group_1_dish(
+				ExpandedRecipeCatalog.CLEAR_STIR_FRY_BEEF,
+				[ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES)],
+				combat_config
+			)
+			data = ExpandedRecipeCatalog.create_group_5_crispy_beef(
+				[crispy_component, clear_beef_component],
+				combat_config
+			)
+			if item_type == ItemData.ItemType.PLATED_CRISPY_RICE_BEEF:
+				data = ItemCatalog.transform(data, item_type)
+		ItemData.ItemType.UNPLATED_SPICY_FRIED_RICE, ItemData.ItemType.PLATED_SPICY_FRIED_RICE, \
+		ItemData.ItemType.UNPLATED_SPICY_BEEF_GREENS, ItemData.ItemType.PLATED_SPICY_BEEF_GREENS, \
+		ItemData.ItemType.UNPLATED_SPICY_BEEF_FRIED_RICE, ItemData.ItemType.PLATED_SPICY_BEEF_FRIED_RICE, \
+		ItemData.ItemType.UNPLATED_SPICY_MIXED_FRIED_RICE, ItemData.ItemType.PLATED_SPICY_MIXED_FRIED_RICE, \
+		ItemData.ItemType.UNPLATED_SPICY_BEEF_SOUP, ItemData.ItemType.PLATED_SPICY_BEEF_SOUP, \
+		ItemData.ItemType.UNPLATED_SPICY_BEEF_GREENS_SOUP, ItemData.ItemType.PLATED_SPICY_BEEF_GREENS_SOUP, \
+		ItemData.ItemType.UNPLATED_PAN_FRIED_RICE_CAKE, ItemData.ItemType.PLATED_PAN_FRIED_RICE_CAKE, \
+		ItemData.ItemType.UNPLATED_GREENS_RICE_CAKE, ItemData.ItemType.PLATED_GREENS_RICE_CAKE, \
+		ItemData.ItemType.UNPLATED_BEEF_RICE_CAKE, ItemData.ItemType.PLATED_BEEF_RICE_CAKE, \
+		ItemData.ItemType.UNPLATED_GREENS_BEEF_RICE_CAKE, ItemData.ItemType.PLATED_GREENS_BEEF_RICE_CAKE:
+			data = _create_groups_6_7_lobby_sample(item_type, combat_config)
+	_finalize_lobby_sample_quality(data, item_type, combat_config)
 	return data
+
+
+func _create_groups_6_7_lobby_sample(item_type: int, combat_config: PrototypeCombatConfig) -> ItemData:
+	var recipe_by_type := {
+		ItemData.ItemType.UNPLATED_SPICY_FRIED_RICE: ExpandedRecipeCatalog.SPICY_FRIED_RICE,
+		ItemData.ItemType.PLATED_SPICY_FRIED_RICE: ExpandedRecipeCatalog.SPICY_FRIED_RICE,
+		ItemData.ItemType.UNPLATED_SPICY_BEEF_GREENS: ExpandedRecipeCatalog.SPICY_BEEF_GREENS,
+		ItemData.ItemType.PLATED_SPICY_BEEF_GREENS: ExpandedRecipeCatalog.SPICY_BEEF_GREENS,
+		ItemData.ItemType.UNPLATED_SPICY_BEEF_FRIED_RICE: ExpandedRecipeCatalog.SPICY_BEEF_FRIED_RICE,
+		ItemData.ItemType.PLATED_SPICY_BEEF_FRIED_RICE: ExpandedRecipeCatalog.SPICY_BEEF_FRIED_RICE,
+		ItemData.ItemType.UNPLATED_SPICY_MIXED_FRIED_RICE: ExpandedRecipeCatalog.SPICY_MIXED_FRIED_RICE,
+		ItemData.ItemType.PLATED_SPICY_MIXED_FRIED_RICE: ExpandedRecipeCatalog.SPICY_MIXED_FRIED_RICE,
+		ItemData.ItemType.UNPLATED_SPICY_BEEF_SOUP: ExpandedRecipeCatalog.SPICY_BEEF_SOUP,
+		ItemData.ItemType.PLATED_SPICY_BEEF_SOUP: ExpandedRecipeCatalog.SPICY_BEEF_SOUP,
+		ItemData.ItemType.UNPLATED_SPICY_BEEF_GREENS_SOUP: ExpandedRecipeCatalog.SPICY_BEEF_GREENS_SOUP,
+		ItemData.ItemType.PLATED_SPICY_BEEF_GREENS_SOUP: ExpandedRecipeCatalog.SPICY_BEEF_GREENS_SOUP,
+		ItemData.ItemType.UNPLATED_PAN_FRIED_RICE_CAKE: ExpandedRecipeCatalog.PAN_FRIED_RICE_CAKE,
+		ItemData.ItemType.PLATED_PAN_FRIED_RICE_CAKE: ExpandedRecipeCatalog.PAN_FRIED_RICE_CAKE,
+		ItemData.ItemType.UNPLATED_GREENS_RICE_CAKE: ExpandedRecipeCatalog.GREENS_RICE_CAKE,
+		ItemData.ItemType.PLATED_GREENS_RICE_CAKE: ExpandedRecipeCatalog.GREENS_RICE_CAKE,
+		ItemData.ItemType.UNPLATED_BEEF_RICE_CAKE: ExpandedRecipeCatalog.BEEF_RICE_CAKE,
+		ItemData.ItemType.PLATED_BEEF_RICE_CAKE: ExpandedRecipeCatalog.BEEF_RICE_CAKE,
+		ItemData.ItemType.UNPLATED_GREENS_BEEF_RICE_CAKE: ExpandedRecipeCatalog.GREENS_BEEF_RICE_CAKE,
+		ItemData.ItemType.PLATED_GREENS_BEEF_RICE_CAKE: ExpandedRecipeCatalog.GREENS_BEEF_RICE_CAKE,
+	}
+	var recipe: StringName = recipe_by_type[item_type]
+	var rice := ItemCatalog.create(ItemData.ItemType.UNPLATED_WHITE_RICE)
+	combat_config.apply_white_rice_stats(rice)
+	var beef_slices := ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES)
+	var beef_dice := ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_DICE)
+	var chili := ItemCatalog.create(ItemData.ItemType.CHILI_SEGMENTS)
+	var oil := ItemCatalog.create(ItemData.ItemType.COOKING_OIL)
+	var leaves := _lobby_leaf_stack()
+	var crumbs := ItemCatalog.create(ItemData.ItemType.GREENS_CRUMBS)
+	crumbs.stack_count = 5
+	crumbs.leaf_count = 5
+	var sources: Array[ItemData] = [rice, oil]
+	if recipe == ExpandedRecipeCatalog.SPICY_FRIED_RICE:
+		sources.append(chili)
+	elif recipe == ExpandedRecipeCatalog.SPICY_BEEF_GREENS:
+		sources = [beef_slices, leaves, chili, oil]
+	elif recipe == ExpandedRecipeCatalog.SPICY_BEEF_FRIED_RICE:
+		sources = [beef_dice, rice, chili, oil]
+	elif recipe == ExpandedRecipeCatalog.SPICY_MIXED_FRIED_RICE:
+		sources = [beef_dice, leaves, rice, chili, oil]
+	elif recipe == ExpandedRecipeCatalog.SPICY_BEEF_SOUP:
+		sources = [beef_dice, chili]
+	elif recipe == ExpandedRecipeCatalog.SPICY_BEEF_GREENS_SOUP:
+		sources = [beef_slices, leaves, chili]
+	elif recipe == ExpandedRecipeCatalog.GREENS_RICE_CAKE:
+		sources = [rice, crumbs, oil]
+	elif recipe == ExpandedRecipeCatalog.BEEF_RICE_CAKE:
+		sources = [beef_dice, rice, oil]
+	elif recipe == ExpandedRecipeCatalog.GREENS_BEEF_RICE_CAKE:
+		sources = [beef_dice, rice, crumbs, oil]
+	var data := ExpandedRecipeCatalog.create_groups_6_7_dish(recipe, sources, combat_config, 5 if recipe in [
+		ExpandedRecipeCatalog.SPICY_BEEF_GREENS,
+		ExpandedRecipeCatalog.SPICY_MIXED_FRIED_RICE,
+		ExpandedRecipeCatalog.SPICY_BEEF_GREENS_SOUP,
+		ExpandedRecipeCatalog.GREENS_RICE_CAKE,
+		ExpandedRecipeCatalog.GREENS_BEEF_RICE_CAKE,
+	] else 0)
+	if String(ItemData.ItemType.keys()[item_type]).begins_with("PLATED_"):
+		data = ItemCatalog.transform(data, item_type)
+	return data
+
+
+func _finalize_lobby_sample_quality(data: ItemData, item_type: int, combat_config: PrototypeCombatConfig) -> void:
+	if data == null:
+		return
+	var enum_name := String(ItemData.ItemType.keys()[item_type])
+	if (
+		not enum_name.begins_with("PLATED_")
+		or not data.is_combat_dish
+		or data.is_weird_dish()
+		or data.quality_cap != ItemData.Quality.PERFECT
+		or not data.failure_tags.is_empty()
+	):
+		return
+	data.set_quality_with_cap(ItemData.Quality.PERFECT)
+	match item_type:
+		ItemData.ItemType.PLATED_STIR_FRY_BEEF:
+			combat_config.apply_combat_dish_stats(data)
+		ItemData.ItemType.PLATED_TOMAHAWK_STEAK:
+			combat_config.apply_tomahawk_stats(data)
+		ItemData.ItemType.PLATED_WHITE_RICE:
+			combat_config.apply_white_rice_stats(data)
+		ItemData.ItemType.PLATED_RICE_PORRIDGE:
+			combat_config.apply_rice_porridge_stats(data)
+		ItemData.ItemType.PLATED_CRISPY_RICE:
+			combat_config.apply_crispy_rice_stats(data)
+		_:
+			ExpandedRecipeCatalog.refresh_after_plating(data, combat_config)
+	data.current_durability = data.max_durability
+
+
+func _lobby_leaf_stack() -> ItemData:
+	var leaves := ItemCatalog.create(ItemData.ItemType.GREENS_LEAF)
+	leaves.stack_count = 5
+	leaves.leaf_count = 5
+	return leaves

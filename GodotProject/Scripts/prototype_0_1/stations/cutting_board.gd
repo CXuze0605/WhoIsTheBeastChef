@@ -3,6 +3,7 @@ extends ProcessingStation
 
 @export var prototype_first_cut_time: float = 1.2
 @export var prototype_second_cut_time: float = 1.2
+@export var prototype_dice_cut_time: float = 1.0
 
 var stored_item: CarryableItem
 var pending_outputs: Array[CarryableItem] = []
@@ -57,14 +58,20 @@ func carry_interact(player: Node) -> void:
 
 
 func get_primary_prompt(_player: Node) -> String:
-	return "[按住 E] 切割" if stored_item != null and _can_cut(stored_item.data) else ""
+	return "[按住 %s] 切割" % InputPrompt.action_text(&"interact_primary", "E") if stored_item != null and _can_cut(stored_item.data) else ""
 
 
 func begin_primary_interaction(player: Node) -> bool:
 	if stored_item == null or not _can_cut(stored_item.data):
 		player.notify_feedback("需要先放入可切割的牛肉")
 		return false
-	var duration := prototype_second_cut_time if stored_item.data.item_type == ItemData.ItemType.RAW_STEAK else prototype_first_cut_time
+	var duration := prototype_first_cut_time
+	if stored_item.data.item_type == ItemData.ItemType.RAW_STEAK:
+		duration = prototype_second_cut_time
+	elif stored_item.data.item_type in [ItemData.ItemType.RAW_BEEF_SLICES, ItemData.ItemType.MARINATED_BEEF_SLICES]:
+		duration = prototype_dice_cut_time
+	elif stored_item.data.item_type == ItemData.ItemType.GREENS_LEAF:
+		duration = prototype_dice_cut_time
 	hold_progress.begin(duration)
 	player.notify_feedback("切割中；松开或离开会使本阶段进度归零")
 	return true
@@ -76,14 +83,33 @@ func update_primary_interaction(player: Node, delta: float) -> bool:
 		return false
 	if not hold_progress.advance(delta):
 		return true
+	_record_near_expiry_processing(stored_item.data)
 	if stored_item.data.item_type == ItemData.ItemType.RAW_BEEF_CHUNK:
 		_complete_chunk_cut()
 		player.notify_feedback("切割完成：产出 3 块独立生牛排，请逐块取走")
-	else:
+	elif stored_item.data.item_type == ItemData.ItemType.RAW_STEAK:
 		stored_item.data = ItemCatalog.transform(stored_item.data, ItemData.ItemType.RAW_BEEF_SLICES)
 		stored_item.data.remaining_portions = 5
+		stored_item.data.beef_portion_count = 5
 		stored_item.refresh_visual()
 		player.notify_feedback("切割完成：1 份生牛肉片包（可涮 5 片）")
+	elif stored_item.data.item_type == ItemData.ItemType.GREENS_LEAF:
+		var leaf_units := maxi(1, stored_item.data.stack_count)
+		stored_item.data = ItemCatalog.transform(stored_item.data, ItemData.ItemType.GREENS_CRUMBS)
+		stored_item.data.stack_count = leaf_units
+		stored_item.data.leaf_count = leaf_units
+		stored_item.refresh_visual()
+		player.notify_feedback("青菜切制完成：%d 份青菜碎" % leaf_units)
+	else:
+		var target_type := (
+			ItemData.ItemType.MARINATED_BEEF_DICE
+			if stored_item.data.item_type == ItemData.ItemType.MARINATED_BEEF_SLICES
+			else ItemData.ItemType.RAW_BEEF_DICE
+		)
+		stored_item.data = ItemCatalog.transform(stored_item.data, target_type)
+		stored_item.data.beef_portion_count = 5
+		stored_item.refresh_visual()
+		player.notify_feedback("切丁完成：同一块牛排的整组牛肉丁（肉量不增加）")
 	_refresh_status()
 	return false
 
@@ -102,7 +128,13 @@ func get_debug_state() -> String:
 
 
 func _can_cut(item_data: ItemData) -> bool:
-	return item_data.item_type in [ItemData.ItemType.RAW_BEEF_CHUNK, ItemData.ItemType.RAW_STEAK]
+	return item_data.item_type in [
+		ItemData.ItemType.RAW_BEEF_CHUNK,
+		ItemData.ItemType.RAW_STEAK,
+		ItemData.ItemType.RAW_BEEF_SLICES,
+		ItemData.ItemType.MARINATED_BEEF_SLICES,
+		ItemData.ItemType.GREENS_LEAF,
+	]
 
 
 func _complete_chunk_cut() -> void:
@@ -117,6 +149,20 @@ func _complete_chunk_cut() -> void:
 		add_child(steak)
 		steak.set_stored(self, Vector2((index - 1) * 25.0, -8.0))
 		pending_outputs.append(steak)
+
+
+func handle_rotten_item_data(data: ItemData) -> void:
+	if stored_item != null and stored_item.data == data:
+		hold_progress.cancel()
+		_refresh_status()
+
+
+func _record_near_expiry_processing(data: ItemData) -> void:
+	if data == null or not data.has_failure_tag(ItemData.FailureTag.NEAR_EXPIRY):
+		return
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null:
+		stats.record_near_expiry_processed()
 
 
 func _reposition_pending_outputs() -> void:

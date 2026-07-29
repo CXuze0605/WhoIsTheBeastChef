@@ -1,0 +1,318 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://Scripts/menu/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://Scenes/menu/settings_panel.tscn" id="2_settings"]
+
+[sub_resource type="StyleBoxFlat" id="MenuPanel"]
+bg_color = Color(0.105, 0.125, 0.16, 0.96)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.82, 0.4, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 48.0
+content_margin_top = 34.0
+content_margin_right = 48.0
+content_margin_bottom = 34.0
+
+[sub_resource type="StyleBoxFlat" id="ModalPanel"]
+bg_color = Color(0.125, 0.145, 0.18, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.82, 0.4, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 36.0
+content_margin_top = 30.0
+content_margin_right = 36.0
+content_margin_bottom = 30.0
+
+[sub_resource type="StyleBoxFlat" id="ButtonNormal"]
+bg_color = Color(0.17, 0.2, 0.25, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.47, 0.58, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="ButtonHover"]
+bg_color = Color(0.25, 0.3, 0.38, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.82, 0.4, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="ButtonPressed"]
+bg_color = Color(0.32, 0.23, 0.14, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.67, 0.3, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.035, 0.045, 0.065, 1)
+mouse_filter = 2
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuPanel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(520, 650)
+layout_mode = 2
+theme_override_styles/panel = SubResource("MenuPanel")
+
+[node name="MenuColumn" type="VBoxContainer" parent="Center/MenuPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="GameTitle" type="Label" parent="Center/MenuPanel/MenuColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.4, 1)
+theme_override_font_sizes/font_size = 42
+text = "《谁是大厨生》"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Center/MenuPanel/MenuColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "Who Is The Beast Chef? · Prototype 菜单"
+horizontal_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="Center/MenuPanel/MenuColumn"]
+layout_mode = 2
+
+[node name="SinglePlayerButton" type="Button" parent="Center/MenuPanel/MenuColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonHover")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+text = "单机游戏"
+
+[node name="MultiplayerButton" type="Button" parent="Center/MenuPanel/MenuColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonHover")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+text = "联机游戏"
+
+[node name="TestHallButton" type="Button" parent="Center/MenuPanel/MenuColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonHover")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+text = "测试大厅"
+
+[node name="SettingsButton" type="Button" parent="Center/MenuPanel/MenuColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonHover")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+text = "设置"
+
+[node name="ExitButton" type="Button" parent="Center/MenuPanel/MenuColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonHover")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+text = "退出游戏"
+
+[node name="Footer" type="Label" parent="Center/MenuPanel/MenuColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56, 0.61, 0.7, 1)
+theme_override_font_sizes/font_size = 13
+text = "方向键 / W S 选择 · Enter / Space 确认"
+horizontal_alignment = 1
+
+[node name="OnlineModal" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Dim" type="ColorRect" parent="OnlineModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.015, 0.025, 0.88)
+
+[node name="Center" type="CenterContainer" parent="OnlineModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="OnlineModal/Center"]
+custom_minimum_size = Vector2(540, 280)
+layout_mode = 2
+theme_override_styles/panel = SubResource("ModalPanel")
+
+[node name="Column" type="VBoxContainer" parent="OnlineModal/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="OnlineModal/Center/Panel/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.4, 1)
+theme_override_font_sizes/font_size = 30
+text = "四人联机功能开发中"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="OnlineModal/Center/Panel/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.97, 1)
+theme_override_font_sizes/font_size = 20
+text = "计划支持1—4名玩家"
+horizontal_alignment = 1
+
+[node name="OnlineBackButton" type="Button" parent="OnlineModal/Center/Panel/Column"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "返回"
+
+[node name="ExitModal" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Dim" type="ColorRect" parent="ExitModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.015, 0.025, 0.88)
+
+[node name="Center" type="CenterContainer" parent="ExitModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="ExitModal/Center"]
+custom_minimum_size = Vector2(560, 280)
+layout_mode = 2
+theme_override_styles/panel = SubResource("ModalPanel")
+
+[node name="Column" type="VBoxContainer" parent="ExitModal/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="ExitModal/Center/Panel/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.56, 0.64, 1)
+theme_override_font_sizes/font_size = 30
+text = "确定要退出游戏吗？"
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="ExitModal/Center/Panel/Column"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ExitCancelButton" type="Button" parent="ExitModal/Center/Panel/Column/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "取消"
+
+[node name="ExitConfirmButton" type="Button" parent="ExitModal/Center/Panel/Column/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "确定退出"
+
+[node name="SettingsPanel" parent="." instance=ExtResource("2_settings")]
+unique_name_in_owner = true
+visible = false

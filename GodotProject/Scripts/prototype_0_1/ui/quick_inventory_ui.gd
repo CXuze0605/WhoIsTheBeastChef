@@ -10,23 +10,32 @@ var slot_icons: Array[TextureRect] = []
 var slot_icon_styles: Array[StyleBoxFlat] = []
 var selected_style: StyleBoxFlat
 var normal_style: StyleBoxFlat
+var armor_style: StyleBoxFlat
+var selected_armor_style: StyleBoxFlat
 
 
 func _ready() -> void:
 	player = get_node(player_path) as PrototypePlayer
 	selected_style = _make_slot_style(true)
 	normal_style = _make_slot_style(false)
+	armor_style = _make_armor_slot_style(false)
+	selected_armor_style = _make_armor_slot_style(true)
 	_build_ui()
 
 
 func _process(_delta: float) -> void:
 	if player == null:
 		return
+	var active_armor := player.get_active_crispy_rice()
 	for slot_index in QuickInventory.SLOT_COUNT:
 		var item := player.inventory.get_item(slot_index)
 		_refresh_slot_content(slot_index, item)
 		var selected := slot_index == player.inventory.selected_index
-		slot_panels[slot_index].add_theme_stylebox_override("panel", selected_style if selected else normal_style)
+		var is_active_armor := item != null and item == active_armor
+		var style := selected_style if selected else normal_style
+		if is_active_armor:
+			style = selected_armor_style if selected else armor_style
+		slot_panels[slot_index].add_theme_stylebox_override("panel", style)
 
 
 func _build_ui() -> void:
@@ -91,6 +100,7 @@ func _refresh_slot_content(slot_index: int, item: CarryableItem) -> void:
 	var icon_style := slot_icon_styles[slot_index]
 	if item == null or not is_instance_valid(item) or item.data == null:
 		icon.texture = null
+		icon.modulate = Color.WHITE
 		icon_style.bg_color = Color("151820")
 		label.text = "%d · 空" % (slot_index + 1)
 		label.tooltip_text = "空格"
@@ -98,10 +108,29 @@ func _refresh_slot_content(slot_index: int, item: CarryableItem) -> void:
 	var art_key := ItemCatalog.get_art_key_for_data(item.data)
 	var texture := PrototypeArtCatalog.TEXTURES.get(art_key) as Texture2D
 	icon.texture = texture
+	icon.modulate = _get_freshness_modulate(item.data)
 	icon_style.bg_color = Color("151820") if texture != null else ItemCatalog.get_item_color(item.data.item_type).darkened(0.42)
 	var count_text := " ×%d" % item.data.stack_count if item.data.is_stackable else ""
-	label.text = "%d%s" % [slot_index + 1, count_text] if texture != null else "%d · %s%s" % [slot_index + 1, item.data.display_name, count_text]
-	label.tooltip_text = item.data.display_name
+	if item.data.is_reusable_resource_container():
+		count_text = " %d/%d" % [item.data.remaining_portions, item.data.max_remaining_portions]
+	var freshness_badge := ""
+	if item.data.is_perishable() or item.data.item_type == ItemData.ItemType.ROTTEN_WASTE:
+		freshness_badge = " · %s" % item.data.get_freshness_text()
+	label.text = "%d%s%s" % [slot_index + 1, count_text, freshness_badge] if texture != null else "%d · %s%s%s" % [slot_index + 1, item.data.display_name, count_text, freshness_badge]
+	label.tooltip_text = item.get_debug_description()
+
+
+func _get_freshness_modulate(data: ItemData) -> Color:
+	if data == null:
+		return Color.WHITE
+	match data.get_freshness_state():
+		ItemData.FreshnessState.STILL_FRESH:
+			return Color("fff0a8")
+		ItemData.FreshnessState.NEAR_EXPIRY:
+			return Color("ffb45b")
+		ItemData.FreshnessState.ROTTEN:
+			return Color("8fa47a")
+	return Color.WHITE
 
 
 func _make_slot_style(selected: bool) -> StyleBoxFlat:
@@ -109,5 +138,14 @@ func _make_slot_style(selected: bool) -> StyleBoxFlat:
 	style.bg_color = Color("576574") if selected else Color("252a33")
 	style.border_color = Color("ffd166") if selected else Color("6c757d")
 	style.set_border_width_all(4 if selected else 2)
+	style.set_corner_radius_all(6)
+	return style
+
+
+func _make_armor_slot_style(selected: bool) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color("4b4030") if selected else Color("332d25")
+	style.border_color = Color("5eead4")
+	style.set_border_width_all(4 if selected else 3)
 	style.set_corner_radius_all(6)
 	return style

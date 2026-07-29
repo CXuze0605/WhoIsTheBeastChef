@@ -49,6 +49,10 @@ var unstuck_steer_left: float = 0.0
 var unstuck_direction := Vector2.ZERO
 var stuck_recovery_count: int = 0
 var walk_animator: DirectionalWalkAnimator
+var character_animator: BasicEnemyCharacterAnimator
+var combat_statuses: CombatStatusController
+var spawn_waste_health_multiplier: float = 1.0
+var spawn_waste_damage_multiplier: float = 1.0
 
 
 func setup(enemy_config: PrototypeWaveConfig, player_target: PrototypePlayer, nav: KitchenNavigationGrid) -> void:
@@ -74,6 +78,22 @@ func _configure_basic_values() -> void:
 	hit_stun_time_value = config.hit_stun_time
 
 
+func apply_spawn_waste_multipliers(health_multiplier: float, damage_multiplier: float) -> void:
+	spawn_waste_health_multiplier = maxf(1.0, health_multiplier)
+	spawn_waste_damage_multiplier = maxf(1.0, damage_multiplier)
+	max_health_value *= spawn_waste_health_multiplier
+	current_health = max_health_value
+	attack_damage_value *= spawn_waste_damage_multiplier
+
+
+func get_spawn_waste_damage_multiplier() -> float:
+	return spawn_waste_damage_multiplier
+
+
+func scale_direct_attack_damage(base_damage: float) -> float:
+	return base_damage * spawn_waste_damage_multiplier
+
+
 func _ready() -> void:
 	add_to_group("damageable")
 	add_to_group("basic_taste_enemy")
@@ -89,12 +109,21 @@ func _ready() -> void:
 	placeholder = PlaceholderVisual.new()
 	add_child(placeholder)
 	placeholder.configure(enemy_visual_size, enemy_color, enemy_title, _status_text())
-	if not (self is HeavyTasteEnemy):
+	var uses_candidate_basic_art := not (
+		self is HeavyTasteEnemy
+		or self is FastTasteEnemy
+		or self is RangedTasteEnemy
+	)
+	if uses_candidate_basic_art:
+		PrototypeArtCatalog.apply_to(placeholder, &"basic_taste_enemy")
+		_setup_candidate_character_animation()
+	elif not (self is HeavyTasteEnemy):
 		PrototypeArtCatalog.apply_to(placeholder, &"basic_taste_enemy")
 		_setup_walk_animation(&"basic_taste_enemy_walk_sheet", 7.5, true)
 	status_effects = DamageOverTimeController.new()
 	status_effects.name = "DamageOverTimeController"
 	add_child(status_effects)
+	combat_statuses = CombatStatusController.ensure_on(self)
 
 
 func _setup_walk_animation(art_key: StringName, fps: float, source_faces_right: bool) -> void:
@@ -112,6 +141,16 @@ func _setup_walk_animation(art_key: StringName, fps: float, source_faces_right: 
 		source_faces_right,
 		source_faces_right
 	)
+
+
+func _setup_candidate_character_animation() -> void:
+	var frames := load(
+		"res://Assets/Characters/Enemies/BasicTasteEnemy01/basic_taste_enemy_01_sprite_frames.tres"
+	) as SpriteFrames
+	character_animator = BasicEnemyCharacterAnimator.new()
+	character_animator.name = "BasicEnemyCharacterAnimator"
+	add_child(character_animator)
+	character_animator.configure(placeholder, frames)
 
 
 func _physics_process(delta: float) -> void:
@@ -190,14 +229,14 @@ func _enter_state(next_state: int) -> void:
 			state_time_left = 0.0
 			chase_refresh_left = 0.0
 		State.WINDUP:
-			state_time_left = windup_time_value
+			state_time_left = windup_time_value / _get_attack_speed_multiplier()
 			velocity = Vector2.ZERO
 		State.ATTACK:
-			state_time_left = attack_active_time_value
+			state_time_left = attack_active_time_value / _get_attack_speed_multiplier()
 			_perform_locked_swing()
 		State.RECOVERY:
-			state_time_left = recovery_time_value
-			attack_cooldown_left = attack_cooldown_value
+			state_time_left = recovery_time_value / _get_attack_speed_multiplier()
+			attack_cooldown_left = attack_cooldown_value / _get_attack_speed_multiplier()
 		State.HIT_STUN:
 			state_time_left = hit_stun_time_value
 		State.REFLAVORING:
@@ -216,6 +255,11 @@ func _enter_state(next_state: int) -> void:
 func _perform_locked_swing() -> void:
 	if target == null or not is_instance_valid(target) or target.is_defeated:
 		return
+	if combat_statuses != null and combat_statuses.has_status(CombatStatusController.StatusType.AIM_DISRUPTION):
+		var runtime := get_tree().get_first_node_in_group("combat_runtime") as CombatManager
+		var miss_chance := runtime.config.choking_melee_miss_chance if runtime != null else 0.0
+		if randf() < miss_chance:
+			return
 	var offset := target.global_position - global_position
 	var forward := offset.dot(locked_attack_direction)
 	var side := absf(offset.dot(locked_attack_direction.orthogonal()))
@@ -239,7 +283,7 @@ func _get_separation_velocity() -> Vector2:
 			separation += fallback if get_instance_id() == lower_id else -fallback
 		elif distance < preferred_distance:
 			separation += offset / distance * (1.0 - distance / preferred_distance)
-	var separation_speed := minf(config.separation_force, move_speed_value * 0.55)
+	var separation_speed := minf(config.separation_force, move_speed_value * _get_move_speed_multiplier() * 0.55)
 	return separation.limit_length(1.0) * separation_speed
 
 
@@ -262,10 +306,18 @@ func _move_chasing(desired: Vector2, delta: float, detect_stuck: bool) -> void:
 		unstuck_steer_left = maxf(0.0, unstuck_steer_left - delta)
 		steering = (desired + unstuck_direction * config.stuck_lateral_weight).normalized()
 	var position_before := global_position
-	velocity = steering * move_speed_value + _get_navigation_safe_separation() + knockback_velocity
+	velocity = steering * move_speed_value * _get_move_speed_multiplier() + _get_navigation_safe_separation() + knockback_velocity
 	move_and_slide()
 	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, config.knockback_decay * delta)
 	_update_stuck_tracking(position_before, desired, delta, detect_stuck)
+
+
+func _get_move_speed_multiplier() -> float:
+	return combat_statuses.get_move_speed_multiplier() if combat_statuses != null else 1.0
+
+
+func _get_attack_speed_multiplier() -> float:
+	return combat_statuses.get_attack_speed_multiplier() if combat_statuses != null else 1.0
 
 
 func _get_navigation_safe_separation() -> Vector2:
@@ -383,11 +435,19 @@ func get_recipe_damage_multiplier(_attack_form: int, _cooking_method: int) -> fl
 
 
 func receive_combat_hit(damage: float, attacker_faction: int, knockback_direction: Vector2, knockback_force: float, friendly_fire: bool, stagger_power_value: float = 0.0) -> bool:
-	if state in [State.REFLAVORING, State.DISABLED] or not CombatRules.can_damage(attacker_faction, get_combat_faction(), friendly_fire):
+	var context := DamageContext.from_legacy(damage, attacker_faction, get_combat_faction(), friendly_fire)
+	return receive_damage_context(context, knockback_direction, knockback_force, stagger_power_value)
+
+
+func receive_damage_context(context: DamageContext, knockback_direction: Vector2 = Vector2.ZERO, knockback_force: float = 0.0, stagger_power_value: float = 0.0) -> bool:
+	if context == null or state in [State.REFLAVORING, State.DISABLED] or not CombatRules.can_damage(context.attacker_faction, get_combat_faction(), context.friendly_fire):
 		return false
+	context.target_faction = get_combat_faction()
+	var resolved_damage := CombatRules.resolve_damage(context, self)
 	var health_before := current_health
-	current_health = maxf(0.0, current_health - damage)
-	_record_damage(health_before - current_health, attacker_faction)
+	current_health = maxf(0.0, current_health - resolved_damage)
+	context.actual_health_damage = health_before - current_health
+	_record_damage_context(context)
 	knockback_velocity += knockback_direction.normalized() * knockback_force * knockback_multiplier
 	hit_flash_left = 0.12
 	if current_health <= 0.0:
@@ -395,6 +455,10 @@ func receive_combat_hit(damage: float, attacker_faction: int, knockback_directio
 	elif stagger_power_value >= stagger_threshold:
 		_enter_state(State.HIT_STUN)
 	return true
+
+
+func get_combat_status_controller() -> CombatStatusController:
+	return combat_statuses
 
 
 func apply_status_effect(effect: StatusEffectData) -> bool:
@@ -438,7 +502,7 @@ func _begin_reflavor() -> void:
 		defeat_recorded = true
 		var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
 		if stats != null:
-			stats.record_enemy_defeated(self is HeavyTasteEnemy)
+			stats.record_enemy_defeated(is_special_enemy(), get_enemy_archetype_key(), get_enemy_rank_key())
 	_release_lure()
 	_enter_state(State.REFLAVORING)
 	collision_layer = 0
@@ -449,6 +513,26 @@ func _record_damage(actual_damage: float, attacker_faction: int) -> void:
 	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
 	if stats != null:
 		stats.record_damage(actual_damage, attacker_faction, get_combat_faction())
+
+
+func _record_damage_context(context: DamageContext) -> void:
+	var stats := get_tree().get_first_node_in_group("run_stats") as RunStats
+	if stats != null:
+		stats.record_damage_context(context)
+
+
+func is_special_enemy() -> bool:
+	return false
+
+
+func get_enemy_archetype_key() -> StringName:
+	return &"basic"
+
+
+func get_enemy_rank_key() -> StringName:
+	# Enemy combat type and long-term rank are intentionally independent.
+	# All four current Prototype archetypes inherit the ordinary rank.
+	return &"ordinary"
 
 
 func _update_reflavor(delta: float) -> void:
@@ -473,6 +557,17 @@ func _refresh_visual() -> void:
 		return
 	placeholder.set_color(Color.WHITE if hit_flash_left > 0.0 else _state_color())
 	placeholder.set_status(_status_text())
+	if character_animator != null:
+		var visual_motion := velocity if state in [State.CHASE, State.LURED] else Vector2.ZERO
+		var is_slowed := combat_statuses != null and combat_statuses.get_move_speed_multiplier() < 0.999
+		character_animator.update_animation(
+			visual_motion,
+			is_slowed,
+			state in [State.WINDUP, State.ATTACK],
+			state == State.REFLAVORING,
+			locked_attack_direction,
+			hit_flash_left > 0.0
+		)
 
 
 func _status_text() -> String:

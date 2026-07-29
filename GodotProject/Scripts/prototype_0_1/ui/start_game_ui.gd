@@ -1,7 +1,7 @@
 class_name StartGameUI
 extends CanvasLayer
 
-const ACTION_PANEL_POSITION := Vector2(20.0, 164.0)
+const ACTION_PANEL_POSITION := Vector2(20.0, 238.0)
 const ACTION_PANEL_SIZE := Vector2(218.0, 88.0)
 
 var manager: PrototypeWaveManager
@@ -24,7 +24,12 @@ func _process(_delta: float) -> void:
 		PrototypeWaveManager.Phase.INTERMISSION,
 	]
 	if manager != null:
-		start_button.text = "开始营业" if manager.phase == PrototypeWaveManager.Phase.FREE_PREPARATION else "提前开始下一波"
+		var start_key := InputPrompt.action_text(&"start_service", "B")
+		start_button.text = (
+			"开始营业 [%s]" % start_key
+			if manager.phase == PrototypeWaveManager.Phase.FREE_PREPARATION
+			else "提前开始下一波 [%s]" % start_key
+		)
 		hint_label.text = "自由大厅 · 可测试与准备" if manager.phase == PrototypeWaveManager.Phase.FREE_PREPARATION else "波间准备 %.0f 秒" % manager.preparation_left
 
 

@@ -25,6 +25,14 @@ func _ready() -> void:
 	refresh_visual()
 
 
+func _process(delta: float) -> void:
+	if data != null and data.hot_time_left > 0.0:
+		var was_hot := data.is_hot()
+		data.hot_time_left = maxf(0.0, data.hot_time_left - delta)
+		if was_hot and not data.is_hot():
+			refresh_visual()
+
+
 func can_interact(player: Node) -> bool:
 	return pickup_enabled and super.can_interact(player)
 
@@ -49,7 +57,7 @@ func set_held(anchor: Node2D) -> void:
 	scale = DEFAULT_HELD_SCALE
 	z_index = 20
 	_apply_default_visual_pose()
-	if _is_unplated_tomahawk():
+	if _is_tomahawk_weapon():
 		placeholder.set_text_visible(false)
 
 
@@ -92,7 +100,7 @@ func release_to_world(world: Node, world_position: Vector2) -> void:
 func update_held_pose(facing_direction: Vector2) -> void:
 	if placeholder == null:
 		return
-	if not _is_unplated_tomahawk():
+	if not _is_tomahawk_weapon():
 		placeholder.set_art_transform()
 		return
 	# The source art points toward local up. Rotate its steak head outward while
@@ -110,8 +118,11 @@ func _apply_default_visual_pose() -> void:
 	placeholder.set_text_visible(true)
 
 
-func _is_unplated_tomahawk() -> bool:
-	return data != null and data.item_type == ItemData.ItemType.TOMAHAWK_STEAK
+func _is_tomahawk_weapon() -> bool:
+	return data != null and data.item_type in [
+		ItemData.ItemType.TOMAHAWK_STEAK,
+		ItemData.ItemType.PLATED_TOMAHAWK_STEAK,
+	]
 
 
 func mark_as_loot_drop() -> void:
@@ -140,6 +151,8 @@ func refresh_visual() -> void:
 		title += " ×%d" % data.stack_count
 	if data.item_type == ItemData.ItemType.RAW_BEEF_SLICES:
 		title += "（剩余%d片）" % data.remaining_portions
+	if data.is_reusable_resource_container():
+		title += "（%s）" % data.get_portion_label()
 	placeholder.set_title(title)
 	if not data.failure_tags.is_empty():
 		status = data.get_failure_tags_text()
@@ -147,6 +160,15 @@ func refresh_visual() -> void:
 		status = "%s主动调味：%s" % [(status + "\n") if not status.is_empty() else "", data.get_active_modifiers_text()]
 	if data.is_combat_dish:
 		status = "%s%s  耐久 %d/%d" % ["怪异 · " if data.is_weird_dish() else "", data.get_quality_text(), data.current_durability, data.max_durability]
+	if data.is_hot():
+		status = "%s%s滚烫 %.1fs" % [status, "\n" if not status.is_empty() else "", data.hot_time_left]
+	if data.is_perishable() or data.item_type == ItemData.ItemType.ROTTEN_WASTE:
+		status = "%s%s新鲜度：%s" % [status, "\n" if not status.is_empty() else "", data.get_freshness_text()]
+	if data.item_type == ItemData.ItemType.ROTTEN_WASTE:
+		status += "\n浪费份量：%d%s" % [data.waste_units_snapshot, "（已结算）" if data.waste_penalty_settled else ""]
+		placeholder.modulate = Color("9aaa82")
+	else:
+		placeholder.modulate = Color.WHITE
 	placeholder.set_status(status)
 
 
@@ -155,5 +177,19 @@ func get_debug_description() -> String:
 		return "空物品"
 	var stack_text := "\n数量：%d/%d" % [data.stack_count, data.max_stack_count] if data.is_stackable else ""
 	var portion_text := "\n原料份数：%d/5" % data.remaining_portions if data.item_type == ItemData.ItemType.RAW_BEEF_SLICES else ""
+	if data.is_reusable_resource_container():
+		portion_text = "\n剩余：%s" % data.get_portion_label()
 	var combat_text := "\n耐久：%d/%d\n伤害：%.1f\n已使用：%s\n完美终结：%s" % [data.current_durability, data.max_durability, data.actual_damage, "是" if data.has_been_used else "否", "是" if data.has_perfect_finisher else "否"] if data.is_combat_dish else ""
-	return "%s%s%s\n失败标签：%s\n主动调味：%s\n怪异料理：%s\n品质：%s%s" % [data.display_name, stack_text, portion_text, data.get_failure_tags_text(), data.get_active_modifiers_text(), "是" if data.is_weird_dish() else "否", data.get_quality_text(), combat_text]
+	var freshness_text := ""
+	if data.is_perishable():
+		freshness_text = "\n新鲜度：%s（%.2f%%，剩余 %.1fs / %.1fs）\n暂停原因：%s" % [
+			data.get_freshness_text(), data.spoilage_ratio * 100.0,
+			data.get_remaining_freshness_seconds(), data.freshness_lifetime,
+			data.freshness_pause_reason if not data.freshness_pause_reason.is_empty() else "无",
+		]
+	elif data.item_type == ItemData.ItemType.ROTTEN_WASTE:
+		freshness_text = "\n腐败来源：%s\n浪费份量：%d\n浪费已结算：%s" % [
+			data.rotten_source_name, data.waste_units_snapshot,
+			"是" if data.waste_penalty_settled else "否",
+		]
+	return "%s%s%s\n失败标签：%s\n主动调味：%s\n怪异料理：%s\n品质：%s%s%s" % [data.display_name, stack_text, portion_text, data.get_failure_tags_text(), data.get_active_modifiers_text(), "是" if data.is_weird_dish() else "否", data.get_quality_text(), combat_text, freshness_text]

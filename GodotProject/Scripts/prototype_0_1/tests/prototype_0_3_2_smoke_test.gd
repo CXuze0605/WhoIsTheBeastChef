@@ -32,8 +32,8 @@ func _test_01_health_hud() -> void:
 	_expect(hud != null and hud.health_bar != null and hud.health_label != null, "01: fixed player health HUD must exist")
 	var old_value := hud.health_bar.value
 	player.set_modal_ui_open(false)
-	player.receive_combat_hit(20.0, CombatRules.Faction.ENEMY, Vector2.RIGHT, 0.0, false)
-	_expect(hud.health_bar.value == old_value - 20.0 and hud.health_label.text == "80 / 100", "01: HUD must immediately follow existing player health data")
+	player.receive_combat_hit(50.0, CombatRules.Faction.ENEMY, Vector2.RIGHT, 0.0, false)
+	_expect(hud.health_bar.value == old_value - 20.0 and hud.health_label.text == "80 / 100" and hud.shield_bar.value == 0.0, "01: HUD must immediately show shield absorption followed by health overflow")
 	var manager := scene.get_node("WaveManager") as PrototypeWaveManager
 	manager.phase = PrototypeWaveManager.Phase.FAILED
 	manager.start_game()
@@ -166,7 +166,7 @@ func _test_07_regression_contract() -> void:
 	manager.start_service_early()
 	await process_frame
 	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION, "07: preparation Start Service and wave flow must remain intact")
-	_expect(cabinet.get_supported_item_types().size() == 6 and cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == manager.config.raw_beef_stock, "07: finite unified cabinet must remain intact")
+	_expect(cabinet.get_supported_item_types().size() == 8 and cabinet.get_stock(ItemData.ItemType.RAW_BEEF_CHUNK) == manager.config.raw_beef_stock and cabinet.get_stock(ItemData.ItemType.RICE_BAG) == 1 and cabinet.get_stock(ItemData.ItemType.WHOLE_GREENS) == manager.config.whole_greens_stock, "07: finite unified cabinet must retain its rice bag and current Prototype whole greens")
 	station.wok_item.add_oil()
 	station.wok_item.insert_meat(ItemCatalog.create(ItemData.ItemType.MARINATED_BEEF_SLICES))
 	station.set_burner_on(true)

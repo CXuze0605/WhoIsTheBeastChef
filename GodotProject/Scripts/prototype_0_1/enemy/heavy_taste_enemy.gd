@@ -34,3 +34,11 @@ func _ready() -> void:
 
 func get_trap_taste_time_multiplier() -> float:
 	return config.heavy_taste_time_multiplier
+
+
+func is_special_enemy() -> bool:
+	return true
+
+
+func get_enemy_archetype_key() -> StringName:
+	return &"heavy"

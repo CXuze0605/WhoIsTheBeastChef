@@ -11,12 +11,14 @@ config_version=5
 [application]
 
 config/name="Who Is The Beast Chef"
-config/version="0.0.2"
-run/main_scene="res://Scenes/prototype_0_1/main.tscn"
+config/version="0.0.3"
+run/main_scene="res://Scenes/menu/main_menu.tscn"
 config/features=PackedStringArray("4.6")
 
 [autoload]
 
+AppSession="*res://Scripts/core/app_session.gd"
+SettingsManager="*res://Scripts/core/settings_manager.gd"
 AudioManager="*res://Scripts/prototype_0_1/audio/audio_manager.gd"
 
 [display]
@@ -77,6 +79,11 @@ dish_attack={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":1,"canceled":false,"pressed":false,"double_click":false,"script":null)
 ]
 }
+secondary_use={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":2,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
 season_dish={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":77,"key_label":0,"unicode":109,"location":0,"echo":false,"script":null)
@@ -114,7 +121,7 @@ select_hotbar_5={
 }
 toggle_backpack={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194308,"physical_keycode":0,"key_label":0,"unicode":9,"location":0,"echo":false,"script":null)
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194306,"physical_keycode":0,"key_label":0,"unicode":9,"location":0,"echo":false,"script":null)
 ]
 }
 rotate_inventory_item={

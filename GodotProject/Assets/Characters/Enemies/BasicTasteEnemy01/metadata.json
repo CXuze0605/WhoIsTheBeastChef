@@ -1,0 +1,144 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "d8be6ecd-0929-4b26-a489-d65e7a224ba3",
+        "name": "Use the uploaded image as",
+        "prompt": "Use the uploaded image as a strict character and body-shape reference. Preserve the enormous low-hanging round belly, broad round face, massive double chin, almost invisible neck, short black hair, tiny tired eyes, thick arms and legs, black athletic T-shirt, black shorts and gray slide sandals.\n\nThis is a modern Chinese large-stomach Weizhen enemy inspired by Liangzi Daweidai. He must remain extremely large and recognizable, not become muscular, heroic or merely chubby.\n\nKeep the dark hungry-mouth marking on the belly and faint amber eyes. No external smoke, aura or separate magical effects. Empty relaxed hands, no clenched fists, no weapon.\n\nCreate a clean 8-direction pixel-art game character in low top-down three-quarter view. Preserve the same face, belly size, clothing, colors and proportions in every direction. Crisp hard pixels, limited palette, dark readable outline, transparent background, matching the Chinese chef hero\u2019s 16-bit-inspired style.\n\nNegative prompt: smaller belly, slim body, muscular body, bodybuilder, visible neck, beard, moustache, sunglasses, clenched fists, fighter pose, ancient China, wuxia, monk, warrior, robe, tunic, sash, belt, armor, cloth shoes, fantasy accessories, weapon, external smoke, large aura, pig, ogre, zombie, blurry pixels, anti-aliasing, inconsistent directions, black background.",
+        "size": {
+          "width": 108,
+          "height": 108
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-07-28T01:32:39.435025+00:00"
+      },
+      "folder": "Use_the_uploaded_image_as",
+      "frames": {
+        "rotations": {
+          "south": "Use_the_uploaded_image_as/rotations/south.png",
+          "south-east": "Use_the_uploaded_image_as/rotations/south-east.png",
+          "east": "Use_the_uploaded_image_as/rotations/east.png",
+          "north-east": "Use_the_uploaded_image_as/rotations/north-east.png",
+          "north": "Use_the_uploaded_image_as/rotations/north.png",
+          "north-west": "Use_the_uploaded_image_as/rotations/north-west.png",
+          "west": "Use_the_uploaded_image_as/rotations/west.png",
+          "south-west": "Use_the_uploaded_image_as/rotations/south-west.png"
+        },
+        "animations": {
+          "Lead_Jab": {
+            "west": [
+              "Use_the_uploaded_image_as/animations/Lead_Jab/west/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Lead_Jab/west/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Lead_Jab/west/frame_002.png"
+            ],
+            "north": [
+              "Use_the_uploaded_image_as/animations/Lead_Jab/north/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Lead_Jab/north/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Lead_Jab/north/frame_002.png"
+            ],
+            "south": [
+              "Use_the_uploaded_image_as/animations/Lead_Jab/south/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Lead_Jab/south/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Lead_Jab/south/frame_002.png"
+            ],
+            "east": [
+              "Use_the_uploaded_image_as/animations/Lead_Jab/east/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Lead_Jab/east/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Lead_Jab/east/frame_002.png"
+            ]
+          },
+          "Running": {
+            "west": [
+              "Use_the_uploaded_image_as/animations/Running/west/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Running/west/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Running/west/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Running/west/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Running/west/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Running/west/frame_005.png"
+            ],
+            "south": [
+              "Use_the_uploaded_image_as/animations/Running/south/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Running/south/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Running/south/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Running/south/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Running/south/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Running/south/frame_005.png"
+            ],
+            "north-west": [
+              "Use_the_uploaded_image_as/animations/Running/north-west/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Running/north-west/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Running/north-west/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Running/north-west/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Running/north-west/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Running/north-west/frame_005.png"
+            ],
+            "east": [
+              "Use_the_uploaded_image_as/animations/Running/east/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Running/east/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Running/east/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Running/east/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Running/east/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Running/east/frame_005.png"
+            ],
+            "south-west": [
+              "Use_the_uploaded_image_as/animations/Running/south-west/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Running/south-west/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Running/south-west/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Running/south-west/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Running/south-west/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Running/south-west/frame_005.png"
+            ],
+            "north": [
+              "Use_the_uploaded_image_as/animations/Running/north/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Running/north/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Running/north/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Running/north/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Running/north/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Running/north/frame_005.png"
+            ],
+            "south-east-c21cebdf": [
+              "Use_the_uploaded_image_as/animations/Running/south-east-c21cebdf/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-c21cebdf/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-c21cebdf/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-c21cebdf/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-c21cebdf/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-c21cebdf/frame_005.png"
+            ],
+            "north-east": [
+              "Use_the_uploaded_image_as/animations/Running/north-east/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Running/north-east/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Running/north-east/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Running/north-east/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Running/north-east/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Running/north-east/frame_005.png"
+            ],
+            "south-east-fabc4a3e": [
+              "Use_the_uploaded_image_as/animations/Running/south-east-fabc4a3e/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-fabc4a3e/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-fabc4a3e/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-fabc4a3e/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-fabc4a3e/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Running/south-east-fabc4a3e/frame_005.png"
+            ]
+          },
+          "Falling_Back_Death": {
+            "south": [
+              "Use_the_uploaded_image_as/animations/Falling_Back_Death/south/frame_000.png",
+              "Use_the_uploaded_image_as/animations/Falling_Back_Death/south/frame_001.png",
+              "Use_the_uploaded_image_as/animations/Falling_Back_Death/south/frame_002.png",
+              "Use_the_uploaded_image_as/animations/Falling_Back_Death/south/frame_003.png",
+              "Use_the_uploaded_image_as/animations/Falling_Back_Death/south/frame_004.png",
+              "Use_the_uploaded_image_as/animations/Falling_Back_Death/south/frame_005.png",
+              "Use_the_uploaded_image_as/animations/Falling_Back_Death/south/frame_006.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-07-28T02:29:21.475388"
+}

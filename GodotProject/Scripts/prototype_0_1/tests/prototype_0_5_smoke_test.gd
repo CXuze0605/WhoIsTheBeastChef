@@ -73,13 +73,14 @@ func _test_c_raging_bull_friendly_fire_risk() -> void:
 	var bull := combat.spawn_raging_bull(player.global_position, Vector2.RIGHT)
 	bull.global_position = player.global_position
 	var health_before := player.current_health
+	var shield_before := player.current_shield
 	bull._hit_targets_with_cooldown()
-	var expected_health := health_before - combat.config.raging_bull_friendly_fire_damage
-	_expect(is_equal_approx(player.current_health, expected_health), "C: friendly targets must use the lower dedicated raging-bull damage")
+	var expected_shield := shield_before - combat.config.raging_bull_friendly_fire_damage
+	_expect(is_equal_approx(player.current_health, health_before) and is_equal_approx(player.current_shield, expected_shield), "C: friendly targets must use lower dedicated raging-bull damage through the shield pipeline")
 	player.hit_protection_left = 0.0
 	bull.target_cooldowns.clear()
 	bull._hit_targets_with_cooldown()
-	_expect(is_equal_approx(player.current_health, expected_health), "C: one raging bull must not repeatedly damage the same friendly target")
+	_expect(is_equal_approx(player.current_health, health_before) and is_equal_approx(player.current_shield, expected_shield), "C: one raging bull must not repeatedly damage the same friendly target")
 	hud._process(0.0)
 	_expect(hud.danger_panel.visible, "C: nearby raging bull must show an obvious player-facing friendly-fire warning")
 	var enemy := manager.spawn_enemy_for_test(player.global_position + Vector2(10.0, 0.0))
@@ -214,10 +215,13 @@ func _test_f_pause_and_exit_flow() -> void:
 	overlay.show_exit_confirmation()
 	_expect(overlay.mode == PrototypeToolsOverlay.Mode.EXIT_CONFIRMATION and paused, "F: Exit Run must require a confirmation while the game remains paused")
 	overlay.confirm_exit_to_lobby()
-	_expect(manager.phase == PrototypeWaveManager.Phase.FREE_PREPARATION and not paused, "F: confirming Exit Run must reuse the lobby reset path and unpause the tree")
+	_expect(manager.phase == PrototypeWaveManager.Phase.FREE_PREPARATION and not paused, "F: confirming Exit Run must reuse the full cleanup path and unpause the tree before changing scenes")
+	await process_frame
 	await process_frame
 	_expect(not is_instance_valid(enemy), "F: confirming Exit Run must clean enemies from the abandoned run")
-	await _dispose_scene(scene)
+	_expect(current_scene is MainMenu, "F: confirming Exit Run must finish at the new main menu")
+	if current_scene != null:
+		await _dispose_scene(current_scene)
 
 
 func _test_g_playtest_notes() -> void:
@@ -308,7 +312,7 @@ func _test_i_static_art_batch() -> void:
 
 	var scene := await _spawn_main_scene()
 	var player := scene.get_node("Kitchen/Player") as PrototypePlayer
-	var player_art := scene.get_node("Kitchen/Player/PlayerArt") as Sprite2D
+	var player_art := scene.get_node("Kitchen/Player/PlayerArt") as AnimatedSprite2D
 	var plate_pile := scene.get_node("Kitchen/CleanPlatePile") as CleanPlatePile
 	var enemy_dummy := scene.get_node("Kitchen/EnemyDummyA") as DebugCombatTarget
 	var friendly_dummy := scene.get_node("Kitchen/FriendlyDummy") as DebugCombatTarget
@@ -325,17 +329,21 @@ func _test_i_static_art_batch() -> void:
 	scene.add_child(shabu_item)
 	_expect(
 		player.walk_animator != null
-		and player_art.texture != null
-		and player_art.texture.resource_path.ends_with("player_walk_sheet.png")
-		and player_art.hframes == 4
-		and player_art.vframes == 3,
-		"I: the actual player node must use the new 4x3 chef walk animation sheet"
+		and player_art != null
+		and player_art.sprite_frames != null
+		and player_art.sprite_frames.has_animation(&"idle_south")
+		and player_art.sprite_frames.has_animation(&"run_south")
+		and player_art.sprite_frames.has_animation(&"defeat_fall"),
+		"I: the actual player node must retain its native PixelLab idle, running, and defeat animation resource"
 	)
 	_expect(plate_pile.placeholder.has_art, "I: the clean plate pile must display the replacement stack art")
 	_expect(enemy_dummy.placeholder.has_art and friendly_dummy.placeholder.has_art, "I: both lobby dummy factions must display dedicated art")
 	_expect(enemy_dummy.placeholder.art_sprite.texture != friendly_dummy.placeholder.art_sprite.texture, "I: enemy and friendly dummies must remain visually distinct")
 	_expect(normal_bull.visual.has_art and raging_bull.visual.has_art, "I: both stir-fry bull attack forms must display their new art")
-	_expect(raw_slice_item.placeholder.art_sprite.texture.resource_path.ends_with("raw_beef_slices.png"), "I: carried multi-portion raw slices must display grouped art")
+	_expect(
+		raw_slice_item.placeholder.art_sprite.texture.resource_path.ends_with("ingredient_raw_beef_slices_1x1.png"),
+		"I: carried multi-portion raw slices must display the authoritative V3 grouped art"
+	)
 	raw_slice_item.data.remaining_portions = 1
 	raw_slice_item.refresh_visual()
 	_expect(raw_slice_item.placeholder.art_sprite.texture.resource_path.ends_with("raw_beef_slice_single.png"), "I: carried final raw slice must refresh to single art")

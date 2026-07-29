@@ -1,0 +1,198 @@
+{
+  "group_id": null,
+  "states": [
+    {
+      "character": {
+        "id": "b8dca93c-e72b-4fd4-817f-918d0d9f18a6",
+        "name": "A young Chinese street-kitchen chef",
+        "prompt": "A young Chinese street-kitchen chef hero with a lively wuxia spirit, confident, energetic and warm-hearted rather than serious or intimidating. He wears a practical traditional Chinese cook's jacket with cloth frog buttons, rolled-up sleeves, a short waist apron, loose dark trousers and simple cloth shoes. A faded red headscarf is tied around his forehead, with a small knot and short cloth tails, giving him a recognizable heroic silhouette. A white kitchen towel hangs from his belt.\n\nHis posture is stable and alert like a young martial artist, with slightly bent knees and relaxed ready hands, as if he can immediately start cooking or enter a fight. His expression is spirited, friendly and determined, with a hint of playful confidence. He should feel like a talented cook raised among lively Chinese street markets and neighborhood restaurants.\n\nNative-resolution 64x64 pixel art character, top-down three-quarter view, four-direction game sprite, clear readable silhouette, compact body proportions, slightly oversized expressive head and hands, crisp hard-edged pixels, limited warm color palette, strong shape language, subtle Chinese fantasy atmosphere, lively 16-bit-inspired style, suitable for a fast-paced cooking action roguelite. Warm ivory, dark charcoal, muted teal and chili red as the main colors. Consistent proportions and costume details in every direction. Transparent background. No handheld weapon or cooking tool.\n\nNegative prompt:\nwestern chef uniform, tall chef hat, modern restaurant uniform, samurai, Japanese clothing, European knight, long sword, permanent handheld weapon, long flowing robe, oversized cape, heavy armor, dark horror, grim expression, photorealistic, anime illustration, smooth digital painting, excessive detail, blurry pixels, anti-aliasing, soft edges, inconsistent pixel size, realistic body proportions, tiny unreadable details, neon cyberpunk colors, pure white outlines, black empty background",
+        "size": {
+          "width": 108,
+          "height": 108
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-07-27T23:50:02.350712+00:00"
+      },
+      "folder": "A_young_Chinese_street-kitchen_chef",
+      "frames": {
+        "rotations": {
+          "south": "A_young_Chinese_street-kitchen_chef/rotations/south.png",
+          "south-east": "A_young_Chinese_street-kitchen_chef/rotations/south-east.png",
+          "east": "A_young_Chinese_street-kitchen_chef/rotations/east.png",
+          "north-east": "A_young_Chinese_street-kitchen_chef/rotations/north-east.png",
+          "north": "A_young_Chinese_street-kitchen_chef/rotations/north.png",
+          "north-west": "A_young_Chinese_street-kitchen_chef/rotations/north-west.png",
+          "west": "A_young_Chinese_street-kitchen_chef/rotations/west.png",
+          "south-west": "A_young_Chinese_street-kitchen_chef/rotations/south-west.png"
+        },
+        "animations": {
+          "Walking": {
+            "north-west": [
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north-west/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north-west/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north-west/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north-west/frame_003.png"
+            ],
+            "east": [
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/east/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/east/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/east/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/east/frame_003.png"
+            ],
+            "west": [
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/west/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/west/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/west/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/west/frame_003.png"
+            ],
+            "south-east": [
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south-east/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south-east/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south-east/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south-east/frame_003.png"
+            ],
+            "north": [
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north/frame_003.png"
+            ],
+            "south-west": [
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south-west/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south-west/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south-west/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south-west/frame_003.png"
+            ],
+            "north-east": [
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north-east/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north-east/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north-east/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/north-east/frame_003.png"
+            ],
+            "south": [
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Walking/south/frame_003.png"
+            ]
+          },
+          "Breathing_Idle": {
+            "south": [
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south/frame_003.png"
+            ],
+            "south-west": [
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south-west/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south-west/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south-west/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south-west/frame_003.png"
+            ],
+            "north": [
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north/frame_003.png"
+            ],
+            "south-east": [
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south-east/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south-east/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south-east/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/south-east/frame_003.png"
+            ],
+            "north-west": [
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north-west/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north-west/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north-west/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north-west/frame_003.png"
+            ],
+            "east": [
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/east/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/east/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/east/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/east/frame_003.png"
+            ],
+            "west": [
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/west/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/west/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/west/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/west/frame_003.png"
+            ],
+            "north-east": [
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north-east/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north-east/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north-east/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Breathing_Idle/north-east/frame_003.png"
+            ]
+          },
+          "Running": {
+            "north-east": [
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north-east/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north-east/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north-east/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north-east/frame_003.png"
+            ],
+            "north": [
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north/frame_003.png"
+            ],
+            "west": [
+              "A_young_Chinese_street-kitchen_chef/animations/Running/west/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/west/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/west/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/west/frame_003.png"
+            ],
+            "south": [
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south/frame_003.png"
+            ],
+            "east": [
+              "A_young_Chinese_street-kitchen_chef/animations/Running/east/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/east/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/east/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/east/frame_003.png"
+            ],
+            "south-east": [
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south-east/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south-east/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south-east/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south-east/frame_003.png"
+            ],
+            "north-west": [
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north-west/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north-west/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north-west/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/north-west/frame_003.png"
+            ],
+            "south-west": [
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south-west/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south-west/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south-west/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Running/south-west/frame_003.png"
+            ]
+          },
+          "Falling_Back_Death": {
+            "south": [
+              "A_young_Chinese_street-kitchen_chef/animations/Falling_Back_Death/south/frame_000.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Falling_Back_Death/south/frame_001.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Falling_Back_Death/south/frame_002.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Falling_Back_Death/south/frame_003.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Falling_Back_Death/south/frame_004.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Falling_Back_Death/south/frame_005.png",
+              "A_young_Chinese_street-kitchen_chef/animations/Falling_Back_Death/south/frame_006.png"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "export_version": "3.1",
+  "export_date": "2026-07-28T00:29:58.079322"
+}

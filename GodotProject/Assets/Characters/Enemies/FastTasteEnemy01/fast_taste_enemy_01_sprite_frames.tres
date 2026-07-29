@@ -1,0 +1,1022 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/east/frame_000.png" id="1_gfgxg"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/east/frame_001.png" id="2_hc6g8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/east/frame_002.png" id="3_mcisc"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/east/frame_003.png" id="4_66tvy"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/east/frame_004.png" id="5_4wu3b"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north/frame_000.png" id="6_w4awj"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north/frame_001.png" id="7_6838j"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north/frame_002.png" id="8_nsl7m"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north/frame_003.png" id="9_bj4y8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north/frame_004.png" id="10_wdm71"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-east/frame_000.png" id="11_xfg5b"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-east/frame_001.png" id="12_lkm31"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-east/frame_002.png" id="13_0f638"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-east/frame_003.png" id="14_fs60s"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-east/frame_004.png" id="15_rxskn"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-west/frame_000.png" id="16_s05lt"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-west/frame_001.png" id="17_26d7j"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-west/frame_002.png" id="18_khysj"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-west/frame_003.png" id="19_m3omu"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/north-west/frame_004.png" id="20_aqu66"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south/frame_000.png" id="21_ibigr"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south/frame_001.png" id="22_a0via"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south/frame_002.png" id="23_xtivf"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south/frame_003.png" id="24_gbh6a"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south/frame_004.png" id="25_3gxsr"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-east/frame_000.png" id="26_vy5if"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-east/frame_001.png" id="27_hh4uw"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-east/frame_002.png" id="28_1m6jg"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-east/frame_003.png" id="29_ri76h"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-east/frame_004.png" id="30_nmmom"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-west/frame_000.png" id="31_0oe81"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-west/frame_001.png" id="32_h5sgd"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-west/frame_002.png" id="33_ro76q"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-west/frame_003.png" id="34_dxr27"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/south-west/frame_004.png" id="35_qpcdw"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/west/frame_000.png" id="36_7gjkl"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/west/frame_001.png" id="37_6wlfg"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/west/frame_002.png" id="38_a7661"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/west/frame_003.png" id="39_10cbq"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Crouching/west/frame_004.png" id="40_71p83"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Falling_Back_Death/south/frame_000.png" id="41_ac6sm"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Falling_Back_Death/south/frame_001.png" id="42_uueso"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Falling_Back_Death/south/frame_002.png" id="43_ng353"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Falling_Back_Death/south/frame_003.png" id="44_axc3i"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Falling_Back_Death/south/frame_004.png" id="45_ungs4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Falling_Back_Death/south/frame_005.png" id="46_fsokl"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Falling_Back_Death/south/frame_006.png" id="47_krxm5"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/rotations/east.png" id="48_bm2yi"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/rotations/north.png" id="49_nfgbh"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/rotations/north-east.png" id="50_wrrvw"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/rotations/north-west.png" id="51_76mma"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/rotations/south.png" id="52_p24j6"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/rotations/south-east.png" id="53_mjbd7"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/rotations/south-west.png" id="54_sgule"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/rotations/west.png" id="55_1suep"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/east/frame_000.png" id="56_wvcdi"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/east/frame_001.png" id="57_dm561"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/east/frame_002.png" id="58_kk0b0"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/east/frame_003.png" id="59_brrrn"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/east/frame_004.png" id="60_8tld8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/east/frame_005.png" id="61_w0fi4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/east/frame_006.png" id="62_68f4a"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/east/frame_007.png" id="63_nesl8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north/frame_000.png" id="64_e28us"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north/frame_001.png" id="65_r5lsm"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north/frame_002.png" id="66_gfl11"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north/frame_003.png" id="67_xgs1u"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north/frame_004.png" id="68_qcvrx"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north/frame_005.png" id="69_r0ojn"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north/frame_006.png" id="70_bw037"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north/frame_007.png" id="71_61d2a"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-east/frame_000.png" id="72_dpcks"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-east/frame_001.png" id="73_dsxgp"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-east/frame_002.png" id="74_bxifo"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-east/frame_003.png" id="75_lou3e"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-east/frame_004.png" id="76_q74en"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-east/frame_005.png" id="77_xamct"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-east/frame_006.png" id="78_cui2h"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-east/frame_007.png" id="79_mhmb6"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-west/frame_000.png" id="80_yg53w"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-west/frame_001.png" id="81_15ime"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-west/frame_002.png" id="82_5edc8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-west/frame_003.png" id="83_yflwy"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-west/frame_004.png" id="84_fjudf"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-west/frame_005.png" id="85_wru7x"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-west/frame_006.png" id="86_23b7e"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/north-west/frame_007.png" id="87_fcaef"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south/frame_000.png" id="88_11saq"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south/frame_001.png" id="89_gbu5d"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south/frame_002.png" id="90_6ssow"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south/frame_003.png" id="91_ms4bv"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south/frame_004.png" id="92_4yvpk"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south/frame_005.png" id="93_q64bn"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south/frame_006.png" id="94_gfkrg"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south/frame_007.png" id="95_mxyyk"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-east/frame_000.png" id="96_gs1ms"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-east/frame_001.png" id="97_xp5y0"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-east/frame_002.png" id="98_d7t4y"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-east/frame_003.png" id="99_m4kr7"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-east/frame_004.png" id="100_74xa8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-east/frame_005.png" id="101_mta8b"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-east/frame_006.png" id="102_1bvh8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-east/frame_007.png" id="103_2588n"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-west/frame_000.png" id="104_pu410"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-west/frame_001.png" id="105_kh403"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-west/frame_002.png" id="106_ixgvc"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-west/frame_003.png" id="107_wsrcx"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-west/frame_004.png" id="108_6en1e"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-west/frame_005.png" id="109_o6rlb"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-west/frame_006.png" id="110_8uilg"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/south-west/frame_007.png" id="111_norjx"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/west/frame_000.png" id="112_samej"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/west/frame_001.png" id="113_wt4xc"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/west/frame_002.png" id="114_5lnoc"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/west/frame_003.png" id="115_lr4so"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/west/frame_004.png" id="116_6rgkb"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/west/frame_005.png" id="117_gy3xn"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/west/frame_006.png" id="118_7aa3g"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/feipu/west/frame_007.png" id="119_caek6"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/east/frame_000.png" id="120_678re"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/east/frame_001.png" id="121_2elxb"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/east/frame_002.png" id="122_cbfkf"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/east/frame_003.png" id="123_u7p0p"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/east/frame_004.png" id="124_fu3fi"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/east/frame_005.png" id="125_8eg4g"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north/frame_000.png" id="126_05tbk"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north/frame_001.png" id="127_urkga"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north/frame_002.png" id="128_stcgg"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north/frame_003.png" id="129_n2vjj"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north/frame_004.png" id="130_7ohkk"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north/frame_005.png" id="131_1ixoy"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-east/frame_000.png" id="132_i5odi"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-east/frame_001.png" id="133_sr3ku"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-east/frame_002.png" id="134_fkomy"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-east/frame_003.png" id="135_7e0ah"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-east/frame_004.png" id="136_3vo1q"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-east/frame_005.png" id="137_krfih"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-west/frame_000.png" id="138_lgset"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-west/frame_001.png" id="139_c43b1"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-west/frame_002.png" id="140_1glhi"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-west/frame_003.png" id="141_t8vtn"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-west/frame_004.png" id="142_hxm0r"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/north-west/frame_005.png" id="143_li75s"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south/frame_000.png" id="144_0itme"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south/frame_001.png" id="145_l68fb"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south/frame_002.png" id="146_kcg5o"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south/frame_003.png" id="147_fnhvm"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south/frame_004.png" id="148_6wma8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south/frame_005.png" id="149_cro2i"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-east/frame_000.png" id="150_dytbt"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-east/frame_001.png" id="151_h4mil"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-east/frame_002.png" id="152_ngdj8"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-east/frame_003.png" id="153_db3h4"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-east/frame_004.png" id="154_6u8dm"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-east/frame_005.png" id="155_v5t2v"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-west/frame_000.png" id="156_wq86t"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-west/frame_001.png" id="157_v01u5"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-west/frame_002.png" id="158_v4r5j"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-west/frame_003.png" id="159_3jlif"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-west/frame_004.png" id="160_xdy1y"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/south-west/frame_005.png" id="161_66wyw"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/west/frame_000.png" id="162_wcfxc"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/west/frame_001.png" id="163_hg24j"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/west/frame_002.png" id="164_r15sd"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/west/frame_003.png" id="165_ntk0w"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/west/frame_004.png" id="166_trc6g"]
+[ext_resource type="Texture2D" path="res://Assets/Characters/Enemies/FastTasteEnemy01/animations/Running/west/frame_005.png" id="167_hyhq2"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_gfgxg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_hc6g8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_mcisc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_66tvy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_4wu3b")
+}],
+"loop": false,
+"name": &"crouch_east",
+"speed": 8.333333
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_w4awj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_6838j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_nsl7m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_bj4y8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_wdm71")
+}],
+"loop": false,
+"name": &"crouch_north",
+"speed": 8.333333
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_xfg5b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_lkm31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_0f638")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_fs60s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_rxskn")
+}],
+"loop": false,
+"name": &"crouch_north-east",
+"speed": 8.333333
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_s05lt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_26d7j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_khysj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_m3omu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_aqu66")
+}],
+"loop": false,
+"name": &"crouch_north-west",
+"speed": 8.333333
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_ibigr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_a0via")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_xtivf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_gbh6a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_3gxsr")
+}],
+"loop": false,
+"name": &"crouch_south",
+"speed": 8.333333
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_vy5if")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_hh4uw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_1m6jg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_ri76h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_nmmom")
+}],
+"loop": false,
+"name": &"crouch_south-east",
+"speed": 8.333333
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_0oe81")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_h5sgd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_ro76q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_dxr27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_qpcdw")
+}],
+"loop": false,
+"name": &"crouch_south-west",
+"speed": 8.333333
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("36_7gjkl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_6wlfg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_a7661")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_10cbq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_71p83")
+}],
+"loop": false,
+"name": &"crouch_west",
+"speed": 8.333333
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("41_ac6sm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_uueso")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_ng353")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_axc3i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_ungs4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_fsokl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_krxm5")
+}],
+"loop": false,
+"name": &"defeat_fall",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("48_bm2yi")
+}],
+"loop": true,
+"name": &"idle_east",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_nfgbh")
+}],
+"loop": true,
+"name": &"idle_north",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("50_wrrvw")
+}],
+"loop": true,
+"name": &"idle_north-east",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_76mma")
+}],
+"loop": true,
+"name": &"idle_north-west",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_p24j6")
+}],
+"loop": true,
+"name": &"idle_south",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("53_mjbd7")
+}],
+"loop": true,
+"name": &"idle_south-east",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("54_sgule")
+}],
+"loop": true,
+"name": &"idle_south-west",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("55_1suep")
+}],
+"loop": true,
+"name": &"idle_west",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_wvcdi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_dm561")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_kk0b0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_brrrn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_8tld8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_w0fi4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_68f4a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_nesl8")
+}],
+"loop": false,
+"name": &"pounce_east",
+"speed": 22.222222
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("64_e28us")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_r5lsm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_gfl11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_xgs1u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_qcvrx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_r0ojn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_bw037")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_61d2a")
+}],
+"loop": false,
+"name": &"pounce_north",
+"speed": 22.222222
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("72_dpcks")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_dsxgp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_bxifo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_lou3e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_q74en")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_xamct")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_cui2h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_mhmb6")
+}],
+"loop": false,
+"name": &"pounce_north-east",
+"speed": 22.222222
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("80_yg53w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_15ime")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_5edc8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_yflwy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_fjudf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_wru7x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("86_23b7e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_fcaef")
+}],
+"loop": false,
+"name": &"pounce_north-west",
+"speed": 22.222222
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("88_11saq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("89_gbu5d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_6ssow")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_ms4bv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("92_4yvpk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_q64bn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_gfkrg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_mxyyk")
+}],
+"loop": false,
+"name": &"pounce_south",
+"speed": 22.222222
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("96_gs1ms")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_xp5y0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("98_d7t4y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("99_m4kr7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("100_74xa8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("101_mta8b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("102_1bvh8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("103_2588n")
+}],
+"loop": false,
+"name": &"pounce_south-east",
+"speed": 22.222222
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("104_pu410")
+}, {
+"duration": 1.0,
+"texture": ExtResource("105_kh403")
+}, {
+"duration": 1.0,
+"texture": ExtResource("106_ixgvc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("107_wsrcx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("108_6en1e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("109_o6rlb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("110_8uilg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("111_norjx")
+}],
+"loop": false,
+"name": &"pounce_south-west",
+"speed": 22.222222
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("112_samej")
+}, {
+"duration": 1.0,
+"texture": ExtResource("113_wt4xc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("114_5lnoc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("115_lr4so")
+}, {
+"duration": 1.0,
+"texture": ExtResource("116_6rgkb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("117_gy3xn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("118_7aa3g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("119_caek6")
+}],
+"loop": false,
+"name": &"pounce_west",
+"speed": 22.222222
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("120_678re")
+}, {
+"duration": 1.0,
+"texture": ExtResource("121_2elxb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("122_cbfkf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("123_u7p0p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("124_fu3fi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("125_8eg4g")
+}],
+"loop": true,
+"name": &"run_east",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("126_05tbk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("127_urkga")
+}, {
+"duration": 1.0,
+"texture": ExtResource("128_stcgg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("129_n2vjj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("130_7ohkk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("131_1ixoy")
+}],
+"loop": true,
+"name": &"run_north",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("132_i5odi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("133_sr3ku")
+}, {
+"duration": 1.0,
+"texture": ExtResource("134_fkomy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("135_7e0ah")
+}, {
+"duration": 1.0,
+"texture": ExtResource("136_3vo1q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("137_krfih")
+}],
+"loop": true,
+"name": &"run_north-east",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("138_lgset")
+}, {
+"duration": 1.0,
+"texture": ExtResource("139_c43b1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("140_1glhi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("141_t8vtn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("142_hxm0r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("143_li75s")
+}],
+"loop": true,
+"name": &"run_north-west",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("144_0itme")
+}, {
+"duration": 1.0,
+"texture": ExtResource("145_l68fb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("146_kcg5o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("147_fnhvm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("148_6wma8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("149_cro2i")
+}],
+"loop": true,
+"name": &"run_south",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("150_dytbt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("151_h4mil")
+}, {
+"duration": 1.0,
+"texture": ExtResource("152_ngdj8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("153_db3h4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("154_6u8dm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("155_v5t2v")
+}],
+"loop": true,
+"name": &"run_south-east",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("156_wq86t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("157_v01u5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("158_v4r5j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("159_3jlif")
+}, {
+"duration": 1.0,
+"texture": ExtResource("160_xdy1y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("161_66wyw")
+}],
+"loop": true,
+"name": &"run_south-west",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("162_wcfxc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("163_hg24j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("164_r15sd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("165_ntk0w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("166_trc6g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("167_hyhq2")
+}],
+"loop": true,
+"name": &"run_west",
+"speed": 11.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("120_678re")
+}, {
+"duration": 1.0,
+"texture": ExtResource("121_2elxb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("122_cbfkf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("123_u7p0p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("124_fu3fi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("125_8eg4g")
+}],
+"loop": true,
+"name": &"slow_run_east",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("126_05tbk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("127_urkga")
+}, {
+"duration": 1.0,
+"texture": ExtResource("128_stcgg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("129_n2vjj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("130_7ohkk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("131_1ixoy")
+}],
+"loop": true,
+"name": &"slow_run_north",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("132_i5odi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("133_sr3ku")
+}, {
+"duration": 1.0,
+"texture": ExtResource("134_fkomy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("135_7e0ah")
+}, {
+"duration": 1.0,
+"texture": ExtResource("136_3vo1q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("137_krfih")
+}],
+"loop": true,
+"name": &"slow_run_north-east",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("138_lgset")
+}, {
+"duration": 1.0,
+"texture": ExtResource("139_c43b1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("140_1glhi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("141_t8vtn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("142_hxm0r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("143_li75s")
+}],
+"loop": true,
+"name": &"slow_run_north-west",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("144_0itme")
+}, {
+"duration": 1.0,
+"texture": ExtResource("145_l68fb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("146_kcg5o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("147_fnhvm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("148_6wma8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("149_cro2i")
+}],
+"loop": true,
+"name": &"slow_run_south",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("150_dytbt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("151_h4mil")
+}, {
+"duration": 1.0,
+"texture": ExtResource("152_ngdj8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("153_db3h4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("154_6u8dm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("155_v5t2v")
+}],
+"loop": true,
+"name": &"slow_run_south-east",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("156_wq86t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("157_v01u5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("158_v4r5j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("159_3jlif")
+}, {
+"duration": 1.0,
+"texture": ExtResource("160_xdy1y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("161_66wyw")
+}],
+"loop": true,
+"name": &"slow_run_south-west",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("162_wcfxc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("163_hg24j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("164_r15sd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("165_ntk0w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("166_trc6g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("167_hyhq2")
+}],
+"loop": true,
+"name": &"slow_run_west",
+"speed": 7.0
+}]

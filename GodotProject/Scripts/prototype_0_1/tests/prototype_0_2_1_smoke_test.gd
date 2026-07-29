@@ -239,7 +239,7 @@ func _test_regression_contracts() -> void:
 	manager.start_service_early()
 	await process_frame
 	_expect(manager.phase == PrototypeWaveManager.Phase.PREPARATION and not cabinet.lobby_unlimited, "Formal preparation must use the finite cabinet")
-	_expect(cabinet.get_supported_item_types().size() == 6, "Unified cabinet must contain exactly the four old ingredients plus salt and mustard")
+	_expect(cabinet.get_supported_item_types().size() == 8 and cabinet.get_stock(ItemData.ItemType.RICE_BAG) == 1 and cabinet.get_stock(ItemData.ItemType.WHOLE_GREENS) == 1, "Unified cabinet must extend the historical ingredients with one real rice bag and one Prototype whole greens")
 	_expect(cabinet.get_stock(ItemData.ItemType.SALT) > 0 and cabinet.get_stock(ItemData.ItemType.MUSTARD) > 0, "Salt and mustard stocks must be finite editable Debug values")
 	player.receive_item_data(ItemCatalog.create(ItemData.ItemType.RAW_BEEF_SLICES))
 	station.carry_interact(player)

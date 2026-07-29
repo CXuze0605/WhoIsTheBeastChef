@@ -8,7 +8,7 @@ var tools_overlay: PrototypeToolsOverlay
 func _ready() -> void:
 	var player := get_node_or_null("Kitchen/Player") as PrototypePlayer
 	if player != null:
-		player.notify_feedback("Prototype 0.5：ESC 暂停；F3 切换开发 UI；F9 记录试玩问题。")
+		player.notify_feedback("Prototype：%s 暂停；F3 切换开发 UI；F9 记录试玩问题。" % InputPrompt.action_text(&"toggle_pause", "ESC"))
 	wave_manager = get_node_or_null("WaveManager") as PrototypeWaveManager
 	audio_manager = get_node_or_null("/root/AudioManager") as PrototypeAudioManager
 	tools_overlay = get_node_or_null("PrototypeToolsOverlay") as PrototypeToolsOverlay
@@ -17,6 +17,13 @@ func _ready() -> void:
 	if wave_manager != null:
 		wave_manager.wave_stats_changed.connect(_sync_music_to_flow)
 	_sync_music_to_flow()
+	var session := get_node_or_null("/root/AppSession") as AppSessionState
+	var launch_mode := session.consume_launch_mode() if session != null else AppSessionState.LaunchMode.UNSPECIFIED
+	if launch_mode == AppSessionState.LaunchMode.TEST_HALL:
+		if tools_overlay != null:
+			tools_overlay.set_development_tools_enabled(true)
+	elif launch_mode == AppSessionState.LaunchMode.SINGLE_PLAYER:
+		call_deferred("_start_single_player_from_menu")
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -35,6 +42,25 @@ func _on_exit_run_confirmed() -> void:
 		wave_manager.return_to_lobby()
 	if tools_overlay != null:
 		tools_overlay.complete_exit_to_lobby()
+	get_tree().paused = false
+	if audio_manager != null:
+		audio_manager.set_music_paused(false)
+		audio_manager.play_music(PrototypeAudioManager.Track.LOBBY)
+	var session := get_node_or_null("/root/AppSession") as AppSessionState
+	if session != null:
+		session.clear_launch_mode()
+	call_deferred("_return_to_main_menu")
+
+
+func _start_single_player_from_menu() -> void:
+	if wave_manager != null and wave_manager.phase == PrototypeWaveManager.Phase.FREE_PREPARATION:
+		wave_manager.start_service_early()
+
+
+func _return_to_main_menu() -> void:
+	var error := get_tree().change_scene_to_file(AppSessionState.MAIN_MENU_SCENE)
+	if error != OK:
+		push_error("Failed to return to main menu: %d" % error)
 
 
 func _get_desired_music_track() -> int:
