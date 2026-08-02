@@ -1,6 +1,8 @@
 class_name BasicTasteEnemy
 extends CharacterBody2D
 
+const LEGACY_WALK_DISPLAY_SCALE := 2.0
+
 signal reflavor_completed(enemy: BasicTasteEnemy)
 
 enum State { CHASE, WINDUP, ATTACK, RECOVERY, HIT_STUN, REFLAVORING, DISABLED, LURED, TASTING }
@@ -141,6 +143,14 @@ func _setup_walk_animation(art_key: StringName, fps: float, source_faces_right: 
 		source_faces_right,
 		source_faces_right
 	)
+	# Heavy enemies still use the legacy walk sheet. Match the same integer 2x
+	# actor presentation while preserving the original ground-contact point.
+	var original_display_height := (
+		sprite_sheet.get_size().y / float(walk_animator.frame_rows)
+		* absf(placeholder.art_sprite.scale.y)
+	)
+	placeholder.art_sprite.position = Vector2(0.0, -original_display_height * 0.5)
+	placeholder.art_sprite.scale *= LEGACY_WALK_DISPLAY_SCALE
 
 
 func _setup_candidate_character_animation() -> void:

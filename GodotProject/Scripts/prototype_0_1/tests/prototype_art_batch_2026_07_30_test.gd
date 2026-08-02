@@ -13,7 +13,7 @@ const EXPECTED_ITEM_KEYS := {
 	ItemData.ItemType.UNPLATED_GREENS_BEEF_BRAISED_RICE: &"greens_beef_braised_rice_unplated",
 	ItemData.ItemType.PLATED_GREENS_BEEF_BRAISED_RICE: &"greens_beef_braised_rice_plated",
 	ItemData.ItemType.UNPLATED_GREENS_BEEF_PORRIDGE: &"greens_beef_congee_unplated",
-	ItemData.ItemType.PLATED_GREENS_BEEF_PORRIDGE: &"greens_beef_congee_plated",
+	ItemData.ItemType.PLATED_GREENS_BEEF_PORRIDGE: &"greens_beef_porridge_plated",
 	ItemData.ItemType.UNPLATED_BEEF_SOAKED_RICE: &"beef_soaked_rice_unplated",
 	ItemData.ItemType.PLATED_BEEF_SOAKED_RICE: &"beef_soaked_rice_plated",
 	ItemData.ItemType.UNPLATED_GREENS_BEEF_SOAKED_RICE: &"greens_beef_soaked_rice_unplated",

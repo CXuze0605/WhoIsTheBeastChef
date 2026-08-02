@@ -76,7 +76,12 @@ func _ready() -> void:
 			config.player_hit_protection_time,
 			config.player_max_shield,
 			config.player_shield_regen_delay,
-			config.player_shield_regen_per_second
+			config.player_shield_regen_per_second,
+			config.player_max_stamina,
+			config.player_sprint_speed_multiplier,
+			config.player_sprint_drain_per_second,
+			config.player_stamina_regen_delay,
+			config.player_stamina_regen_per_second
 		)
 		player.player_defeated.connect(_on_player_defeated)
 	_initialize_new_run()
@@ -276,7 +281,7 @@ func _initialize_new_run() -> void:
 	preparation_left = 0.0
 	var cabinet := get_tree().get_first_node_in_group("ingredient_cabinet") as IngredientCabinet
 	if cabinet != null:
-		cabinet.configure_lobby_unlimited_catalog()
+		_fill_lobby_catalog_deferred(cabinet)
 	if run_stats == null:
 		run_stats = get_tree().get_first_node_in_group("run_stats") as RunStats
 	if run_stats != null:
@@ -285,6 +290,19 @@ func _initialize_new_run() -> void:
 	if player != null:
 		player.set_modal_ui_open(false)
 	wave_stats_changed.emit()
+
+
+func _fill_lobby_catalog_deferred(cabinet: IngredientCabinet) -> void:
+	# Filling the 20x80 unlimited catalog takes ~300ms. Waiting two frames lets
+	# the kitchen render before the fill runs so scene switches stay responsive.
+	var tree := get_tree()
+	if tree == null:
+		return
+	await tree.process_frame
+	await tree.process_frame
+	if not is_inside_tree() or not is_instance_valid(cabinet) or phase != Phase.FREE_PREPARATION:
+		return
+	cabinet.configure_lobby_unlimited_catalog()
 
 
 func _begin_local_warning() -> void:
@@ -960,7 +978,12 @@ func _reset_scene_for_new_game() -> void:
 			config.player_hit_protection_time,
 			config.player_max_shield,
 			config.player_shield_regen_delay,
-			config.player_shield_regen_per_second
+			config.player_shield_regen_per_second,
+			config.player_max_stamina,
+			config.player_sprint_speed_multiplier,
+			config.player_sprint_drain_per_second,
+			config.player_stamina_regen_delay,
+			config.player_stamina_regen_per_second
 		)
 	var cutting_board := get_tree().get_first_node_in_group("cutting_board") as CuttingBoard
 	if cutting_board != null:

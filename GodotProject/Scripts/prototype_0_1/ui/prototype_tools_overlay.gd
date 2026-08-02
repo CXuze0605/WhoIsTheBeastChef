@@ -9,6 +9,7 @@ enum Mode {
 	EXIT_CONFIRMATION,
 	PLAYTEST_NOTES,
 	SETTINGS,
+	COOKBOOK,
 }
 
 const TEST_VERSION: String = "Prototype 0.5"
@@ -25,6 +26,7 @@ var notes_status_label: Label
 var save_notes_button: Button
 var close_notes_button: Button
 var continue_button: Button
+var cookbook_button: Button
 var settings_button: Button
 var settings_panel: SettingsPanel
 var previous_mouse_mode: int = Input.MOUSE_MODE_VISIBLE
@@ -32,6 +34,8 @@ var previous_tree_paused: bool = false
 var previous_music_paused: bool = false
 var owns_world_pause: bool = false
 var notes_return_mode: int = Mode.NONE
+var _cookbook_ui: CookbookUI
+var _cookbook_return_mode: int = Mode.NONE
 
 
 func _ready() -> void:
@@ -110,6 +114,39 @@ func show_exit_confirmation() -> void:
 		return
 	mode = Mode.EXIT_CONFIRMATION
 	_apply_mode_visibility()
+
+
+func open_cookbook() -> void:
+	if mode != Mode.PAUSE_MENU:
+		return
+	if _cookbook_ui == null:
+		_cookbook_ui = CookbookUI.new()
+		add_child(_cookbook_ui)
+	_cookbook_return_mode = Mode.PAUSE_MENU
+	mode = Mode.COOKBOOK
+	_apply_mode_visibility()
+	if pause_root != null:
+		pause_root.visible = false
+	_cookbook_ui.open(close_cookbook)
+
+
+func close_cookbook() -> void:
+	if mode != Mode.COOKBOOK:
+		return
+	if _cookbook_ui != null:
+		_cookbook_ui.close()
+	if _cookbook_return_mode == Mode.PAUSE_MENU:
+		mode = Mode.PAUSE_MENU
+		_cookbook_return_mode = Mode.NONE
+		if pause_root != null:
+			pause_root.visible = true
+		_apply_mode_visibility()
+		if continue_button != null:
+			continue_button.grab_focus()
+		return
+	mode = Mode.NONE
+	_apply_mode_visibility()
+	_restore_world_pause()
 
 
 func open_settings() -> void:
@@ -256,6 +293,8 @@ func _apply_mode_visibility() -> void:
 		notes_root.visible = mode == Mode.PLAYTEST_NOTES
 	if settings_panel != null and mode != Mode.SETTINGS:
 		settings_panel.visible = false
+	if _cookbook_ui != null:
+		_cookbook_ui.visible = mode == Mode.COOKBOOK
 
 
 func _get_notes_path() -> String:
@@ -296,6 +335,9 @@ func _build_pause_ui() -> void:
 	settings_button.name = "PauseSettingsButton"
 	settings_button.pressed.connect(open_settings)
 	column.add_child(settings_button)
+	cookbook_button = _make_button("烹饪大典")
+	cookbook_button.pressed.connect(open_cookbook)
+	column.add_child(cookbook_button)
 	var exit_button := _make_button("退出本局")
 	exit_button.pressed.connect(show_exit_confirmation)
 	column.add_child(exit_button)

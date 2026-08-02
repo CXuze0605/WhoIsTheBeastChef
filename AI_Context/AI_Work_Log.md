@@ -1,4 +1,64 @@
 # AI Work Log
+## 2026-08-02 — 玩家血条扣血残影与受击反馈
+执行 AI：DeepSeek V4 Flash（Codex 环境）
+
+完成：
+- `player_hud.gd` 新增残影血条：绿色主条（`#4caf50`，不透明）受击瞬间立即掉到真实血量，红色残影条（`#e53935`）从扣血前旧值以 `25/秒` 平滑跟上；回血时残影立即同步，不拖尾。
+- 残影条与主条同尺寸叠放于 `HealthBarStack`，底层残影条 background 提供 1px 纯黑描边包裹整条血条外轮廓。
+- 迭代记录：第一版跟随速度 100/秒过快肉眼不可见；第二版加入 2 秒保持窗口，实测反馈呈现"延迟扣血"而非"残影"；运行时取证发现项目默认 ProgressBar fill 为半透明白 `(1,1,1,0.4)`，与白色残影叠加后两层不可分——最终改为绿色主条 + 红色残影 + 立即跟随。
+- 新增专项 `prototype_hud_ghost_health_bar_test.gd`：断言残影存在、扣血瞬间主条立即 80 且残影滞留 100、1.2 秒内残影追上、失败重开时残影立即同步。
+
+验证：
+- 专项 PASS；`prototype_0_3_2_smoke_test.gd` PASS（7/7，含 HUD 立即血量断言）。
+- Native MCP 运行时取证：节点存在、主条 fill 绿 `#4caf50`、残影 fill 红 `#e53935`、描边纯黑；负责人实机验收通过。
+- 本轮未提交、推送、发布或清理工作区。
+
+## 2026-08-02 — 大餐厅扩场、怪物赶路提速与玩家疾跑体力
+执行 AI：GPT Codex
+
+完成：
+- 将地图配置从 `2304×1728` 调整为 `4608×3456`；厨房改为精确居中且保持原尺寸，外围六组家具向外疏开，十个生成入口随新边缘重排。
+- 基础味真族普通移速 `82→164`、重型 `52→104`，并同步分离／卡住检测的速度尺度；速度型和远程型的普通转场速度随基础值提高，飞扑、弹丸及攻击参数未改。
+- 玩家增加可改键 `sprint`（默认 Shift）：基础 `240`、疾跑 `2×`、体力 `100`、消耗 `30/秒`、恢复延迟 `0.8秒`、恢复 `25/秒`。耗尽不惩罚，只要求松开按键后重启疾跑。
+- HUD 增加满值隐藏的体力条与疾跑／恢复／耗尽状态；玩家动画改为普通 Walking、疾跑 Running、减速 Walking 降速播放。
+- 更新设置、开发操作提示、玩家专项与餐厅白盒专项；保留通用体力消耗／恢复接口，但未新增料理或技能。
+
+验证：
+- Godot 4.6.2 `--import` 成功。
+- `prototype_player_pixel_animation_test.gd` PASS（5/5）；覆盖步行、疾跑、两倍速度、消耗、延迟恢复、耗尽重启和减速动画。
+- `prototype_restaurant_whitebox_test.gd` PASS；覆盖新边界、厨房中心、十入口寻路、特殊速度不变及体力 HUD 显隐。
+- `prototype_0_6b_regression_test.gd` PASS（10/10），既有护盾、四类敌人和战斗管线无回归。
+- `prototype_main_menu_settings_test.gd` 的 Shift 默认／可改键检查通过；整体仅保留预存测试柜 `20×40` 陈旧断言失败。
+- Native MCP 已读取 `input/sprint`。普通窗口运行被 Godot 编辑器已有独占确认框中止，未将这次自动截图冒充实机验收；大地图密度、疾跑手感与 HUD 排布仍交由负责人实测。
+- 未提交、推送、发布、打标签、清理或覆盖无关脏文件。
+
+## 2026-08-02 — 餐厅地图角色视觉比例调整
+执行 AI：GPT Codex
+
+完成：
+- 根据普通窗口实机画面，将玩家、普通、速度、重型和远程味真族的角色美术统一放大为整数 `2×`。
+- 各角色以原脚底位置为锚点向上放大；玩家、敌人物理根节点、移动速度、攻击距离、交互距离和现有脚下碰撞尺寸保持不变，避免扩大后破坏四个 L 型厨房通道与寻路。
+- 更新玩家、普通与速度型像素动画场景契约测试。
+
+验证：
+- Godot 重新导入成功；玩家、普通与速度型三组像素动画专项退出码均为 0。
+- Native MCP 普通窗口复测显示玩家与现有厨具比例明显改善；实际四类怪物混合拥挤仍需负责人继续实机确认。
+- 未提交、推送、发布或修改战斗数值。
+
+## 2026-08-02 — 现代餐厅白盒地图与十入口接入
+执行 AI：GPT Codex
+
+完成：
+- 将 Prototype 地图扩大为 `2304×1728`，按已确认 V4 方向搭建中央四 L 型开放厨房、中央净空区、外围六组简化障碍岛和东南未来设备预留区。
+- 重排全部现有厨房工作站，保持每个厨具/工作台为独立节点；新增 `RestaurantWhiteboxLayout`，仅管理白盒地面分区和静态碰撞。
+- 将边缘候选刷新点由 8 个扩展为 10 个，为每条路线增加稳定 `lane_id`，未修改当前三波敌人数量、组成、掉落或无尽模式规则。
+- 新增白盒专项，覆盖地图尺寸、厨房偏移、障碍数量、入口分布、中央净空与十入口寻路。
+
+验证：
+- Godot 4.6.2 `--import` 与全局脚本解析通过；白盒专项 PASS；主场景 Headless 180 帧通过。
+- 0.4 9/9、0.5 9/9、0.6B 10/10、内容扩展 F 5/5、新鲜度 8/8、掉落复用 4/4、料理 6～7 组 5/5、烹饪大典专项通过。
+- 0.6A 与料理第 1 组仍为预存 `20×40` 测试柜陈旧断言；0.5 阻断专项在当前沙箱无法写仓库根目录试玩记录。均与地图改动无关。
+- 未提交、推送、发布、打标签或清理工作区；普通窗口比例与战斗手感等待负责人验收。
 
 ## 2026-07-30 — v0.0.3 GitHub 发布
 执行 AI：GPT Codex
@@ -1397,3 +1457,124 @@ Git：本轮未提交、未推送、未创建标签、未发布，也未清理�
 - 正式图标、米粒、三／六连切、汤流、牛肉粒、命中和音效未制作；当前使用现有通用素材与程序占位。
 - 需人工完整制作／使用四道菜，确认分支可读性、耐久、20粒性能、切击节奏、青菜汤推力、牛肉汤前排锁定和五层反馈。
 - 本轮未修改公开版本号，未提交、推送、发布、创建标签或清理工作区。
+## 2026-08-01 — 主菜单→游戏场景切换卡顿优化（两轮）与延迟填充竞态修复
+执行 AI：DeepSeek Codex（Codex CLI）
+
+背景：
+- 主菜单进入测试大厅／单人游戏时切换卡顿明显，此前被误判为“一次性加载 PNG 过多”并修出大量 Bug。
+
+完成：
+- 第一轮：`ingredient_cabinet.gd` 的 `configure_lobby_unlimited_catalog()` 由每次全网格重扫改为 `_lobby_fill_cursor` 游标续扫，大厅 20×80 无限柜填充约 6541ms → 306ms（约 21 倍），114/114 全部放入。
+- 第二轮：`main_menu.gd` 在 `_ready` 以 `ResourceLoader.load_threaded_request(GAMEPLAY_SCENE)` 后台预载游戏场景；`_launch_gameplay` 改为 `_poll_gameplay_scene()` 轮询 + `change_scene_to_packed()`；新增 `_gameplay_scene` 缓存与快速点击 `OS.delay_msec(8)` 轮询兜底。
+- 第二轮：`wave_manager.gd` 的 `_initialize_new_run()` 改为延迟 2 帧填充大厅柜（新增 `_fill_lobby_catalog_deferred`），把 `add_child` 阻塞从约 490ms 降至约 153ms。
+- 竞态修复：`_fill_lobby_catalog_deferred` 增加 `phase != Phase.FREE_PREPARATION` 守卫——单机模式 `prototype_main.gd` 会 `call_deferred` 调用 `start_service_early()` 切正式有限柜，延迟协程恢复后不得再把柜子切回大厅无限模式。
+
+验证：
+- 基准（`bench_transition3.gd`）：后台预载约 384ms；`add_child` 阻塞 490ms → 153ms；2 帧后 114/114 放入。
+- `prototype_0_3_2_smoke_test.gd` 7/7 通过；`prototype_0_1_smoke_test.gd` 通过；`prototype_item_art_correction_v4_test.gd` 5/5 通过。
+- Godot 4.6.2 Headless 解析扫描无 SCRIPT ERROR／Parse Error（沙箱内仅 `.godot` 缓存写入受限的环境提示）。
+- `prototype_main_menu_settings_test.gd` 当前 FAIL(1)，唯一失败为预存陈旧断言：测试第 199 行与 `prototype_missing_recipes_group_1_test.gd:269` 仍断言大厅柜 20×40，而 `item_storage_catalog.gd:8` 的 `LOBBY_TEST_CABINET_SIZE = Vector2i(20, 80)` 自 v0.0.2（提交 03d0be5）起已是 20×80；`prototype_item_art_correction_v4_test.gd:131` 已断言 80。本轮修复前该测试为 FAIL(2)，其中第 187 行单机有限柜断言在竞态修复后通过。
+
+遗留／注意：
+- 菜单设置测试第 163 行附近出现的 `Parameter "t" is null` 为 Headless 渲染路径既有环境日志（`main_menu.gd:161` 退出确认贴图在无渲染后端下为空），ConfigFile parse error 为测试故意写入损坏配置的预期路径，二者均不构成断言失败。
+- 第一轮优化已人工验收为“约半秒”；第二轮新增预载与延迟填充待负责人实机确认体感。
+- 未提交、未推送；保留负责人既有未提交文件与本轮改动，未执行 reset/clean/stash/checkout。
+## 2026-08-01 — 修复“测试大厅返回主菜单直接退出”崩溃与主菜单乱码
+执行 AI：DeepSeek Codex（Codex CLI）
+
+背景：
+- 上一轮卡顿优化后，实机测试发现“进入测试大厅再退回主菜单会直接退出游戏”（疑似崩溃而非主动 quit）。
+- 另发现 `main_menu.gd:136` 中文文案被损坏为 `"璁剧疆"`（UTF-8→GBK 往返乱码）。
+
+完成：
+- 乱码修复：`main_menu.gd:136` `open_panel("璁剧疆")` → `open_panel("设置")`，全文唯一一处，字节级替换为正确 UTF-8（`E8 AE BE E7 BD AE`）。
+- 崩溃修复：`main_menu.gd:57` 后台预载参数 `ResourceLoader.load_threaded_request(GAMEPLAY_SCENE, "", true)` → `false`。上一轮为消除切换阻塞使用了 `use_sub_threads=true`；返回主菜单时新菜单实例会对同一场景路径二次发起线程预载，命中 Godot 官方缺陷族（#115069 同资源二次加载崩溃、#84012 随机崩溃、#103674/#121001 死锁，4.6 同代可复现，报告均注明“改用 false 即正常”）。改为 `false` 保留异步预载、改走单线程加载路径。
+- 排查过程：headless 3 循环（菜单→测试大厅→返回）修正版复现脚本在修复前后均未复现崩溃（该崩溃对渲染/时序敏感），如实记录：崩溃未在 headless 直接复现，修复依据为引擎已知缺陷与改动时间线强相关。
+
+验证：
+- 修复后 headless 3 循环进厅→返回全部通过，stderr 干净（无 SCRIPT ERROR）。
+- `prototype_main_menu_settings_test.gd` 保持基线 FAIL(1)（唯一失败为预存陈旧 20×40 断言，见上轮记录）。
+- `prototype_0_3_2_smoke_test.gd` 7/7、`prototype_0_1_smoke_test.gd`、`prototype_item_art_correction_v4_test.gd` 5/5 均通过。
+- Godot editor 解析（--headless --editor --quit）退出码 0；`settings_manager.gd` 中文字节核验完好（控制台中文乱码仅为显示编码问题）。
+- `main_menu.gd` 修复后无 BOM、行尾 LF 不变；git diff 仅含两处目标行变更（其余为负责人既有 WIP）。
+
+遗留/注意：
+- 实机“测试大厅→返回主菜单”未人工复测，待负责人实机验收；二次进厅路径（进厅→返回→再次进厅）未覆盖。
+- 复现脚本 `zz_repro_menu_return_test.gd` 已删除，不留在工作区。
+- 环境备注：沙箱内工作区不可写；提权审核曾因 `approvals_reviewer=auto_review` 与 DeepSeek 部署模型不兼容而全部被拒（负责人已调整）；后续写工作区仍需提权。
+- 未提交、未推送；未执行 reset/clean/stash/checkout。
+## 2026-08-01 — 修复“退出测试大厅返回主菜单直接关闭”崩溃（第二轮，根因实锤）
+执行 AI：DeepSeek Codex（Codex CLI）
+
+背景：
+- 上一轮将 `use_sub_threads` 改 false 后，实机仍崩溃。负责人实机测试的 `%APPDATA%/Godot/app_userdata/Who Is The Beast Chef/logs/godot.log` 提供了决定性证据。
+
+根因（实机日志证据）：
+- `wave_manager.gd:294 _fill_lobby_catalog_deferred`：上一轮为优化大厅柜填充加入的“延迟 2 帧填充”协程，在退出对局、wave_manager 离开场景树后才恢复，`await get_tree().process_frame` 的 `get_tree()` 返回 null，产生 `Parameter "data.tree" is null` + `Invalid access to property 'process_frame' on null instance`，中断返回主菜单流程。
+- 另一处竞态：返回主菜单时新菜单实例 `_ready` 会对刚销毁的 main.tscn 再次发起 `load_threaded_request` 线程预载，与旧场景资源销毁竞争，导致第二/三次加载 main.tscn 时 `chef_wuxia_01_sprite_frames.tres:111 Parse Error`（该 .tres 独立加载、二次加载均正常，问题只在完整场景切换上下文出现）。
+
+修复（2 个生产文件 + 1 个新回归测试）：
+- `wave_manager.gd`：`_fill_lobby_catalog_deferred` 改为先捕获 `var tree := get_tree()`（调用时节点必在树内），`await tree.process_frame`，恢复后增加 `not is_inside_tree()` 守卫，场景已切换则直接返回、不再填充。
+- `main_menu.gd`：新增 `static var _gameplay_preload_requested := false`，仅首个菜单实例发起线程预载；返回主菜单的新实例不再重复预载，从根上消除二次预载与旧场景销毁的竞态。保留首进速度收益与 `_poll_gameplay_scene` 轮询兜底。
+- 新增 `Scripts/prototype_0_1/tests/prototype_exit_to_menu_regression_test.gd`：构造“同帧 return_to_lobby + 切场景”竞争，断言游戏存活并回到主菜单。
+
+验证：
+- 新回归测试 PASS，stderr 干净；3 循环“进厅→返回”复现 PASS，stderr 干净；强制竞争脚本（v4）PASS，stderr 干净（修复前该脚本场景的等价路径会打印 data.tree 空实例错误）。
+- `prototype_0_3_2_smoke_test.gd` 7/7、`prototype_0_1_smoke_test.gd`、`prototype_item_art_correction_v4_test.gd` 5/5 均通过；`prototype_main_menu_settings_test.gd` 保持基线 FAIL(1)（预存陈旧 20×40 断言）。
+- Godot editor 解析扫描（--headless --editor --quit）退出码 0，无 SCRIPT ERROR/Parse Error。
+
+遗留/注意：
+- chef_wuxia 解析错误在守卫后不再出现（headless 与渲染模式均干净）；若未来再启用返回时预载需重新评估该竞态。
+- `main_menu.gd` 第 1 行存在负责人测试写权限时留下的 `# Codex write test` 注释（非 AI 添加），未改动，建议负责人清理。
+- 负责人已于 2026-08-01 实机验收：“测试大厅→返回主菜单”流畅、无报错；二次进厅路径另由 3 循环复现覆盖（headless）。
+- 未提交、未推送；未执行 reset/clean/stash/checkout。
+
+## 2026-08-01 — 烹饪大典重做：书本形态 UI + 初始 43 道料理内容
+
+执行 AI：DeepSeek Codex
+
+背景：
+- 负责人反馈原烹饪大典“太简单太廉价”，要求参考 MC 书的样子重做视觉效果与详细内容。
+- 原实现为纯代码扁平面板（左列表+右详情），43 道菜的 art_key 从未被 UI 使用，详情仅名称/徽章/一句话描述。
+
+实现（2 个生产文件 + 1 个新冒烟测试）：
+- `Scripts/prototype_0_1/core/cookbook_catalog.gd`：DishEntry 扩展 4 个字段（ingredients 烹饪路径、stat_text 数值摘要、lore 风味文案、tips 实战提示），初始 43 道菜全部补齐；数值以 PrototypeCombatConfig 当前原型配置为源。
+- `Scripts/prototype_0_1/ui/cookbook_ui.gd`：整体重构为书本形态——封面态（皮革纹理+金饰+“点击翻开”）、羊皮纸双页（运行时生成纸张/皮革纹理并缓存）、书脊阴影、翻页动画（右页按书脊 pivot 压缩翻转）、目录页（左）+ 详情页（右）、锁定占位、页码与上一道/下一道按钮、←/→ 键翻页、Esc 关闭。
+- 料理插图复用 PrototypeArtCatalog.TEXTURES（当时约 35/43 有现成贴图，缺失回退为首字占位）。
+- 新增 `Scripts/prototype_0_1/tests/prototype_cookbook_ui_smoke_test.gd`：校验 43 条数据完整性、封面打开、翻页、目录跳转、锁定占位、关闭。
+- 接口不变：open()/close()/Esc 逻辑保持，主菜单与局内暂停两个入口无需改动。
+
+验证：
+- 新冒烟测试 PASS，stderr 干净。
+- prototype_exit_to_menu_regression_test.gd、prototype_0_1_smoke_test.gd 均 PASS，stderr 干净。
+- 解析扫描（--headless --path --quit）：cookbook 相关 0 报错。
+- 注意：本工作区存在预存环境问题——Assets/Combat/DishEffects2026_07_30/fx_crispy_rice_beef_explosion 的 9 帧贴图在未先执行 --import 时会报 35 条 preload 错误（combat_art_catalog.gd），与本次改动无关；先跑一次 --headless --import 后即干净。
+- 未提交、未推送；未执行 reset/clean/stash/checkout。
+
+遗留/注意：
+- 新文案（lore/tips/stat_text）与翻页手感需负责人人工验收一次。
+- 中文衬线字体（如 Noto Serif SC）可作二期增强，本次未引入字体资源。
+
+## 2026-08-01 — 烹饪大典接线修复与正式项目验证
+
+执行 AI：Codex
+
+- 修复料理解锁链路：`run_stats.gd` 现在使用 `ItemData.recipe_id`，不再把正式字段误当 metadata。
+- 修复大典重开刷新：每次 `open()` 重建目录行，能反映本局新解锁料理。
+- 普通牛肉粥新增独立条目；青菜牛肉盖饭补入目录；目录总数由 43 调整为 45。
+- 修正青菜炒牛肉、战斧牛排、辣味料理、香煎米饼的 recipe/art key 映射。
+- 校正盐水青菜与炝炒青菜的机制文案。
+- 正式项目验证通过：大典集成测试、UI 冒烟测试、退出主菜单回归、v0.0.3.2 冒烟（7/7）、扩展料理 A-F 全部通过。
+- 当前插图覆盖为 40/45；仍缺独立素材：青菜牛肉粥、炒白饭、清炒牛肉、青菜汤、牛肉汤。
+- 未提交、未推送；未执行 reset/clean/stash/checkout。
+
+## 2026-08-01 — 补齐烹饪大典最后五张料理插图
+
+执行 AI：Codex
+
+- 使用 PixelLab 生成并逐张放大检查，最终接入青菜牛肉粥、炒白饭、清炒牛肉、青菜汤、牛肉汤五张 32×32 透明背景摆盘素材。
+- 新素材位于 `Assets/Items/ItemArtBatch2026_08_01/assets/ready/`；`PrototypeArtCatalog` 新增五个与 recipe id 对齐的 `*_plated` key。
+- 五种盘装料理的 `ItemCatalog.get_art_key()` 已改用新素材；未摆盘版本继续保留旧占位图，避免用精致瓷器冒充临时容器。
+- 烹饪大典 UI 冒烟测试 PASS，并将覆盖断言收紧为 45/45；2026-07-30 美术批次测试 PASS（3/3）。
+- 第一组料理测试仅保留历史基线失败：20×40 测试橱柜无法容纳全部当前 ItemType；本次未新增料理逻辑回归。
+- 未提交、未推送；未执行 reset/clean/stash/checkout。

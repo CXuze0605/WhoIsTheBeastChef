@@ -160,6 +160,18 @@ theme_override_styles/focus = SubResource("ButtonHover")
 theme_override_styles/pressed = SubResource("ButtonPressed")
 text = "测试大厅"
 
+[node name="CookbookButton" type="Button" parent="Center/MenuPanel/MenuColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonHover")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+text = "烹饪大典"
+
 [node name="SettingsButton" type="Button" parent="Center/MenuPanel/MenuColumn"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 62)

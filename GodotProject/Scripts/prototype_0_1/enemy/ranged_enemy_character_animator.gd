@@ -16,6 +16,8 @@ const DIRECTIONS: PackedStringArray = [
 const WALK_FPS := 9.0
 const ATTACK_FPS := 4.4
 const DEFEAT_FPS := 15.0
+const DISPLAY_SCALE := 2.0
+const GROUND_ANCHOR_POSITION := Vector2(0.0, -56.0)
 
 var sprite: AnimatedSprite2D
 var current_animation: StringName = &""
@@ -28,6 +30,8 @@ func configure(visual: PlaceholderVisual, frames: SpriteFrames = null) -> void:
 	sprite = AnimatedSprite2D.new()
 	sprite.name = "RangedTasteEnemyArt"
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.position = GROUND_ANCHOR_POSITION
+	sprite.scale = Vector2.ONE * DISPLAY_SCALE
 	sprite.sprite_frames = frames if frames != null else build_sprite_frames()
 	visual.add_child(sprite)
 	if visual.art_sprite != null:
@@ -160,4 +164,3 @@ func _add_animation(
 			push_error("远程味真族动画帧加载失败：%s" % path)
 			continue
 		frames.add_frame(key, texture)
-

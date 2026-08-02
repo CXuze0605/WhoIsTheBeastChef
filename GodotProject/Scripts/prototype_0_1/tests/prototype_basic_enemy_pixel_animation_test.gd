@@ -107,7 +107,7 @@ func _test_defeat_and_scene_contracts(enemy: BasicTasteEnemy) -> void:
 			collision = child as CollisionShape2D
 			break
 	var shape := collision.shape as CircleShape2D if collision != null else null
-	_expect(animator.sprite.position == Vector2.ZERO and animator.sprite.scale == Vector2.ONE, "Basic enemy art: use native 1x scale at the retained visual origin")
+	_expect(animator.sprite.position == BasicEnemyCharacterAnimator.GROUND_ANCHOR_POSITION and animator.sprite.scale == Vector2.ONE * BasicEnemyCharacterAnimator.DISPLAY_SCALE, "Basic enemy art: use the restaurant-scale integer 2x presentation while retaining its foot point")
 	_expect(animator.sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Basic enemy art: use nearest filtering")
 	_expect(shape != null and shape.radius == 14.0, "Basic enemy art: visual replacement must not change the ordinary enemy collision radius")
 	_expect(enemy.move_speed_value == enemy.config.enemy_move_speed, "Basic enemy art: visual replacement must not change movement speed")

@@ -22,6 +22,7 @@ func _ready() -> void:
 	if launch_mode == AppSessionState.LaunchMode.TEST_HALL:
 		if tools_overlay != null:
 			tools_overlay.set_development_tools_enabled(true)
+		CookbookCatalog.set_test_hall_mode(true)
 	elif launch_mode == AppSessionState.LaunchMode.SINGLE_PLAYER:
 		call_deferred("_start_single_player_from_menu")
 
@@ -49,6 +50,7 @@ func _on_exit_run_confirmed() -> void:
 	var session := get_node_or_null("/root/AppSession") as AppSessionState
 	if session != null:
 		session.clear_launch_mode()
+	CookbookCatalog.set_test_hall_mode(false)
 	call_deferred("_return_to_main_menu")
 
 

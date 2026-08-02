@@ -29,6 +29,13 @@ func _apply_expanded_map() -> void:
 	if floor_art != null:
 		floor_art.position = bounds.position
 		floor_art.size = bounds.size
+	var whitebox := scene_root.get_node_or_null("RestaurantWhitebox") as RestaurantWhiteboxLayout
+	if whitebox != null:
+		whitebox.configure(bounds)
+	var title := scene_root.get_node_or_null("PrototypeTitle") as Label
+	if title != null:
+		title.position = Vector2(bounds.position.x, bounds.end.y - 38.0)
+		title.size = Vector2(bounds.size.x, 30.0)
 
 	var kitchen := scene_root.get_node_or_null("Kitchen") as Node2D
 	if kitchen != null:
@@ -94,20 +101,22 @@ func _apply_spawn_points(scene_root: Node, bounds: Rect2) -> void:
 	var points := scene_root.get_node_or_null("SpawnPoints")
 	if points == null:
 		return
-	var edge_inset := config.navigation_inset + 16.0
+	var edge_inset := maxf(config.spawn_edge_inset, config.navigation_inset + 16.0)
 	var left_x := bounds.position.x + edge_inset
 	var right_x := bounds.end.x - edge_inset
 	var top_y := bounds.position.y + edge_inset
 	var bottom_y := bounds.end.y - edge_inset
 	var positions := {
-		"LeftTop": Vector2(left_x, bounds.position.y + bounds.size.y * 0.25),
-		"LeftBottom": Vector2(left_x, bounds.position.y + bounds.size.y * 0.75),
-		"RightTop": Vector2(right_x, bounds.position.y + bounds.size.y * 0.25),
-		"RightBottom": Vector2(right_x, bounds.position.y + bounds.size.y * 0.75),
-		"TopLeft": Vector2(bounds.position.x + bounds.size.x * 0.25, top_y),
-		"TopRight": Vector2(bounds.position.x + bounds.size.x * 0.75, top_y),
-		"BottomLeft": Vector2(bounds.position.x + bounds.size.x * 0.25, bottom_y),
-		"BottomRight": Vector2(bounds.position.x + bounds.size.x * 0.75, bottom_y),
+		"LeftTop": Vector2(left_x, bounds.position.y + bounds.size.y * 0.315),
+		"LeftBottom": Vector2(left_x, bounds.position.y + bounds.size.y * 0.685),
+		"RightTop": Vector2(right_x, bounds.position.y + bounds.size.y * 0.315),
+		"RightBottom": Vector2(right_x, bounds.position.y + bounds.size.y * 0.685),
+		"TopLeft": Vector2(bounds.position.x + bounds.size.x / 6.0, top_y),
+		"TopCenter": Vector2(bounds.get_center().x, top_y),
+		"TopRight": Vector2(bounds.position.x + bounds.size.x * 5.0 / 6.0, top_y),
+		"BottomLeft": Vector2(bounds.position.x + bounds.size.x / 6.0, bottom_y),
+		"BottomCenter": Vector2(bounds.get_center().x, bottom_y),
+		"BottomRight": Vector2(bounds.position.x + bounds.size.x * 5.0 / 6.0, bottom_y),
 	}
 	for point_name in positions:
 		var point := points.get_node_or_null(NodePath(point_name)) as Marker2D

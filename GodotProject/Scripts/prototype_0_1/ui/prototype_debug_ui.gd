@@ -149,8 +149,9 @@ func _get_controls_text() -> String:
 		InputPrompt.action_text(&"select_hotbar_1", "1"),
 		InputPrompt.action_text(&"select_hotbar_5", "5"),
 	]
-	return "%s 移动  %s 交互/切洗  %s 投料/拿取\n%s 锅具  滚轮/%s 切格  %s 开始营业\n%s 调味  %s 陷阱  %s 摆盘  %s 攻击\nESC/%s 暂停  F3 隐藏开发 UI  F9 试玩记录  T 重置" % [
+	return "%s 移动  %s 疾跑  %s 交互/切洗  %s 投料/拿取\n%s 锅具  滚轮/%s 切格  %s 开始营业\n%s 调味  %s 陷阱  %s 摆盘  %s 攻击\nESC/%s 暂停  F3 隐藏开发 UI  F9 试玩记录  T 重置" % [
 		movement,
+		InputPrompt.action_text(&"sprint", "Shift"),
 		InputPrompt.action_text(&"interact_primary", "E"),
 		InputPrompt.action_text(&"interact_carry", "F"),
 		InputPrompt.action_text(&"interact_cookware", "R"),

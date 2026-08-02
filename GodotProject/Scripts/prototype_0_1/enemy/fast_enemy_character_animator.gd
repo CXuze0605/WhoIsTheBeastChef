@@ -26,6 +26,8 @@ const CROUCH_FPS := 8.333333
 # Eight pounce frames cover the existing 0.36 second straight dash.
 const POUNCE_FPS := 22.222222
 const DEFEAT_FPS := 15.0
+const DISPLAY_SCALE := 2.0
+const GROUND_ANCHOR_POSITION := Vector2(0.0, -20.0)
 
 var sprite: AnimatedSprite2D
 var current_animation: StringName = &""
@@ -38,7 +40,8 @@ func configure(visual: PlaceholderVisual, frames: SpriteFrames = null) -> void:
 	sprite = AnimatedSprite2D.new()
 	sprite.name = "FastTasteEnemyArt"
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.scale = Vector2.ONE
+	sprite.position = GROUND_ANCHOR_POSITION
+	sprite.scale = Vector2.ONE * DISPLAY_SCALE
 	sprite.flip_h = false
 	sprite.sprite_frames = frames if frames != null else build_sprite_frames()
 	visual.add_child(sprite)

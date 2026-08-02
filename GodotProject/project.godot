@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Who Is The Beast Chef"
-config/version="0.0.3"
+config/version="0.0.4-dev.1"
 run/main_scene="res://Scenes/menu/main_menu.tscn"
 config/features=PackedStringArray("4.6")
 
@@ -20,12 +20,18 @@ config/features=PackedStringArray("4.6")
 AppSession="*res://Scripts/core/app_session.gd"
 SettingsManager="*res://Scripts/core/settings_manager.gd"
 AudioManager="*res://Scripts/prototype_0_1/audio/audio_manager.gd"
+McpBridgeGame="*res://mcp_bridge_game.gd"
+MCPRuntimeProbe="*uid://bsg12huaf1u5i"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/mcp_bridge/plugin.cfg", "res://addons/godot_mcp/plugin.cfg")
 
 [input]
 
@@ -47,6 +53,11 @@ move_up={
 move_down={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":83,"key_label":0,"unicode":115,"location":0,"echo":false,"script":null)
+]
+}
+sprint={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194325,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 interact_primary={

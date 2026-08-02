@@ -4,10 +4,16 @@ extends CharacterBody2D
 signal player_defeated
 signal health_changed(current: float, maximum: float)
 signal shield_changed(current: float, maximum: float)
+signal stamina_changed(current: float, maximum: float)
 signal shield_feedback(event_name: StringName)
 signal effective_damage_received
 
 @export var prototype_move_speed: float = 240.0
+@export var prototype_sprint_speed_multiplier: float = 2.0
+@export var prototype_max_stamina: float = 100.0
+@export var prototype_sprint_drain_per_second: float = 30.0
+@export var prototype_stamina_regen_delay: float = 0.8
+@export var prototype_stamina_regen_per_second: float = 25.0
 @export var prototype_interaction_distance: float = 108.0
 @export var prototype_max_health: float = 100.0
 
@@ -34,6 +40,10 @@ var shield_regen_delay: float = 4.0
 var shield_regen_per_second: float = 10.0
 var time_since_last_damage: float = 999.0
 var shield_was_regenerating: bool = false
+var current_stamina: float = 100.0
+var stamina_regen_delay_left: float = 0.0
+var is_sprinting: bool = false
+var sprint_exhausted: bool = false
 var knockback_velocity := Vector2.ZERO
 var spawn_position := Vector2.ZERO
 var hit_protection_time: float = 0.22
@@ -63,6 +73,7 @@ var auto_dish_controller: AutoDishEquipmentController
 
 func _ready() -> void:
 	current_health = prototype_max_health
+	current_stamina = prototype_max_stamina
 	spawn_position = global_position
 	add_to_group("damageable")
 	add_to_group("player_target")
@@ -93,6 +104,7 @@ func _ready() -> void:
 	_refresh_inventory_visuals()
 	health_changed.emit(current_health, prototype_max_health)
 	shield_changed.emit(current_shield, prototype_max_shield)
+	stamina_changed.emit(current_stamina, prototype_max_stamina)
 
 
 func _physics_process(delta: float) -> void:
@@ -113,11 +125,18 @@ func _physics_process(delta: float) -> void:
 	var movement_locked := is_defeated or modal_ui_open or action_stun_left > 0.0 or is_consuming or (active_interactable != null and active_interactable.blocks_movement_during_primary())
 	var input_direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var movement_speed_multiplier := 1.0
+	var sprint_requested := Input.is_action_pressed("sprint")
+	is_sprinting = _update_stamina(
+		delta,
+		not movement_locked and not input_direction.is_zero_approx(),
+		sprint_requested
+	)
 	if movement_locked:
 		velocity = Vector2.ZERO
 	else:
 		movement_speed_multiplier = combat_statuses.get_move_speed_multiplier() if combat_statuses != null else 1.0
-		velocity = input_direction * prototype_move_speed * movement_speed_multiplier + knockback_velocity
+		var sprint_multiplier := prototype_sprint_speed_multiplier if is_sprinting else 1.0
+		velocity = input_direction * prototype_move_speed * movement_speed_multiplier * sprint_multiplier + knockback_velocity
 		if not input_direction.is_zero_approx():
 			facing_direction = input_direction.normalized()
 	move_and_slide()
@@ -127,7 +146,8 @@ func _physics_process(delta: float) -> void:
 			Vector2.ZERO if movement_locked else input_direction,
 			facing_direction,
 			movement_speed_multiplier < 0.999,
-			is_defeated
+			is_defeated,
+			is_sprinting
 		)
 	_update_facing_visual()
 	_update_active_interaction(delta)
@@ -564,7 +584,12 @@ func configure_wave_health(
 	protection_time: float,
 	max_shield: float = 30.0,
 	regen_delay: float = 4.0,
-	regen_per_second: float = 10.0
+	regen_per_second: float = 10.0,
+	max_stamina: float = 100.0,
+	sprint_speed_multiplier: float = 2.0,
+	sprint_drain_per_second: float = 30.0,
+	stamina_regen_delay: float = 0.8,
+	stamina_regen_per_second: float = 25.0
 ) -> void:
 	prototype_max_health = max_health
 	current_health = max_health
@@ -573,6 +598,13 @@ func configure_wave_health(
 	current_shield = prototype_max_shield
 	shield_regen_delay = maxf(0.0, regen_delay)
 	shield_regen_per_second = maxf(0.0, regen_per_second)
+	_configure_stamina(
+		max_stamina,
+		sprint_speed_multiplier,
+		sprint_drain_per_second,
+		stamina_regen_delay,
+		stamina_regen_per_second
+	)
 	time_since_last_damage = shield_regen_delay
 	shield_was_regenerating = false
 	is_defeated = false
@@ -580,6 +612,7 @@ func configure_wave_health(
 		walk_animator.show_idle(facing_direction)
 	health_changed.emit(current_health, prototype_max_health)
 	shield_changed.emit(current_shield, prototype_max_shield)
+	stamina_changed.emit(current_stamina, prototype_max_stamina)
 
 
 func apply_action_stun(duration: float, message: String = "短暂僵直") -> void:
@@ -605,7 +638,12 @@ func reset_for_new_game(
 	protection_time: float,
 	max_shield: float = 30.0,
 	regen_delay: float = 4.0,
-	regen_per_second: float = 10.0
+	regen_per_second: float = 10.0,
+	max_stamina: float = 100.0,
+	sprint_speed_multiplier: float = 2.0,
+	sprint_drain_per_second: float = 30.0,
+	stamina_regen_delay: float = 0.8,
+	stamina_regen_per_second: float = 25.0
 ) -> void:
 	_cancel_active_interaction()
 	if is_consuming:
@@ -622,6 +660,13 @@ func reset_for_new_game(
 	current_shield = prototype_max_shield
 	shield_regen_delay = maxf(0.0, regen_delay)
 	shield_regen_per_second = maxf(0.0, regen_per_second)
+	_configure_stamina(
+		max_stamina,
+		sprint_speed_multiplier,
+		sprint_drain_per_second,
+		stamina_regen_delay,
+		stamina_regen_per_second
+	)
 	time_since_last_damage = shield_regen_delay
 	shield_was_regenerating = false
 	hit_protection_left = 0.0
@@ -640,6 +685,7 @@ func reset_for_new_game(
 		walk_animator.show_idle(facing_direction)
 	health_changed.emit(current_health, prototype_max_health)
 	shield_changed.emit(current_shield, prototype_max_shield)
+	stamina_changed.emit(current_stamina, prototype_max_stamina)
 	_refresh_inventory_visuals()
 	_hide_hold_progress_indicator()
 	var attack_controller := get_node_or_null("DishAttackController") as DishAttackController
@@ -1016,6 +1062,76 @@ func _update_shield_regeneration(delta: float) -> void:
 	if current_shield >= prototype_max_shield:
 		shield_was_regenerating = false
 		shield_feedback.emit(&"full")
+
+
+func _configure_stamina(
+	max_stamina: float,
+	sprint_speed_multiplier: float,
+	drain_per_second: float,
+	regen_delay: float,
+	regen_per_second: float
+) -> void:
+	prototype_max_stamina = maxf(1.0, max_stamina)
+	prototype_sprint_speed_multiplier = maxf(1.0, sprint_speed_multiplier)
+	prototype_sprint_drain_per_second = maxf(0.0, drain_per_second)
+	prototype_stamina_regen_delay = maxf(0.0, regen_delay)
+	prototype_stamina_regen_per_second = maxf(0.0, regen_per_second)
+	current_stamina = prototype_max_stamina
+	stamina_regen_delay_left = 0.0
+	is_sprinting = false
+	sprint_exhausted = false
+
+
+func _update_stamina(delta: float, can_sprint: bool, sprint_requested: bool) -> bool:
+	if is_defeated:
+		is_sprinting = false
+		return false
+	if sprint_exhausted and not sprint_requested:
+		sprint_exhausted = false
+	var sprint_active := (
+		can_sprint
+		and sprint_requested
+		and not sprint_exhausted
+		and current_stamina > 0.0
+	)
+	var before := current_stamina
+	if sprint_active:
+		current_stamina = maxf(0.0, current_stamina - prototype_sprint_drain_per_second * delta)
+		stamina_regen_delay_left = prototype_stamina_regen_delay
+		if current_stamina <= 0.0:
+			sprint_exhausted = true
+	else:
+		stamina_regen_delay_left = maxf(0.0, stamina_regen_delay_left - delta)
+		if stamina_regen_delay_left <= 0.0 and current_stamina < prototype_max_stamina:
+			current_stamina = minf(
+				prototype_max_stamina,
+				current_stamina + prototype_stamina_regen_per_second * delta
+			)
+	is_sprinting = sprint_active
+	if not is_equal_approx(before, current_stamina):
+		stamina_changed.emit(current_stamina, prototype_max_stamina)
+	return sprint_active
+
+
+func consume_stamina(amount: float) -> float:
+	if amount <= 0.0 or current_stamina <= 0.0:
+		return 0.0
+	var before := current_stamina
+	current_stamina = maxf(0.0, current_stamina - amount)
+	stamina_regen_delay_left = prototype_stamina_regen_delay
+	if current_stamina <= 0.0:
+		sprint_exhausted = true
+	stamina_changed.emit(current_stamina, prototype_max_stamina)
+	return before - current_stamina
+
+
+func restore_stamina(amount: float) -> float:
+	if amount <= 0.0 or current_stamina >= prototype_max_stamina:
+		return 0.0
+	var before := current_stamina
+	current_stamina = minf(prototype_max_stamina, current_stamina + amount)
+	stamina_changed.emit(current_stamina, prototype_max_stamina)
+	return current_stamina - before
 
 
 func _apply_active_crispy_rice(raw_damage: float) -> float:

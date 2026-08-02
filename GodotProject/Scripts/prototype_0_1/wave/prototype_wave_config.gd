@@ -30,7 +30,7 @@ const DROP_SMALL_RICE_BAG_PORTIONS: int = 2
 
 @export_category("Basic Taste-True enemy")
 @export var enemy_max_health: float = 60.0
-@export var enemy_move_speed: float = 82.0
+@export var enemy_move_speed: float = 164.0
 @export var chase_refresh_interval: float = 0.28
 @export var attack_distance: float = 58.0
 @export var attack_range: float = 78.0
@@ -44,17 +44,17 @@ const DROP_SMALL_RICE_BAG_PORTIONS: int = 2
 @export var hit_stun_time: float = 0.14
 @export var knockback_decay: float = 520.0
 @export var separation_radius: float = 40.0
-@export var separation_force: float = 48.0
+@export var separation_force: float = 96.0
 @export var chase_slot_radius: float = 30.0
 @export var stuck_repath_time: float = 0.75
-@export var stuck_minimum_speed: float = 6.0
+@export var stuck_minimum_speed: float = 12.0
 @export var stuck_steer_time: float = 0.5
 @export var stuck_lateral_weight: float = 0.7
 @export var reflavor_exit_time: float = 0.48
 
 @export_category("Heavy Taste-True enemy - Prototype values")
 @export var heavy_max_health: float = 165.0
-@export var heavy_move_speed: float = 52.0
+@export var heavy_move_speed: float = 104.0
 @export var heavy_attack_distance: float = 72.0
 @export var heavy_attack_range: float = 98.0
 @export var heavy_attack_width: float = 112.0
@@ -75,6 +75,13 @@ const DROP_SMALL_RICE_BAG_PORTIONS: int = 2
 @export var player_max_shield: float = 30.0
 @export var player_shield_regen_delay: float = 4.0
 @export var player_shield_regen_per_second: float = 10.0
+
+@export_category("Player Prototype sprint")
+@export var player_max_stamina: float = 100.0
+@export var player_sprint_speed_multiplier: float = 2.0
+@export var player_sprint_drain_per_second: float = 30.0
+@export var player_stamina_regen_delay: float = 0.8
+@export var player_stamina_regen_per_second: float = 25.0
 
 @export_category("Fast enemy - Prototype 0.6B values")
 @export var fast_max_health_multiplier: float = 0.60
@@ -186,9 +193,10 @@ const DROP_SMALL_RICE_BAG_PORTIONS: int = 2
 @export var marinating_time: float = 1.8
 
 @export_category("Expanded test map - Prototype values")
-@export var map_bounds := Rect2(28.0, 28.0, 1820.0, 1328.0)
-@export var navigation_inset: float = 14.0
-@export var kitchen_offset := Vector2(240.0, 220.0)
+@export var map_bounds := Rect2(0.0, 0.0, 4608.0, 3456.0)
+@export var navigation_inset: float = 32.0
+@export var spawn_edge_inset: float = 96.0
+@export var kitchen_offset := Vector2(1776.0, 1392.0)
 @export var camera_limit_margin: float = 0.0
 @export var camera_zoom := Vector2(0.75, 0.75)
 

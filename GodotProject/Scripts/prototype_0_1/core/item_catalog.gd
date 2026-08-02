@@ -739,19 +739,19 @@ static func get_art_key(item_type: int) -> StringName:
 		ItemData.ItemType.UNPLATED_FRIED_WHITE_RICE:
 			return &"white_rice_unplated"
 		ItemData.ItemType.PLATED_FRIED_WHITE_RICE:
-			return &"white_rice_plated"
+			return &"fried_white_rice_plated"
 		ItemData.ItemType.UNPLATED_CLEAR_STIR_FRY_BEEF:
 			return &"stir_fry_beef_unplated"
 		ItemData.ItemType.PLATED_CLEAR_STIR_FRY_BEEF:
-			return &"stir_fry_beef_plated"
+			return &"clear_stir_fry_beef_plated"
 		ItemData.ItemType.UNPLATED_GREENS_SOUP:
 			return &"greens_porridge_unplated"
 		ItemData.ItemType.PLATED_GREENS_SOUP:
-			return &"greens_porridge_plated"
+			return &"greens_soup_plated"
 		ItemData.ItemType.UNPLATED_BEEF_SOUP:
 			return &"beef_porridge_unplated"
 		ItemData.ItemType.PLATED_BEEF_SOUP:
-			return &"beef_porridge_plated"
+			return &"beef_soup_plated"
 		ItemData.ItemType.UNPLATED_GREENS_RICE_BOWL:
 			return &"greens_rice_bowl_unplated"
 		ItemData.ItemType.PLATED_GREENS_RICE_BOWL:
@@ -773,7 +773,7 @@ static func get_art_key(item_type: int) -> StringName:
 		ItemData.ItemType.UNPLATED_GREENS_BEEF_PORRIDGE:
 			return &"greens_beef_congee_unplated"
 		ItemData.ItemType.PLATED_GREENS_BEEF_PORRIDGE:
-			return &"greens_beef_congee_plated"
+			return &"greens_beef_porridge_plated"
 		ItemData.ItemType.UNPLATED_BEEF_SOAKED_RICE:
 			return &"beef_soaked_rice_unplated"
 		ItemData.ItemType.PLATED_BEEF_SOAKED_RICE:

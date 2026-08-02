@@ -71,6 +71,8 @@ func record_dish_created(_dish_data: ItemData = null) -> void:
 	if not tracking_active:
 		return
 	dishes_created += 1
+	if _dish_data != null:
+		CookbookCatalog.mark_unlocked_by_data(_dish_data)
 	stats_changed.emit()
 
 

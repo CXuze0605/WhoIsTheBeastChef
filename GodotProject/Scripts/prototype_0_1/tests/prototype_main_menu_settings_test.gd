@@ -97,6 +97,11 @@ func _test_settings_audio_capture_conflicts_and_persistence() -> void:
 			and _snapshot_first_event_text(panel.get_working_snapshot_for_test(), &"move_up") == "W",
 		"settings: confirmed Restore Defaults must load project.godot defaults into the working copy"
 	)
+	_expect(
+		GameSettingsManager.EDITABLE_ACTIONS.has(&"sprint")
+			and _snapshot_first_event_text(panel.get_working_snapshot_for_test(), &"sprint").contains("Shift"),
+		"settings: sprint must be remappable and default to Shift"
+	)
 
 	panel.master_slider.value = 0.0
 	panel.music_slider.value = 37.0

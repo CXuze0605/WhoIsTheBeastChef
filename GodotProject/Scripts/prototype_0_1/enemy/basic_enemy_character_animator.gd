@@ -18,6 +18,8 @@ const ATTACK_FPS := 8.0
 # The established reflavor exit is 0.48 seconds. Fifteen FPS lets all seven
 # south defeat frames appear without changing combat or wave timing.
 const DEFEAT_FPS := 15.0
+const DISPLAY_SCALE := 2.0
+const GROUND_ANCHOR_POSITION := Vector2(0.0, -25.0)
 
 var sprite: AnimatedSprite2D
 var current_animation: StringName = &""
@@ -30,7 +32,8 @@ func configure(visual: PlaceholderVisual, frames: SpriteFrames = null) -> void:
 	sprite = AnimatedSprite2D.new()
 	sprite.name = "BasicTasteEnemyArt"
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.scale = Vector2.ONE
+	sprite.position = GROUND_ANCHOR_POSITION
+	sprite.scale = Vector2.ONE * DISPLAY_SCALE
 	sprite.flip_h = false
 	sprite.sprite_frames = frames if frames != null else _build_sprite_frames()
 	visual.add_child(sprite)

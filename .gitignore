@@ -18,3 +18,6 @@ Builds/
 .DS_Store
 Thumbs.db
 desktop.ini
+# Local Codex / Godot MCP dev tooling
+GodotProject/mcp_ports.cfg
+GodotProject/screenshots/

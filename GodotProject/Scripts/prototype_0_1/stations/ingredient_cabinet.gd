@@ -18,6 +18,10 @@ var storage_node: Node2D
 var lobby_unlimited: bool = false
 var lobby_replenishing: bool = false
 var lobby_replenish_queued: bool = false
+# Row-major scan cursor for the test-lobby unlimited catalog. Placement
+# resumes from here so filling the 20x80 grid does not rescan every cell
+# (and rebuild the occupied set) for each ItemType.
+var _lobby_fill_cursor := Vector2i(0, 3)
 
 
 func _ready() -> void:
@@ -122,6 +126,7 @@ func configure_lobby_unlimited_catalog() -> void:
 		lobby_replenishing = false
 		push_error("Test-lobby cabinet could not resize to %s" % ItemStorageCatalog.LOBBY_TEST_CABINET_SIZE)
 		return
+	_lobby_fill_cursor = Vector2i(0, 3)
 	_populate_missing_lobby_items()
 	lobby_replenishing = false
 	_refresh_status()
@@ -257,6 +262,8 @@ func _populate_missing_lobby_items() -> void:
 		if catalog_position == Vector2i(-1, -1) or not storage.add_item_at(item, catalog_position, false):
 			push_error("Test-lobby unlimited cabinet could not fit item_type=%d" % item_type)
 			item.queue_free()
+			continue
+		_lobby_fill_cursor = Vector2i(catalog_position.x + 1, catalog_position.y)
 
 
 func _find_lobby_catalog_position(item: CarryableItem) -> Vector2i:
@@ -268,8 +275,24 @@ func _find_lobby_catalog_position(item: CarryableItem) -> Vector2i:
 	var bounds := ItemStorageCatalog.get_shape_bounds(
 		ItemStorageCatalog.get_shape_cells_for_data(item.data, false)
 	)
-	for y in range(3, storage.height - bounds.y + 1):
-		for x in range(0, storage.width - bounds.x + 1):
+	var max_y := storage.height - bounds.y + 1
+	var origin := _scan_lobby_range(item, bounds, _lobby_fill_cursor, Vector2i(storage.width - bounds.x + 1, max_y - 1))
+	if origin == Vector2i(-1, -1):
+		origin = _scan_lobby_range(item, bounds, Vector2i(0, 3), Vector2i(_lobby_fill_cursor.x, mini(max_y, _lobby_fill_cursor.y)))
+	return origin
+
+
+func _scan_lobby_range(item: CarryableItem, bounds: Vector2i, start: Vector2i, end: Vector2i) -> Vector2i:
+	# Row-major scan from start (inclusive) to end (exclusive): the first row
+	# begins at start.x, the last row stops at end.x, and rows in between are
+	# scanned fully. The start row is clamped to the visible workbench (row 3).
+	var first_y := maxi(3, start.y)
+	for y in range(first_y, end.y + 1):
+		var x_begin := start.x if y == first_y else 0
+		var x_end := storage.width - bounds.x + 1
+		if y == end.y:
+			x_end = mini(x_end, end.x)
+		for x in range(x_begin, x_end):
 			var origin := Vector2i(x, y)
 			if storage.can_place_item(item, origin, false):
 				return origin

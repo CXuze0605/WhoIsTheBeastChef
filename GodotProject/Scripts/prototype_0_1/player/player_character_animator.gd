@@ -16,6 +16,9 @@ const IDLE_FPS := 4.0
 const WALK_FPS := 6.0
 const RUN_FPS := 9.0
 const DEFEAT_FPS := 8.0
+const SLOWED_WALK_SPEED_SCALE := 0.65
+const DISPLAY_SCALE := 2.0
+const GROUND_ANCHOR_POSITION := Vector2(0.0, -31.0)
 
 var sprite: AnimatedSprite2D
 var current_animation: StringName = &""
@@ -29,7 +32,10 @@ func configure(target_sprite: AnimatedSprite2D) -> void:
 	if sprite.sprite_frames == null or not sprite.sprite_frames.has_animation(&"idle_south"):
 		sprite.sprite_frames = _build_sprite_frames()
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.scale = Vector2.ONE
+	# The restaurant whitebox is built at the final combat-map scale. Keep the
+	# actor crisp at an integer 2x size and grow upward from the old foot point.
+	sprite.position = GROUND_ANCHOR_POSITION
+	sprite.scale = Vector2.ONE * DISPLAY_SCALE
 	sprite.flip_h = false
 	show_idle(Vector2.DOWN)
 
@@ -38,20 +44,25 @@ func update_animation(
 	motion: Vector2,
 	facing_direction: Vector2,
 	is_slowed: bool,
-	is_defeated: bool
+	is_defeated: bool,
+	is_sprinting: bool = false
 ) -> void:
 	if sprite == null:
 		return
 	if is_defeated:
+		sprite.speed_scale = 1.0
 		_play_if_changed(&"defeat_fall")
 		return
 	var direction := get_direction_name(facing_direction)
 	if motion.is_zero_approx():
+		sprite.speed_scale = 1.0
 		_play_if_changed(StringName("idle_%s" % direction))
-	elif is_slowed:
-		_play_if_changed(StringName("walk_%s" % direction))
-	else:
+	elif is_sprinting:
+		sprite.speed_scale = 1.0
 		_play_if_changed(StringName("run_%s" % direction))
+	else:
+		sprite.speed_scale = SLOWED_WALK_SPEED_SCALE if is_slowed else 1.0
+		_play_if_changed(StringName("walk_%s" % direction))
 
 
 func show_idle(facing_direction: Vector2) -> void:

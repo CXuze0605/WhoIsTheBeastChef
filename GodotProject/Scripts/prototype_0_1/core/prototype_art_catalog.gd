@@ -87,6 +87,13 @@ const TEXTURES := {
 	&"beef_greens_soup_plated": preload("res://Assets/Items/ItemArtCorrection2026_07_29_v4/assets/ready/dish_greens_beef_soup_plated.png"),
 	&"mustard_greens_unplated": preload("res://Assets/Items/ItemArtPack2026_07_29_v3/assets/ready/dishes/dish_mustard_greens_unplated_selected_candidate42.png"),
 	&"mustard_greens_plated": preload("res://Assets/Items/ItemArtPack2026_07_29_v3/assets/ready/dishes/dish_mustard_greens_plated_selected_candidate64.png"),
+	# 2026-08-01 cookbook completion batch. Only plated variants are final in
+	# this pass; existing unplated fallbacks remain until their own art pass.
+	&"greens_beef_porridge_plated": preload("res://Assets/Items/ItemArtBatch2026_08_01/assets/ready/dish_greens_beef_porridge_plated.png"),
+	&"fried_white_rice_plated": preload("res://Assets/Items/ItemArtBatch2026_08_01/assets/ready/dish_fried_white_rice_plated.png"),
+	&"clear_stir_fry_beef_plated": preload("res://Assets/Items/ItemArtBatch2026_08_01/assets/ready/dish_clear_stir_fry_beef_plated.png"),
+	&"greens_soup_plated": preload("res://Assets/Items/ItemArtBatch2026_08_01/assets/ready/dish_greens_soup_plated.png"),
+	&"beef_soup_plated": preload("res://Assets/Items/ItemArtBatch2026_08_01/assets/ready/dish_beef_soup_plated.png"),
 	# 2026-07-30 missing-recipe art batch. These are deliberately keyed by
 	# ItemType mappings in ItemCatalog rather than translated display names.
 	&"greens_rice_bowl_unplated": preload("res://Assets/Items/ItemArtBatch2026_07_30/assets/ready/dish_greens_rice_bowl_unplated.png"),

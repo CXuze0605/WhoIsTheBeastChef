@@ -106,7 +106,7 @@ func _test_visual_and_combat_contracts(enemy: FastTasteEnemy) -> void:
 			collision = child as CollisionShape2D
 			break
 	var shape := collision.shape as CircleShape2D if collision != null else null
-	_expect(animator.sprite.position == Vector2.ZERO and animator.sprite.scale == Vector2.ONE, "Fast enemy art: retain the existing visual origin at native integer scale")
+	_expect(animator.sprite.position == FastEnemyCharacterAnimator.GROUND_ANCHOR_POSITION and animator.sprite.scale == Vector2.ONE * FastEnemyCharacterAnimator.DISPLAY_SCALE, "Fast enemy art: use the restaurant-scale integer 2x presentation while retaining its foot point")
 	_expect(animator.sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Fast enemy art: use nearest filtering")
 	_expect(enemy.walk_animator == null and enemy.placeholder.art_sprite != null and not enemy.placeholder.art_sprite.visible, "Fast enemy art: old sheet must remain only as a hidden rollback fallback")
 	_expect(shape != null and shape.radius == 13.0, "Fast enemy art: visual replacement must not change the speed enemy collision radius")

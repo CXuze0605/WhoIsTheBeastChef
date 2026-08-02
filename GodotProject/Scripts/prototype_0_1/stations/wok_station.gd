@@ -72,7 +72,7 @@ func get_carry_prompt(player: Node) -> String:
 
 func carry_interact(player: Node) -> void:
 	if cookware_item == null:
-		player.notify_feedback("灶位上没有锅具")
+		player.notify_feedback("灶位为空：请使用 [%s] 放置锅具" % InputPrompt.action_text(&"interact_cookware", "R"))
 		return
 	var held_data: ItemData = player.held_item.data if player.held_item != null else null
 	if held_data != null and _can_insert_selected_item(held_data):
