@@ -1,6 +1,6 @@
 # Who's the Beast Chef? / 谁是大厨生
 
-> `v0.0.3` Systems & Content Expansion Update — Godot 4.6
+> `v0.0.4-test` Development Test Snapshot — Godot 4.6
 
 《谁是大厨生》是一款 2D 俯视角实时烹饪 × 战斗原型。
 
@@ -70,7 +70,7 @@
 - 尚无正式存档、手柄支持和完整教程；设置系统目前覆盖音量与键鼠按键。
 - 部分物品、攻击实体、地图细节和界面仍使用灰盒占位表现。
 - 自动化测试覆盖从早期Prototype到当前扩展料理、敌人、仓储、新鲜度、设置与美术映射，但操作手感、性能、数值和音频体验仍需要持续人工试玩。
-- Windows 免安装测试包可从 [v0.0.3 Release](https://github.com/CXuze0605/WhoIsTheBeastChef/releases/tag/v0.0.3) 下载；解压后保持 `.exe` 与 `.pck` 同目录。
+- Windows 免安装测试包可从 [v0.0.3 Release](https://github.com/CXuze0605/WhoIsTheBeastChef/releases/tag/v0.0.3) 下载；本次 `v0.0.4-test` 暂未提供新的 Windows 包。解压后保持 `.exe` 与 `.pck` 同目录。
 
 ## 项目结构
 
@@ -82,7 +82,7 @@
 
 ## 版本
 
-当前公开版本：`v0.0.3`
+当前公开测试版本：`v0.0.4-test`（预发行）
 
 内部实现里程碑：`Prototype 0.6B + Content Expansion`
 

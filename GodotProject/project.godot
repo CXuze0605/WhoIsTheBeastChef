@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Who Is The Beast Chef"
-config/version="0.0.4-dev.1"
+config/version="0.0.4-test"
 run/main_scene="res://Scenes/menu/main_menu.tscn"
 config/features=PackedStringArray("4.6")
 
