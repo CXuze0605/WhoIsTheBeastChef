@@ -20,6 +20,7 @@ const DIM := Color(0.0, 0.0, 0.0, 0.55)
 const BOOK_W := 1080
 const BOOK_H := 700
 const FLIP_TIME := 0.26
+const DISH_ICON_FRAME_SIZE := Vector2(150.0, 100.0)
 
 static var _parchment_cache: Dictionary = {}
 static var _leather_cache: Texture2D
@@ -424,6 +425,9 @@ func _build_toc_rows() -> void:
 		row.add_child(btn)
 
 		var pad := MarginContainer.new()
+		# The button is the full-row hit target. The visual padding layer must not
+		# consume the mouse event before it reaches the button underneath.
+		pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		pad.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		pad.add_theme_constant_override("margin_left", 12)
 		pad.add_theme_constant_override("margin_right", 12)
@@ -526,13 +530,24 @@ func _show_detail(index: int) -> void:
 
 	var dish_texture := resolve_dish_texture(dish)
 	if dish_texture != null:
+		var icon_holder := Control.new()
+		icon_holder.name = "DishIconHolder"
+		icon_holder.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		icon_holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon_frame.add_child(icon_holder)
 		var icon_tex := TextureRect.new()
+		icon_tex.name = "DishIcon"
 		icon_tex.texture = dish_texture
 		icon_tex.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon_tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon_tex.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		icon_tex.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		icon_frame.add_child(icon_tex)
+		icon_holder.add_child(icon_tex)
+		var icon_shift := get_dish_icon_shift(dish_texture)
+		icon_tex.offset_left = icon_shift.x
+		icon_tex.offset_top = icon_shift.y
+		icon_tex.offset_right = icon_shift.x
+		icon_tex.offset_bottom = icon_shift.y
 	else:
 		var fallback := Label.new()
 		fallback.text = String(dish.display_name).substr(0, 1)
@@ -805,3 +820,25 @@ static func resolve_dish_texture(dish: CookbookCatalog.DishEntry) -> Texture2D:
 		if tex != null:
 			return tex
 	return null
+
+
+# Some 32×32 dish files have a transparent border whose visible pixels are
+# slightly off-center. Keep the original scale, but offset the TextureRect so
+# the visible food, rather than the transparent canvas, is centered in the
+# icon frame.
+static func get_dish_icon_shift(texture: Texture2D) -> Vector2:
+	if texture == null:
+		return Vector2.ZERO
+	var image := texture.get_image()
+	if image == null or image.is_empty():
+		return Vector2.ZERO
+	var used := image.get_used_rect()
+	if used.size == Vector2i.ZERO:
+		return Vector2.ZERO
+	var image_center := Vector2(image.get_size()) * 0.5
+	var content_center := Vector2(used.position) + Vector2(used.size) * 0.5
+	var fit_scale := minf(
+		DISH_ICON_FRAME_SIZE.x / float(image.get_width()),
+		DISH_ICON_FRAME_SIZE.y / float(image.get_height())
+	)
+	return (image_center - content_center) * fit_scale

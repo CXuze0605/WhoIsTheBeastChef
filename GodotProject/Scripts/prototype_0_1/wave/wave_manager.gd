@@ -917,8 +917,10 @@ func _apply_shared_prototype_config() -> void:
 	var pile := get_tree().get_first_node_in_group("clean_plate_pile") as CleanPlatePile
 	if pile != null:
 		pile.configure_initial_stock(config.clean_plate_stock)
-	var cutting_board := get_tree().get_first_node_in_group("cutting_board") as CuttingBoard
-	if cutting_board != null:
+	for cutting_board_node in get_tree().get_nodes_in_group("cutting_board"):
+		var cutting_board := cutting_board_node as CuttingBoard
+		if cutting_board == null:
+			continue
 		cutting_board.prototype_first_cut_time = config.first_cut_time
 		cutting_board.prototype_second_cut_time = config.second_cut_time
 		cutting_board.prototype_dice_cut_time = config.dice_cut_time
@@ -985,9 +987,10 @@ func _reset_scene_for_new_game() -> void:
 			config.player_stamina_regen_delay,
 			config.player_stamina_regen_per_second
 		)
-	var cutting_board := get_tree().get_first_node_in_group("cutting_board") as CuttingBoard
-	if cutting_board != null:
-		cutting_board.reset_for_new_game()
+	for cutting_board_node in get_tree().get_nodes_in_group("cutting_board"):
+		var cutting_board := cutting_board_node as CuttingBoard
+		if cutting_board != null:
+			cutting_board.reset_for_new_game()
 	var marinating_station := get_tree().get_first_node_in_group("marinating_station") as MarinatingStation
 	if marinating_station != null:
 		marinating_station.reset_for_new_game()

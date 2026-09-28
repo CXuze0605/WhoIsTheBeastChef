@@ -108,6 +108,25 @@ func _test_ui_open_flip_and_lock() -> void:
 	await create_timer(0.5).timeout
 	name_label = ui.find_child("DetailName", true, false) as Label
 	_expect(name_label != null and name_label.text == "涮牛肉", "ui: toc jump should show 涮牛肉")
+	if toc_btn != null:
+		var toc_pad := toc_btn.get_parent().get_child(1) as MarginContainer
+		_expect(toc_pad != null and toc_pad.mouse_filter == Control.MOUSE_FILTER_IGNORE, "ui: table-of-contents padding must pass clicks to the row button")
+
+	# The four reported dishes use art with asymmetric transparent borders. The
+	# detail icon should apply the visible-pixel centering offset for each one.
+	var all_dishes := CookbookCatalog.get_all_dishes()
+	for dish_index in [11, 12, 13, 19]:
+		var dish := all_dishes[dish_index] as CookbookCatalog.DishEntry
+		var target_btn := ui.find_child("TocButton%d" % dish_index, true, false) as Button
+		_expect(target_btn != null, "ui: missing TOC button for dish %d" % (dish_index + 1))
+		if target_btn != null:
+			target_btn.pressed.emit()
+		await create_timer(0.5).timeout
+		var icon := ui.find_child("DishIcon", true, false) as TextureRect
+		var expected_shift := CookbookUI.get_dish_icon_shift(CookbookUI.resolve_dish_texture(dish))
+		_expect(icon != null, "ui: dish %d icon missing" % (dish_index + 1))
+		if icon != null:
+			_expect(is_equal_approx(icon.offset_left, expected_shift.x) and is_equal_approx(icon.offset_top, expected_shift.y), "ui: dish %d icon should center its visible pixels" % (dish_index + 1))
 
 	# 锁定页（关闭试炼厅全解锁后，未解锁料理显示锁占位）
 	CookbookCatalog.set_test_hall_mode(false)

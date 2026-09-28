@@ -20,6 +20,31 @@
 - 关联提交或版本：
 ```
 
+## 2026-09-27｜按负责人决定将美术与烹饪区布局局部回退到 v0.0.3
+
+- 修改内容：恢复公开版本 `v0.0.3` 的旧地面、旧工作台素材引用、单个砧板和独立工作站坐标；从主场景解除后续四 L 共享碰撞/视觉层、餐厅背景和额外南侧砧板。保留 `4608×3456` 地图、十入口、料理/战斗/体力逻辑，以及静态素材桥接开关，方便负责人后续在 Godot 中手工替换。
+- 修改文件：`GodotProject/Scenes/prototype_0_1/main.tscn`、`GodotProject/Scripts/prototype_0_1/interaction/interactable.gd`、`GodotProject/Scripts/prototype_0_1/tests/prototype_restaurant_whitebox_test.gd`；旧素材目录继续保留，未删除当前生成的候选素材。同步更新 `Current_Status.md`、`Pending_Tasks.md`、`AI_Handoff.md`。
+- 验证结果：Godot 4.6.2 `--import` 成功；`prototype_0_3_smoke_test.gd` 14/14、`prototype_0_3_2_smoke_test.gd` 7/7、`prototype_0_5_smoke_test.gd` 9/9、回退后的 `prototype_restaurant_whitebox_test.gd` PASS；主场景 Headless 180 帧退出码 0；`git diff --check` 通过。
+- 未验证内容：普通窗口中的旧地面像素比例、工作站视觉位置、角色与工作台遮挡、真实手感尚未由负责人实机确认。
+- 遗留问题：`restaurant_whitebox_layout.gd`、新餐厅背景、四 L 静态图和相关候选素材仍保留在工作区，当前主场景不引用；如需清理或重新接入，应由负责人后续明确决定。
+- 关联提交或版本：以仓库标签 `v0.0.3`（`cdb6075`）为回退基准；本轮未提交、推送、打标签、重置或清理工作区。
+
+## 2026-09-27｜接入垃圾桶静态美术
+
+- 修改内容：为垃圾桶增加 `trash_bin` 美术键，使用现有 `workstation_trash_bin_static_v1.png`；未改变垃圾桶位置、独立碰撞、交互范围或销毁逻辑。
+- 修改文件：`GodotProject/Scripts/prototype_0_1/core/prototype_art_catalog.gd`、`GodotProject/Scripts/prototype_0_1/stations/trash_bin.gd`。
+- 验证结果：Godot 4.6.2 导入成功；`prototype_0_1_smoke_test.gd` PASS；`prototype_0_3_2_smoke_test.gd` PASS（7/7）；`git diff --check` 通过。
+- 遗留问题：普通窗口中的像素比例和与工作台的视觉贴合仍待负责人确认。
+- 关联提交或版本：未提交、未推送。
+
+## 2026-09-27｜烹饪大典目录跳转与菜品插图居中修复
+
+- 修改内容：目录行的视觉填充层改为透传鼠标事件，点击任意菜品可直接翻页到对应条目；详情页插图根据透明像素有效区域自动计算偏移，修正第 12、13、14、20 道菜的视觉偏移，同时保持原始像素缩放。
+- 修改文件：`GodotProject/Scripts/prototype_0_1/ui/cookbook_ui.gd`、`GodotProject/Scripts/prototype_0_1/tests/prototype_cookbook_ui_smoke_test.gd`。
+- 验证结果：`prototype_cookbook_ui_smoke_test.gd` PASS；覆盖目录跳转、目录点击透传、四道问题菜品的插图偏移以及锁定页；`git diff --check` 通过。
+- 未验证内容：普通窗口中不同分辨率下的插图主观观感仍需负责人确认。
+- 遗留问题：未提交、未推送；本轮未修改料理数据、配方或数值。
+
 ## 历史开发记录
 
 以下为既有实际开发记录。保留原有内容与证据；它们不替代当前状态，也不自动形成新的开发授权。
@@ -1528,6 +1553,30 @@ Git：本轮未提交、未推送、未创建标签、未发布，也未清理�
 - 复现脚本 `zz_repro_menu_return_test.gd` 已删除，不留在工作区。
 - 环境备注：沙箱内工作区不可写；提权审核曾因 `approvals_reviewer=auto_review` 与 DeepSeek 部署模型不兼容而全部被拒（负责人已调整）；后续写工作区仍需提权。
 - 未提交、未推送；未执行 reset/clean/stash/checkout。
+
+### 2026-08-05 — 餐厅空壳像素底图接入 Prototype 0.1 最底层背景
+
+执行 AI：Codex
+
+- 修改内容：主场景新增纯视觉最底层背景 RestaurantBackground/ShellBackgroundSprite（Sprite2D），贴图 Assets/Environment/Restaurant/Base/52ccbe22ced0a75ca289bde51a9dc3f1.png（4608×3456），position (0,0)、centered=false、scale 1:1、rotation 0、z_index=-1000、texture_filter=NEAREST；不参与 YSort、无碰撞、无脚本、不阻挡交互；图片导入为无损（compress/mode=0）、无 mipmap、无 repeat，与地图 Rect2(0,0,4608,3456) 左上角原点完全对齐。
+- 修改文件：GodotProject/Scenes/prototype_0_1/main.tscn（新增 ext_resource 34_pnk2y 与 RestaurantBackground、ShellBackgroundSprite 两节点；FloorArt、RestaurantVisualLayer 设 visible=false，未删除节点/资源）。
+- 隐藏的旧占位视觉（纯视觉）：/root/Prototype01Main/FloorArt、/root/Prototype01Main/RestaurantVisualLayer，均可随时回退。
+- 验证结果：实机运行主场景，背景以 1:1 覆盖 (0,0)-(4608,3456)；运行时刻截图多处像素与原图完全一致，白盒 L 型柜台仍绘制于背景之上；prototype_restaurant_whitebox_test PASS、prototype_0_1_smoke_test PASS；地图边界、相机限制、玩家出生点 (2304,1728)、四 L 厨房、碰撞与导航均未变；控制台无新增报错/警告。
+- 未验证内容：空壳底图与白盒柜台/工位静态图的像素级吻合需负责人实机验收；prototype_0_3_1_smoke_test 的 04/06 组失败为历史遗留旧地图（1820×1328）断言基线，与本次无关。
+- 遗留问题：底图自带中央厨房台面，与既有白盒柜台绘制存在视觉重叠，是否隐藏白盒柜台视觉待负责人确认；未提交、未推送；未执行 reset/clean/stash/checkout。
+### 2026-08-03 — 餐厅样板房第一轮视觉接入
+
+执行 AI：Codex
+
+- 新增纯视觉 `RestaurantVisualLayer`：基于既有 4608×3456 白盒，绘制餐厅水磨石地面、中央厨房防滑砖、分区缝、外侧玻璃/墙体、十入口、四组 L 型柜台及现有白盒家具位置。
+- 已同步并接入已验收的 Architecture、MapFloor 素材；六个既有工作站美术映射切换为同批静态图。未修改碰撞、导航、交互范围、波次、地图尺寸或数值。
+- 验证：两处普通窗口视角截图检查通过，运行约 159 FPS；新增脚本与工作站美术目录的健康扫描无脚本或资源依赖问题；场景持久化审计 0 项问题。
+
+遗留/注意：
+- 这是待负责人实机验收的样板层，仍需检查十入口可读性、角色/怪物遮挡、远程弹道预警和桌椅周边通行观感。
+- 动态灶火、锅具、切配与腌制动画尚未接入，继续保持与底图、碰撞、导航、交互分离。
+- 未提交、未推送；未执行 reset/clean/stash/checkout。
+
 ### 2026-08-01 — 修复“退出测试大厅返回主菜单直接关闭”崩溃（第二轮，根因实锤）
 执行 AI：DeepSeek Codex（Codex CLI）
 
@@ -1603,3 +1652,34 @@ Git：本轮未提交、未推送、未创建标签、未发布，也未清理�
 - 烹饪大典 UI 冒烟测试 PASS，并将覆盖断言收紧为 45/45；2026-07-30 美术批次测试 PASS（3/3）。
 - 第一组料理测试仅保留历史基线失败：20×40 测试橱柜无法容纳全部当前 ItemType；本次未新增料理逻辑回归。
 - 未提交、未推送；未执行 reset/clean/stash/checkout。
+### 2026-09-27 — 餐厅底图与烹饪区视觉层修复
+
+- 根据负责人提供的 4:3 背景参考，新增 `Assets/Environment/Restaurant/Base/restaurant_background_v2.png`，由 `1536×1152` 母版按整数 `3×` 最近邻放大为 `4608×3456`，避免非整数缩放和粗颗粒底图继续放大。
+- 新增 `Assets/VisualLock/Architecture/cooking_islands_ai_v1.png` 透明视觉层，包含四个 L 型商用烹饪岛；接入 `main.tscn` 时只作为视觉 Sprite，未修改厨房碰撞、导航、交互节点、站点状态或料理规则。
+- `RestaurantWhiteboxLayout.draw_legacy_visuals=false` 关闭旧程序柜台绘制，保留其碰撞障碍；新视觉层使用独立位置、缩放和最近邻过滤。
+- 验证：Godot 资源导入退出码 0；`prototype_restaurant_whitebox_test.gd` PASS；`prototype_0_1_smoke_test.gd` PASS；`prototype_0_3_2_smoke_test.gd` PASS（7/7）；`git diff --check` 通过。
+- 遗留：仍需负责人普通窗口确认新烹饪岛与交互站点图标是否重叠，以及角色在新底图上的像素比例；本轮未修改碰撞、数值或角色动画。
+### 2026-09-27 — L 形烹饪区碰撞与静态交互层对齐
+
+- 将 `RestaurantWhiteboxLayout.RESERVED_COUNTER_SPECS` 重算为当前 `cooking_islands_ai_v1.png` 透明边界投影后的八段矩形；底部两段为避开中央净空向外收齐 4 像素，导航碰撞与可见 L 形台面保持一致。
+- `Interactable` 新增 `show_placeholder_art` 与 `use_individual_obstacle` 两个可逆开关。当前九个厨房工位隐藏旧独立工位图，并停用重复的工位局部碰撞；工位脚本、节点路径、状态和后续恢复动态视觉的接口均保留。
+- 两处灶位支持可配置提示名称，当前分别为“炒锅灶位”和“煎锅灶位”；静态展示模式会隐藏灶位内置锅具和锅具架内置汤锅，拿取后仍沿用原有物品逻辑。玩家靠近目标时交互提示会带目标名称，避免水池等位置显示炒菜功能。
+- 重新定位切菜板、腌制区、两处灶位、锅具架、水池、盘子堆和垃圾桶，使其交互中心落在对应静态台面设备上；没有修改配方、数值、碰撞层职责或动态烹饪流程。
+- 验证：`prototype_restaurant_whitebox_test.gd` PASS（含碰撞矩形、静态开关和水池提示映射断言）；`prototype_0_1_smoke_test.gd` PASS；`prototype_0_3_2_smoke_test.gd` PASS（7/7）；`prototype_0_5_smoke_test.gd` PASS（9/9）；资源解析退出码 0；`git diff --check` 通过。9601 端口占用仍是已有编辑器/MCP 并行噪声。
+- 遗留：仍需负责人普通窗口确认角色与静态台面比例、从台面外侧靠近各工位的手感，以及新美术透明边界在不同相机缩放下的 1～2 像素误差；没有提交或推送。
+
+### 2026-09-27 — 修正下方烹饪岛 L 形、双切菜位与可见交互提示
+
+- 重新生成并替换 `Assets/VisualLock/Architecture/cooking_islands_ai_v1.png`：下方两组由倒 T 接缝改为左右镜像的清晰 L 形；砧板不再烤入肉、蔬菜和散落食材，保留空砧板作为可放置表面。
+- `main.tscn` 新增 `CuttingBoardSouth`，并把食材柜、上方切菜板、腌制台、两处灶位、锅具架、盘子、水池和垃圾桶的交互点收回各自 L 内侧；厨房交互节点和静态视觉层分离，后续可在同一路径恢复动态动画。
+- `KitchenObstacle` 增加可关闭的导航占位；静态工位停用局部碰撞时不再在空地留下 48 像素导航禁行块。`PlayerHUD` 新增底部高对比目标提示条，显示当前设备名称和操作，解决靠近工位提示不明显的问题。
+- `prototype_restaurant_whitebox_test.gd` 新增双切菜位、L 内侧食材柜、静态工位导航占位和提示映射断言。
+- 验证：资源导入退出码 0；餐厅专项 PASS；0.1 PASS；0.3.2 PASS（7/7）；0.5 PASS（9/9）。MCP 端口占用仍是并行编辑器噪声；没有提交、推送或清理工作区。
+- 遗留：仍需负责人普通窗口确认下方 L 形与角色/台面比例、两个切菜位的实际放置手感，以及不同窗口比例下提示条是否遮挡快捷栏。
+
+### 2026-09-27 — 收窄下方横臂碰撞并找回西南水池交互点
+
+- 根据当前透明 PNG 的 alpha 投影复核下方两组 L：西南横臂由 `420×160` 收窄为 `420×95` 并下移到 `y=1857`，东南横臂由 `404×160` 调整为 `418×95`、左移到 `x=2370` 并下移到 `y=1857`，消除横臂下方多余禁行区域，同时给中央净空边界留出 1 像素安全缝；保留两侧竖臂的真实落地碰撞。
+- 将 `main.tscn` 的水池和垃圾桶交互点从下方横臂中段移到西南 L 左侧竖臂，与底图中可见水槽/垃圾桶对应；水池提示名称和清洗逻辑未改变。
+- 餐厅专项新增横臂下方两个空地的可通行断言，并保留水池位置断言。
+- 验证：`prototype_restaurant_whitebox_test.gd` PASS（含导航和物理点查询，确认横臂下方为空地）；`prototype_0_3_smoke_test.gd` PASS（14/14）；`prototype_0_3_2_smoke_test.gd` PASS（7/7）；`prototype_0_5_smoke_test.gd` PASS（9/9）。未提交、未推送。

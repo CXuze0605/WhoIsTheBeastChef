@@ -31,7 +31,6 @@
 [ext_resource type="Script" uid="uid://kmpysff7kxqo" path="res://Scripts/prototype_0_1/ui/prototype_tools_overlay.gd" id="29_tools_overlay"]
 [ext_resource type="Script" uid="uid://dvoju84c48dbv" path="res://Scripts/prototype_0_1/stations/trash_bin.gd" id="30_trash_bin"]
 [ext_resource type="Script" uid="uid://ejiup2m6mwod" path="res://Scripts/prototype_0_1/core/freshness_manager.gd" id="31_freshness"]
-[ext_resource type="Script" uid="uid://b2dh26c08v2jc" path="res://Scripts/prototype_0_1/navigation/restaurant_whitebox_layout.gd" id="32_whitebox"]
 
 [sub_resource type="RectangleShape2D" id="WallTopBottom"]
 size = Vector2(1840, 28)
@@ -59,10 +58,6 @@ patch_margin_bottom = 60
 z_index = -11
 color = Color(0.15, 0.17, 0.2, 0)
 polygon = PackedVector2Array(28, 28, 1848, 28, 1848, 1356, 28, 1356)
-
-[node name="RestaurantWhitebox" type="Node2D" parent="." unique_id=307973399]
-z_index = -9
-script = ExtResource("32_whitebox")
 
 [node name="PrototypeTitle" type="Label" parent="." unique_id=1210461486]
 offset_left = 34.0
@@ -175,7 +170,7 @@ lane_id = &"south_east"
 position = Vector2(240, 220)
 
 [node name="IngredientCabinet" type="Node2D" parent="Kitchen" unique_id=1487250860]
-position = Vector2(112, 96)
+position = Vector2(470, 105)
 script = ExtResource("3_cabinet")
 cooking_oil_stock = 2
 prototype_art_key = &"ingredient_cabinet"
@@ -185,7 +180,7 @@ script = ExtResource("16_obstacle")
 obstacle_size = Vector2(210, 78)
 
 [node name="CuttingBoard" type="Node2D" parent="Kitchen" unique_id=150191761]
-position = Vector2(240, 96)
+position = Vector2(155, 320)
 script = ExtResource("4_cutting")
 prototype_first_cut_time = 1.4
 prototype_second_cut_time = 1.4
@@ -196,7 +191,7 @@ script = ExtResource("16_obstacle")
 obstacle_size = Vector2(136, 72)
 
 [node name="MarinatingStation" type="Node2D" parent="Kitchen" unique_id=1971257358]
-position = Vector2(368, 96)
+position = Vector2(385, 320)
 script = ExtResource("5_marinating")
 prototype_marinating_time = 1.8
 prototype_art_key = &"marinating_bowl"
@@ -206,7 +201,7 @@ script = ExtResource("16_obstacle")
 obstacle_size = Vector2(136, 72)
 
 [node name="WokStation" type="Node2D" parent="Kitchen" unique_id=159740158]
-position = Vector2(688, 96)
+position = Vector2(625, 320)
 script = ExtResource("6_wok")
 prototype_art_key = &"stove_station_double"
 
@@ -215,7 +210,7 @@ script = ExtResource("16_obstacle")
 obstacle_size = Vector2(136, 72)
 
 [node name="StoveStation2" type="Node2D" parent="Kitchen" unique_id=1757474828]
-position = Vector2(816, 96)
+position = Vector2(625, 112)
 script = ExtResource("6_wok")
 station_id = &"prototype_stove_02"
 initial_cookware_type = 15
@@ -226,7 +221,7 @@ script = ExtResource("16_obstacle")
 obstacle_size = Vector2(136, 72)
 
 [node name="CookwareRack" type="Node2D" parent="Kitchen" unique_id=114035007]
-position = Vector2(944, 96)
+position = Vector2(840, 220)
 script = ExtResource("24_cookware_rack")
 prototype_art_key = &"soup_pot"
 
@@ -235,7 +230,7 @@ script = ExtResource("16_obstacle")
 obstacle_size = Vector2(136, 72)
 
 [node name="CleanPlatePile" type="Node2D" parent="Kitchen" unique_id=409266968]
-position = Vector2(240, 576)
+position = Vector2(840, 112)
 script = ExtResource("12_plate_pile")
 prototype_art_key = &"clean_plate_stack"
 
@@ -244,7 +239,7 @@ script = ExtResource("16_obstacle")
 obstacle_size = Vector2(146, 72)
 
 [node name="Sink" type="Node2D" parent="Kitchen" unique_id=1918718797]
-position = Vector2(112, 576)
+position = Vector2(840, 320)
 script = ExtResource("7_sink")
 prototype_art_key = &"washing_station"
 
@@ -253,7 +248,7 @@ script = ExtResource("16_obstacle")
 obstacle_size = Vector2(136, 72)
 
 [node name="TrashBin" type="Node2D" parent="Kitchen" unique_id=1038734305]
-position = Vector2(112, 480)
+position = Vector2(1040, 320)
 script = ExtResource("30_trash_bin")
 
 [node name="Obstacle" type="StaticBody2D" parent="Kitchen/TrashBin" unique_id=858562150]
@@ -284,8 +279,6 @@ position = Vector2(840, 816)
 script = ExtResource("13_target")
 combat_faction = 2
 debug_title = "友方测试目标"
-
-[node name="VisualLockSample" type="Node2D" parent="Kitchen" unique_id=174111256]
 
 [node name="DebugUI" type="CanvasLayer" parent="." unique_id=1433387825]
 script = ExtResource("8_ui")

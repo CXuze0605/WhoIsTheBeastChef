@@ -2,7 +2,7 @@ class_name RestaurantWhiteboxLayout
 extends Node2D
 
 # Prototype-only restaurant graybox. Interactive stations remain separate scene nodes;
-# this layer owns only floor zoning, static dining furniture and reserved counters.
+# this layer owns the four real L-shaped kitchen-island collision footprints.
 
 const DEFAULT_MAP_BOUNDS := Rect2(0.0, 0.0, 4608.0, 3456.0)
 const KITCHEN_FLOOR_RECT := Rect2(1776.0, 1392.0, 1056.0, 672.0)
@@ -17,17 +17,25 @@ const DINING_OBSTACLE_SPECS: Array[Dictionary] = [
 	{"name": &"SouthTableWest", "rect": Rect2(780.0, 2792.0, 360.0, 144.0)},
 ]
 
+# Each island uses two joined rectangles: one horizontal arm and one vertical arm.
+# These values are the world-space projection of the alpha bounds of
+# CookingIslandsArt (placed at 1776,1392 and scaled from 1448x1086). Keeping the
+# footprint here, instead of on individual appliance nodes, makes navigation
+# match the static counter pixels and leaves a clean upgrade point for a future
+# visual/animation adapter.
 const RESERVED_COUNTER_SPECS: Array[Dictionary] = [
-	{"name": &"NorthWestCornerCounter", "rect": Rect2(1824.0, 1548.0, 128.0, 72.0)},
-	{"name": &"NorthEastCornerCounter", "rect": Rect2(2656.0, 1548.0, 128.0, 72.0)},
-	{"name": &"SouthWestSpareCounter", "rect": Rect2(2080.0, 1932.0, 128.0, 72.0)},
-	{"name": &"SouthEastVerticalCounter", "rect": Rect2(2656.0, 1888.0, 128.0, 72.0)},
-	{"name": &"SouthEastCounterLeft", "rect": Rect2(2400.0, 1932.0, 128.0, 72.0)},
-	{"name": &"SouthEastCounterCenter", "rect": Rect2(2528.0, 1932.0, 128.0, 72.0)},
-	{"name": &"SouthEastCounterRight", "rect": Rect2(2656.0, 1932.0, 128.0, 72.0)},
+	{"name": &"NorthWestHorizontal", "island": &"north_west", "rect": Rect2(1820.0, 1438.0, 420.0, 108.0)},
+	{"name": &"NorthWestVertical", "island": &"north_west", "rect": Rect2(1820.0, 1438.0, 108.0, 232.0)},
+	{"name": &"NorthEastHorizontal", "island": &"north_east", "rect": Rect2(2384.0, 1438.0, 404.0, 108.0)},
+	{"name": &"NorthEastVertical", "island": &"north_east", "rect": Rect2(2680.0, 1438.0, 108.0, 232.0)},
+	{"name": &"SouthWestVertical", "island": &"south_west", "rect": Rect2(1820.0, 1780.0, 108.0, 240.0)},
+	{"name": &"SouthWestHorizontal", "island": &"south_west", "rect": Rect2(1820.0, 1857.0, 420.0, 95.0)},
+	{"name": &"SouthEastVertical", "island": &"south_east", "rect": Rect2(2680.0, 1780.0, 108.0, 240.0)},
+	{"name": &"SouthEastHorizontal", "island": &"south_east", "rect": Rect2(2370.0, 1857.0, 418.0, 95.0)},
 ]
 
 var map_bounds := DEFAULT_MAP_BOUNDS
+@export var draw_legacy_visuals: bool = true
 var spawned_obstacles: Array[KitchenObstacle] = []
 
 
@@ -56,26 +64,38 @@ func _spawn_static_obstacles() -> void:
 
 
 func _draw() -> void:
-	draw_rect(map_bounds, Color("#30363d"), true)
-	draw_rect(map_bounds.grow(-24.0), Color("#49515a"), false, 4.0)
-	draw_rect(KITCHEN_FLOOR_RECT, Color("#59646b"), true)
-	draw_rect(KITCHEN_FLOOR_RECT, Color("#aab7bd"), false, 4.0)
-	draw_rect(CENTRAL_CLEAR_CORE, Color(0.72, 0.78, 0.78, 0.16), true)
-	draw_rect(CENTRAL_CLEAR_CORE, Color(0.73, 0.84, 0.84, 0.65), false, 3.0)
-
-	for spec in DINING_OBSTACLE_SPECS:
-		var rect: Rect2 = spec["rect"]
-		draw_rect(rect, Color("#665c55"), true)
-		draw_rect(rect, Color("#c0aaa0"), false, 3.0)
+	if not draw_legacy_visuals:
+		return
+	# The visual floor and restaurant furniture are drawn by RestaurantVisualLayer.
+	# These counter bodies match the collision exactly; appliances remain separate.
 	for spec in RESERVED_COUNTER_SPECS:
 		var rect: Rect2 = spec["rect"]
-		draw_rect(rect, Color("#344a54"), true)
-		draw_rect(rect, Color("#8fb2bf"), false, 3.0)
+		_draw_counter_segment(rect)
 
-	# Boundary-only modern service silhouettes. They deliberately have no gameplay
-	# collision yet, so the south combat lane remains broad during graybox testing.
-	draw_rect(Rect2(2160.0, 3328.0, 288.0, 64.0), Color("#27333a"), true)
-	draw_rect(Rect2(2160.0, 3328.0, 288.0, 64.0), Color("#8da2ad"), false, 3.0)
+
+func _draw_counter_segment(rect: Rect2) -> void:
+	# Neutral graphite cabinetry with a warm service-light toe-kick. It is purposely
+	# axis-aligned so later final art can replace it without changing the footprint.
+	draw_rect(rect, Color("#20262b"), true)
+	draw_rect(rect.grow(-5.0), Color("#343b40"), true)
+	draw_rect(rect.grow(-11.0), Color("#2a3035"), true)
+	draw_rect(rect, Color("#637078"), false, 3.0)
+	draw_rect(rect.grow(-8.0), Color("#151a1e"), false, 2.0)
+
+	var light_y := rect.end.y - 16.0
+	draw_line(Vector2(rect.position.x + 16.0, light_y), Vector2(rect.end.x - 16.0, light_y), Color("#dca952", 0.8), 3.0)
+	if rect.size.x > rect.size.y:
+		var module_count := maxi(1, floori((rect.size.x - 40.0) / 72.0))
+		for index in range(module_count):
+			var module_x := rect.position.x + 24.0 + index * 72.0
+			draw_rect(Rect2(module_x, rect.position.y + 22.0, 44.0, 18.0), Color("#4a5359"), true)
+			draw_rect(Rect2(module_x, rect.position.y + 22.0, 44.0, 18.0), Color("#7b858a"), false, 1.0)
+	else:
+		var module_count := maxi(1, floori((rect.size.y - 40.0) / 64.0))
+		for index in range(module_count):
+			var module_y := rect.position.y + 20.0 + index * 64.0
+			draw_rect(Rect2(rect.position.x + 22.0, module_y, 18.0, 38.0), Color("#4a5359"), true)
+			draw_rect(Rect2(rect.position.x + 22.0, module_y, 18.0, 38.0), Color("#7b858a"), false, 1.0)
 
 
 func get_dining_obstacle_rects() -> Array[Rect2]:

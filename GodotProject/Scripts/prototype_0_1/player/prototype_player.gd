@@ -422,7 +422,8 @@ func get_interaction_prompt() -> String:
 		prompts.append(primary_prompt)
 	if not secondary_prompt.is_empty():
 		prompts.append(secondary_prompt)
-	return "  ".join(prompts) if not prompts.is_empty() else "当前目标没有可用操作"
+	var target_name := current_target.display_title
+	return "%s：%s" % [target_name, "  ".join(prompts)] if not prompts.is_empty() else "%s：当前没有可用操作" % target_name
 
 
 func get_inspected_item_data() -> ItemData:

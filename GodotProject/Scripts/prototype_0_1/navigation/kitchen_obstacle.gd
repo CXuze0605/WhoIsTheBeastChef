@@ -2,6 +2,7 @@ class_name KitchenObstacle
 extends StaticBody2D
 
 @export var obstacle_size := Vector2(140.0, 76.0)
+@export var navigation_enabled: bool = true
 
 var collision_shape: CollisionShape2D
 
@@ -27,5 +28,7 @@ func set_obstacle_size(value: Vector2) -> void:
 
 
 func get_navigation_rect(extra_margin: float = 0.0) -> Rect2:
+	if not navigation_enabled or obstacle_size.x <= 0.0 or obstacle_size.y <= 0.0:
+		return Rect2(global_position, Vector2.ZERO)
 	var expanded := obstacle_size + Vector2.ONE * extra_margin * 2.0
 	return Rect2(global_position - expanded * 0.5, expanded)

@@ -5,6 +5,8 @@ extends ProcessingStation
 # behavior is Prototype 0.4's generic stove slot.
 @export var station_id: StringName = &"prototype_stove_01"
 @export var initial_cookware_type: int = ItemData.ItemType.WOK
+@export var station_label: String = "通用灶位"
+@export var static_visual_mode: bool = false
 
 var cookware_item: CookwareItem
 var wok_item: WokItem:
@@ -30,7 +32,7 @@ var flash_smoke: FlashStirSmoke
 
 
 func _ready() -> void:
-	display_title = "通用灶位"
+	display_title = station_label
 	placeholder_color = Color("7a5551")
 	super._ready()
 	add_to_group("wok_station")
@@ -39,6 +41,7 @@ func _ready() -> void:
 	if combat_runtime != null:
 		config = combat_runtime.config
 	_create_initial_cookware()
+	_apply_static_cookware_visibility()
 	_build_circular_indicator()
 	_refresh_status()
 
@@ -120,9 +123,10 @@ func secondary_interact(player: Node) -> void:
 		player.notify_feedback("需要手持炒锅、煎锅或汤锅")
 		return
 	cookware_item = player.release_held_to_container(self, Vector2(0.0, -10.0)) as CookwareItem
+	_apply_static_cookware_visibility()
 	active_stage = -1
 	hold_progress.cancel()
-	player.notify_feedback("%s已放到通用灶位%s" % [cookware_item.get_cookware_name(), "；自动加热从当前阶段起点开始" if burner_on else ""])
+	player.notify_feedback("%s已放到%s%s" % [cookware_item.get_cookware_name(), display_title, "；自动加热从当前阶段起点开始" if burner_on else ""])
 	advance_automatic_cooking(0.0, player)
 	_refresh_status()
 
@@ -991,8 +995,8 @@ func _get_soup_duration(stage: int) -> float:
 
 func get_debug_state() -> String:
 	if cookware_item == null:
-		return "通用灶位\n灶火：%s\n锅具：无\n进度：0%%" % ("开启" if burner_on else "关闭")
-	return "通用灶位\n灶火：%s\n%s\n进度：%d%%\n最近事件：%s" % ["开启" if burner_on else "关闭", cookware_item.get_debug_description(), roundi(get_progress_ratio() * 100.0), last_event_text]
+		return "%s\n灶火：%s\n锅具：无\n进度：0%%" % [display_title, "开启" if burner_on else "关闭"]
+	return "%s\n灶火：%s\n%s\n进度：%d%%\n最近事件：%s" % [display_title, "开启" if burner_on else "关闭", cookware_item.get_debug_description(), roundi(get_progress_ratio() * 100.0), last_event_text]
 
 
 func _build_circular_indicator() -> void:
@@ -1012,6 +1016,14 @@ func _create_initial_cookware() -> void:
 			var wok := WokItem.new(); wok.setup_wok(station_id); cookware_item = wok
 	add_child(cookware_item)
 	cookware_item.set_stored(self, Vector2(0.0, -10.0))
+	_apply_static_cookware_visibility()
+
+
+func _apply_static_cookware_visibility() -> void:
+	if cookware_item == null or not is_instance_valid(cookware_item):
+		return
+	if static_visual_mode and cookware_item.get_parent() == self:
+		cookware_item.visible = false
 
 
 func set_session_active(value: bool) -> void:

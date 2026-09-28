@@ -21,6 +21,8 @@ const GHOST_HEALTH_FOLLOW_SPEED := 25.0
 var panel: PanelContainer
 var danger_panel: PanelContainer
 var danger_label: Label
+var interaction_panel: PanelContainer
+var interaction_label: Label
 var flash_left: float = 0.0
 var shield_flash_left: float = 0.0
 
@@ -50,6 +52,7 @@ func _process(delta: float) -> void:
 		ghost_health_bar.value = ghost_health_value
 	_update_raging_bull_warning()
 	_update_armor_status()
+	_update_interaction_prompt()
 
 
 func _on_health_changed(current: float, maximum: float) -> void:
@@ -276,6 +279,44 @@ func _build_ui() -> void:
 	danger_label.add_theme_color_override("font_color", Color.WHITE)
 	danger_panel.add_child(danger_label)
 	danger_panel.visible = false
+
+	interaction_panel = PanelContainer.new()
+	interaction_panel.name = "InteractionPromptPanel"
+	interaction_panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	interaction_panel.position = Vector2(-300.0, -178.0)
+	interaction_panel.size = Vector2(600.0, 58.0)
+	var interaction_style := StyleBoxFlat.new()
+	interaction_style.bg_color = Color(0.035, 0.055, 0.085, 0.94)
+	interaction_style.border_color = Color("ffd166")
+	interaction_style.set_border_width_all(3)
+	interaction_style.set_corner_radius_all(8)
+	interaction_style.content_margin_left = 16.0
+	interaction_style.content_margin_right = 16.0
+	interaction_style.content_margin_top = 8.0
+	interaction_style.content_margin_bottom = 8.0
+	interaction_panel.add_theme_stylebox_override("panel", interaction_style)
+	add_child(interaction_panel)
+	interaction_label = Label.new()
+	interaction_label.name = "InteractionPrompt"
+	interaction_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	interaction_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	interaction_label.add_theme_font_size_override("font_size", 18)
+	interaction_label.add_theme_color_override("font_color", Color("fff3bf"))
+	interaction_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.8))
+	interaction_label.add_theme_constant_override("shadow_offset_x", 2)
+	interaction_label.add_theme_constant_override("shadow_offset_y", 2)
+	interaction_panel.add_child(interaction_label)
+	interaction_panel.visible = false
+
+
+func _update_interaction_prompt() -> void:
+	if interaction_panel == null or interaction_label == null or player == null:
+		return
+	var target := player.current_target
+	var visible_target := is_instance_valid(target) and target.can_interact(player)
+	interaction_panel.visible = visible_target
+	if visible_target:
+		interaction_label.text = player.get_interaction_prompt()
 
 
 func _update_raging_bull_warning() -> void:

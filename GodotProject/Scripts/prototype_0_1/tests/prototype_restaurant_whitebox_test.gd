@@ -18,7 +18,6 @@ func _run() -> void:
 	var manager := scene.get_node("WaveManager") as PrototypeWaveManager
 	manager.set_process(false)
 	var navigation := scene.get_node("KitchenNavigation") as KitchenNavigationGrid
-	var layout := scene.get_node("RestaurantWhitebox") as RestaurantWhiteboxLayout
 	var player := scene.get_node("Kitchen/Player") as PrototypePlayer
 	var hud := scene.get_node("PlayerHUD") as PlayerHUD
 	var spawn_points: Array[Node] = get_nodes_in_group("enemy_spawn_point")
@@ -28,8 +27,27 @@ func _run() -> void:
 	_expect(manager.config.enemy_move_speed == 164.0 and manager.config.heavy_move_speed == 104.0, "Ordinary enemy traversal speeds must double with the larger restaurant")
 	_expect(manager.config.fast_dash_speed == 620.0 and manager.config.ranged_projectile_speed == 360.0, "Fast pounce and ranged projectile speeds must not be doubled")
 	_expect(player.global_position == manager.config.map_bounds.get_center(), "The player and central kitchen core must begin at the geometric center of the doubled map")
-	_expect(layout != null and layout.get_dining_obstacle_rects().size() == 6, "The restaurant must expose six simplified dining obstacle islands")
-	_expect(layout.get_reserved_counter_rects().size() == 7, "The four-L kitchen must retain its reserved modular counter pieces")
+	_expect(scene.get_node_or_null("RestaurantWhitebox") == null, "The 0.0.3 art rollback must remove the later shared L-shaped kitchen layer")
+	var static_station_names := ["IngredientCabinet", "CuttingBoard", "MarinatingStation", "WokStation", "StoveStation2", "CookwareRack", "CleanPlatePile", "Sink", "TrashBin"]
+	for station_name in static_station_names:
+		var station := scene.get_node("Kitchen/" + station_name) as Interactable
+		_expect(station != null and station.show_placeholder_art and station.use_individual_obstacle, "0.0.3 station %s must use its own static art and collision" % station_name)
+	var cutting_boards := get_nodes_in_group("cutting_board")
+	_expect(cutting_boards.size() == 1, "The 0.0.3 kitchen must expose one cutting-board interaction point")
+	var sink := scene.get_node("Kitchen/Sink") as SinkStation
+	_expect(sink.position == Vector2(840.0, 320.0), "The sink interaction point must return to the 0.0.3 layout")
+	player.global_position = sink.global_position + Vector2(-100.0, 0.0)
+	player._update_current_target()
+	_expect(player.current_target == sink and player.get_interaction_prompt().begins_with("水池："), "Approaching the sink must show the sink name instead of a cooking prompt")
+	await process_frame
+	var interaction_panel := hud.find_child("InteractionPromptPanel", true, false) as PanelContainer
+	_expect(interaction_panel != null and interaction_panel.visible, "A nearby station must expose the high-contrast interaction prompt panel")
+	var cabinet := scene.get_node("Kitchen/IngredientCabinet") as IngredientCabinet
+	player.global_position = cabinet.global_position + Vector2(-80.0, 0.0)
+	player._update_current_target()
+	_expect(player.current_target == cabinet and player.get_interaction_prompt().begins_with("异形食材柜："), "The ingredient cabinet must remain reachable in the restored 0.0.3 kitchen layout")
+	player.global_position = manager.config.map_bounds.get_center()
+	player._update_current_target()
 	_expect(spawn_points.size() == 10, "The map must expose ten candidate edge spawn lanes")
 
 	var lane_ids: Dictionary = {}
@@ -43,11 +61,9 @@ func _run() -> void:
 	_expect(lane_ids.size() == 10, "Every candidate spawn lane must have a unique stable ID")
 	_expect(edge_counts == {"上侧": 3, "下侧": 3, "左侧": 2, "右侧": 2}, "Spawn lanes must remain distributed 3/3/2/2 across the four map edges")
 
-	var clear_core := RestaurantWhiteboxLayout.CENTRAL_CLEAR_CORE
-	_expect(clear_core.has_point(player.global_position), "The player must begin inside the central clear kitchen core")
-	for obstacle_node in get_nodes_in_group("kitchen_obstacle"):
-		var obstacle := obstacle_node as KitchenObstacle
-		_expect(not obstacle.get_navigation_rect().intersects(clear_core), "No station or furniture collision may invade the central clear core: %s" % obstacle.name)
+	for station_name in static_station_names:
+		var station_obstacle := scene.get_node("Kitchen/" + station_name + "/Obstacle") as KitchenObstacle
+		_expect(station_obstacle != null and station_obstacle.navigation_enabled and station_obstacle.obstacle_size.x > 0.0 and station_obstacle.obstacle_size.y > 0.0, "0.0.3 station %s must retain its own collision" % station_name)
 
 	var route_pairs := [
 		[Vector2(2304.0, 96.0), Vector2(2304.0, 1728.0)],

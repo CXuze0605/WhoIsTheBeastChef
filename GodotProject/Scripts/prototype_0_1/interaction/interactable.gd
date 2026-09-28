@@ -5,6 +5,12 @@ extends Node2D
 @export var placeholder_size := Vector2(140.0, 76.0)
 @export var placeholder_color := Color("52616b")
 @export var prototype_art_key: StringName = &""
+@export_category("Static presentation bridge")
+# Static kitchen art can own the visible appliance. Keeping the Interactable
+# node and this switch means a later art/animation pass can restore the legacy
+# station visual without changing cooking logic or node paths.
+@export var show_placeholder_art: bool = true
+@export var use_individual_obstacle: bool = true
 
 var interaction_enabled: bool = true
 var placeholder: PlaceholderVisual
@@ -19,7 +25,17 @@ func _ready() -> void:
 	if not prototype_art_key.is_empty():
 		PrototypeArtCatalog.apply_to(placeholder, prototype_art_key)
 		_sync_obstacle_to_art()
-
+	placeholder.visible = show_placeholder_art
+	if not use_individual_obstacle:
+		# The static L-shaped counter layout owns the visible collision footprint.
+		# Keep the child node alive as a reversible upgrade hook, but remove its
+		# duplicate navigation and physics footprint for this presentation pass.
+		var obstacle := get_node_or_null("Obstacle") as KitchenObstacle
+		if obstacle != null:
+			obstacle.set_obstacle_size(Vector2.ZERO)
+			obstacle.navigation_enabled = false
+			obstacle.collision_layer = 0
+			obstacle.collision_mask = 0
 
 func _sync_obstacle_to_art() -> void:
 	var obstacle := get_node_or_null("Obstacle") as KitchenObstacle

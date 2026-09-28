@@ -8,6 +8,7 @@ func _ready() -> void:
 	display_title = "垃圾桶"
 	placeholder_size = Vector2(76.0, 78.0)
 	placeholder_color = Color("4f5b57")
+	prototype_art_key = &"trash_bin"
 	super._ready()
 	add_to_group("trash_bin")
 	set_placeholder_status("手持物品后按 %s 直接销毁" % InputPrompt.action_text(&"interact_primary", "E"))

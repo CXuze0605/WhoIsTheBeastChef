@@ -1,6 +1,7 @@
 class_name CookwareRack
 extends Interactable
 
+@export var static_visual_mode: bool = false
 var soup_pot: SoupPotItem
 
 
@@ -11,6 +12,7 @@ func _ready() -> void:
 	super._ready()
 	add_to_group("cookware_rack")
 	_create_soup_pot()
+	_apply_static_pot_visibility()
 	_refresh_status()
 
 
@@ -36,6 +38,7 @@ func reset_for_new_game() -> void:
 		soup_pot.queue_free()
 	soup_pot = null
 	_create_soup_pot()
+	_apply_static_pot_visibility()
 	_refresh_status()
 
 
@@ -44,6 +47,14 @@ func _create_soup_pot() -> void:
 	soup_pot.setup_soup_pot(&"prototype_soup_rack")
 	add_child(soup_pot)
 	soup_pot.set_stored(self, Vector2(0.0, -8.0))
+	_apply_static_pot_visibility()
+
+
+func _apply_static_pot_visibility() -> void:
+	if soup_pot == null or not is_instance_valid(soup_pot):
+		return
+	if static_visual_mode and soup_pot.get_parent() == self:
+		soup_pot.visible = false
 
 
 func _refresh_status() -> void:

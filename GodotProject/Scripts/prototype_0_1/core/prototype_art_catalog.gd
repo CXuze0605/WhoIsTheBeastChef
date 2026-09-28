@@ -9,6 +9,7 @@ const TEXTURES := {
 	&"stove_station_double": preload("res://Assets/Prototype/Static/stove_station_double.png"),
 	&"washing_station": preload("res://Assets/Prototype/Static/washing_station.png"),
 	&"clean_plate_stack": preload("res://Assets/Items/ItemArtPack2026_07_29_v3/assets/ready/containers/container_clean_plate.png"),
+	&"trash_bin": preload("res://Assets/VisualLock/Workstations/workstation_trash_bin_static_v1.png"),
 	&"dirty_plate": preload("res://Assets/Items/ItemArtPack2026_07_29_v3/assets/ready/containers/container_dirty_plate.png"),
 	&"basic_taste_enemy": preload("res://Assets/Prototype/Static/basic_taste_enemy.png"),
 	&"heavy_taste_enemy": preload("res://Assets/Prototype/Static/heavy_taste_enemy.png"),
